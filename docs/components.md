@@ -2,31 +2,26 @@
 
 **Bolded** components are associated with routes.
 
-(:exclamation: Remember, the bolded components are created by their
-associated routes, so the nesting of your bolded components must
-_**exactly**_ match the nesting of your routes.)
-
 * **App**
-  * NotebooksIndex
+  * **NotesIndex**
+    * NotesIndexItem
+    * NoteForm
+  * **NotebooksIndex**
     * Search
     * NotebookIndexItem
-    * NotebookForm
-  * **NotesIndex**
     * NoteForm
-    * NoteIndexItem
-    * **NoteDetail**
-      * NoteTags
-      * NoteEditArea
 
+Routes
 
-## Routes
+* App (path '/')
+  * NotesIndex (path index)
+  * NotesIndex (path 'notebooks/notebookId')
+  * NotebooksIndex (path 'notebooks')
+    * NotebookIndexItem
+    * NotebookForm
 
-* **component:** `App` **path:** `/`
-  * **component:** `NotesIndex` **path:** index
-  * **component:** `NotesIndex` **path:** `notebooks/:notebookId`
-    * **component:** `NoteDetail` **path:** `notes/:noteId`
-  * **component:** `NotesIndex` **path:** none
-    * **component:** `NoteDetail` **path:** `notes/:noteId`
+Questions
 
-For Routes that have no `notebookId`, `NotesIndex` will render all
-notes.
+* Why isn't NotebooksIndex a route in the example?
+* Why is there a NoteDetail component in the example?
+* Why is there an index path and a none path for NotesIndex?
