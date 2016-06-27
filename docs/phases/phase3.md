@@ -25,20 +25,20 @@
 * Notebook
 
 ### Actions
-* ApiActions.receiveAllNotebooks -> triggered by ApiUtil
-* ApiActions.receiveSingleNotebook
-* ApiActions.deleteNotebook
+* NotebookActions.receiveAllNotebooks -> triggered by ApiUtil
+* NotebookActions.receiveNotebook
+* NotebookActions.deleteNotebook
 * NotebookActions.fetchAllNotebooks -> triggers ApiUtil
-* NotebookActions.fetchSingleNotebook
+* NotebookActions.fetchNotebook
 * NotebookActions.createNotebook
 * NotebookActions.editNotebook
-* NotebookActions.destroyNotebook
+* NotebookActions.deleteNotebook
 
 ### ApiUtil
 * ApiUtil.fetchAllNotebooks
-* ApiUtil.fetchSingleNotebook
+* ApiUtil.fetchNotebook
 * ApiUtil.createNotebook
 * ApiUtil.editNotebook
-* ApiUtil.destroyNotebook
+* ApiUtil.deleteNotebook
 
 ## Gems/Libraries

@@ -14,24 +14,24 @@
 * NoteForm
 
 ### Stores
-* Note
+* NoteStore
 
 ### Actions
-* ApiActions.receiveAllNotes -> triggered by ApiUtil
-* ApiActions.receiveSingleNote
-* ApiActions.deleteNote
+* NoteActions.receiveAllNotes -> triggered by ApiUtil
+* NoteActions.receiveNote
+* NoteActions.deleteNote
 * NoteActions.fetchAllNotes -> triggers ApiUtil
-* NoteActions.fetchSingleNote 
+* NoteActions.fetchNote
 * NoteActions.createNote
-* NoteActions.editNote 
+* NoteActions.editNote
 * NoteActions.destroyNote
 
 ### ApiUtil
 * ApiUtil.fetchAllNotes
-* ApiUtil.fetchSingleNote
+* ApiUtil.fetchNote
 * ApiUtil.createNote
 * ApiUtil.editNote
-* ApiUtil.destroyNote
+* ApiUtil.deleteNote
 
 ## Gems/Libraries
 * Flux Dispatcher (npm)
