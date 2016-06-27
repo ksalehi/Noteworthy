@@ -1,5 +1,22 @@
 # Flux Cycles
 
+* `fetchAllNotes`
+  * Invoked from `NotesIndex` `ComponentDidMount` / `ComponentWillReceiveProps`
+  * `NoteActions` calls `ApiUtil.fetchAllNotes`
+  * `ApiUtil` makes 'GET' request to `/api/notes` with `receiveAllNotes` as success callback
+  * `receiveAllNotes` dispatches payload to `NotesStore`
+  * `NotesStore` updates `_notes` and emits change
+  * `NotesIndex` listens for changes from NotesStore and re-renders accordingly
+
+* `CreateNote`
+  * Invoked from `NotesIndex` button `onClick`
+  * `NoteActions` calls `ApiUtil.CreateNote`
+  * `ApiUtil` makes 'POST' request to `/api/notes` with `receiveNote` as success callback
+  * `receiveNote` dispatches payload to NotesStore
+  * `NotesStore` updates `_notes` and emits change
+  * `NotesIndex` listens for changes from `NotesStore` and re-renders accordingly
+
+
 Flux loops are organized by data type. Under each data type, there may
 be sub-categories, and each action is listed with the sequence of events
 that result from its invocation, ending with the API or store. Finally,

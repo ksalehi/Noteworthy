@@ -1,5 +1,8 @@
 # API Endpoints
 
+* What is the relationship exactly between the JSON API endpoints and the Routes?
+* How come there are JSON API endpoints like /api/notes but no 'notes' path in Routes? 
+
 ## HTML API
 
 ### Root

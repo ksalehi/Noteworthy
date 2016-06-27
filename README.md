@@ -43,54 +43,53 @@ Noteworthy is a web application for note management and storage modeled after Ev
 
 ## Implementation Timeline
 
-### Phase 1: Backend setup and Front End User Authentication (1 day, W1 Tu 6pm)
+### Phase 1: Back-end setup and front-end user authentication (1 day, due W1 Tu 6pm)
 
-**Objective:** Functioning rails project with Authentication
+**Objective:** Basic rails project with authentication
 
 - [ ] create new project
 - [ ] create `User` model
-- [ ] authentication
-- [ ] user signup/signin pages
-- [ ] blank landing page after signin
+- [ ] roll authentication
+- [ ] create user signup/login pages
+- [ ] create blank landing page after login
 
-### Phase 2: Notes Model, API, and basic APIUtil (1.5 days, W1 Th 12pm)
+### Phase 2: Note model, API, basic APIUtil (1.5 days, due W1 Th 12pm)
 
-**Objective:** Notes can be created, read, edited and destroyed through
+**Objective:** Notes can be created, read, updated and destroyed through
 the API.
 
 - [ ] create `Note` model
-- [ ] seed the database with a small amount of test data
-- [ ] CRUD API for notes (`NotesController`)
-- [ ] jBuilder views for notes
+- [ ] seed database
+- [ ] create jBuilder views for notes
 - [ ] setup Webpack & Flux scaffold
 - [ ] setup `APIUtil` to interact with the API
-- [ ] test out API interaction in the console.
+- [ ] test out API in console
 
-### Phase 3: Flux Architecture and Router (1.5 days, W1 F 6pm)
+### Phase 3: Flux architecture and router (1.5 days, due W1 F 6pm)
 
-**Objective:** Notes can be created, read, edited and destroyed with the
-user interface.
+**Objective:** Notes can be created, read, updated and destroyed through the
+UI.
 
-- [ ] setup the flux loop with skeleton files
+- [ ] set up flux loop with skeleton files
 - [ ] setup React Router
-- implement each note component, building out the flux loop as needed.
+- implement each note component, building out the flux loop as needed:
   - [ ] `NotesIndex`
   - [ ] `NoteIndexItem`
   - [ ] `NoteForm`
 - [ ] save Notes to the DB when the form loses focus or is left idle
-  after editing.
+  after editing
 
-### Phase 4: Start Styling (0.5 days, W2 M 12pm)
+### Phase 4: Start styling (0.5 days, due W2 M 12pm)
 
-**Objective:** Existing pages (including signup/signin) will look good.
+**Objective:** Existing pages look polished.
 
-- [ ] create a basic style guide
+- [ ] create basic style guide
 - [ ] position elements on the page
 - [ ] add basic colors & styles
 
-### Phase 5: Notebooks (1 day, W2 Tu 12pm)
+### Phase 5: Notebooks (1 day, due W2 Tu 12pm)
 
-**Objective:** Notes belong to Notebooks, and can be viewed by notebook.
+**Objective:** Notes belong to notebooks, and can be viewed by notebook.
 
 - [ ] create `Notebook` model
 - build out API, Flux loop, and components for:
@@ -98,14 +97,11 @@ user interface.
   - [ ] adding notes requires a notebook
   - [ ] moving notes to a different notebook
   - [ ] viewing notes by notebook
-- Use CSS to style new views
+- Style new views
 
-Phase 3 adds organization to the Notes. Notes belong to a Notebook,
-which has its own `Index` view.
+### Phase 6: Tags (1 day, due W2 Th 12pm)
 
-### Phase 6: Tags (1 days, W2 Th 12pm)
-
-**Objective:** Notes can be tagged with multiple tags, and tags are searchable.
+**Objective:** Notes can be tagged, and tags are searchable.
 
 - [ ] create `Tag` model and join table
 - build out API, Flux loop, and components for:
@@ -115,13 +111,13 @@ which has its own `Index` view.
   - [ ] searching notebooks by tag
 - [ ] Style new elements
 
-### Phase 7: Allow Complex Styling in Notes (0.5 days, W2 Th 6pm)
+### Phase 7: Add styling capabilities (0.5 days, due W2 Th 6pm)
 
 **objective:** Enable complex styling of notes.
 
 - [ ] Integrate `react-quill` (based on Quill.js).
 - [ ] Use Rails helpers to sanitize HTML before rendering.
-- [ ] Style the new Quill elements.
+- [ ] Style new Quill elements.
 
 ### Phase 8: Styling Cleanup and Seeding (1 day, W2 F 6pm)
 
