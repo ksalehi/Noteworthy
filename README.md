@@ -1,6 +1,6 @@
 # Noteworthy
 
-[Heroku link][heroku] **Note:** This should be a link to your production site
+[Heroku link][heroku]
 
 [heroku]: http://www.herokuapp.com
 
@@ -119,11 +119,11 @@ UI.
 - [ ] Use Rails helpers to sanitize HTML before rendering.
 - [ ] Style new Quill elements.
 
-### Phase 8: Styling Cleanup and Seeding (1 day, W2 F 6pm)
+### Phase 8: Styling cleanup and seeding (1 day, due W2 F 6pm)
 
-**objective:** Make the site feel more cohesive and awesome.
+**objective:** Make the site more polished.
 
-- [ ] Get feedback on my UI from others
+- [ ] Get feedback on UI from others
 - [ ] Refactor HTML classes & CSS rules
 - [ ] Add modals, transitions, and other styling flourishes.
 
@@ -131,11 +131,12 @@ UI.
 - [ ] Search through notes for blocks of text
 - [ ] Pagination / infinite scroll for Notes Index
 - [ ] Set reminders on notes
-- [ ] Changelogs for Notes
+- [ ] Changelogs for notes
 - [ ] Multiple sessions
 
 [phase-one]: docs/phases/phase1.md
 [phase-two]: docs/phases/phase2.md
 [phase-three]: docs/phases/phase3.md
 [phase-four]: docs/phases/phase4.md
-[phase-five]: docs/phases/phase5.md
+
+* What is the relationship between the phases listed here and the ones in 'docs/phases'...
