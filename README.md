@@ -99,7 +99,7 @@ UI.
   - [ ] viewing notes by notebook
 - Style new views
 
-### Phase 6: Tags (1 day, due W2 Th 12pm)
+### Phase 6: Tags (1 day, due W2 Th 6pm)
 
 **Objective:** Notes can be tagged, and tags are searchable.
 
@@ -111,7 +111,7 @@ UI.
   - [ ] searching notebooks by tag
 - [ ] Style new elements
 
-### Phase 7: Add styling capabilities (0.5 days, due W2 Th 6pm)
+### Phase 7: Add styling capabilities (0.5 days, due W2 F 12pm)
 
 **objective:** Enable complex styling of notes.
 
@@ -119,7 +119,7 @@ UI.
 - [ ] Use Rails helpers to sanitize HTML before rendering.
 - [ ] Style new Quill elements.
 
-### Phase 8: Styling cleanup and seeding (1 day, due W2 F 6pm)
+### Phase 8: Styling cleanup and seeding (0.5 days, due W2 F 6pm)
 
 **objective:** Make the site more polished.
 

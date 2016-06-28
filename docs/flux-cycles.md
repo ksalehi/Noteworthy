@@ -25,7 +25,7 @@
   * `NotesStore` updates `_notes` and emits change
   * `NoteDetail` listens for changes and re-renders to show note content
 
-* `editNote`
+* `updateNote`
   * Invoked from `NoteDetail` on `ComponentDidMount` / `ComponentWillReceiveProps`
   * `ApiUtil` makes 'PATCH' request to `/api/notes/:noteId`
   * `receiveNote` invoked on success
@@ -39,7 +39,7 @@
   * `NotesStore` updates `_notes` and emits change
   * `NoteDetail` listens for changes and re-renders to show note content
 
-* **Why does the example say updatePost (editPost here) should make a POST request? Why not PATCH?**
+* **Why does the example say updatePost (updatePost here) should make a POST request? Why not PATCH?**
 
 ## Notebook Flux Cycles
 
@@ -66,7 +66,7 @@
   * `NotebooksStore` updates `_notebooks` and emits change
   * `NotebooksIndex` listens for changes and re-renders to show note content (?)
 
-* `editNotebook`
+* `updateNotebook`
   * Invoked from `NotebooksIndex` on `ComponentDidMount` / `ComponentWillReceiveProps`
   * `ApiUtil` makes 'PATCH' request to `/api/notebooks/:notebookId`
   * `receiveNotebook` invoked on success

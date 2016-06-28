@@ -7,7 +7,7 @@
     * NotesIndexItem
       * **NoteDetail**
         * NoteTags
-        * NoteEditForm
+        * NoteForm
   * **NotebooksIndex**
     * Search
     * NotebookIndexItem
@@ -25,5 +25,5 @@ Questions
 
 * Why isn't NotebooksIndex a route in the example? Is it something about it taking you immediately to NotesIndex...
 * Why is there an index path and a none path for NotesIndex?
-* Why is there both a NoteForm in NotesIndexItem and a NoteEditArea in NoteDetail? There is no NoteEditArea in wireframes example.
+* Why is there both a NoteForm in NotesIndexItem and a NoteEditArea in NoteDetail in the example? There is no NoteEditArea in wireframes example.
 * Am I supposed to put NoteDetail as a route under NotesIndex too? How do I access NoteDetail whether there is a notebookId provided or not?
