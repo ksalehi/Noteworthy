@@ -13,6 +13,9 @@ const ErrorStore = require('./stores/error_store');
 const NoteStore = require('./stores/note_store');
 const NoteIndex = require('./components/notes/note_index');
 const NoteActions = require('./actions/note_actions');
+const NotebookIndex = require('./components/notebooks/notebook_index');
+const NoteIndexItem = require('./components/notes/note_index_item');
+const NoteDetail = require('./components/notes/note_detail');
 
 window.na = NoteActions;
 window.ns = NoteStore;
@@ -21,7 +24,7 @@ const App = React.createClass({
   render(){
     return (
       <div>
-        <h1>Capstone</h1>
+        <h1>Noteworthy</h1>
         {this.props.children}
       </div>
     );
@@ -31,7 +34,10 @@ const App = React.createClass({
 const routes = (
   <Route path="/" component={App}>
     <IndexRoute component={NoteIndex}/>
-    <Route path="notes" component={NoteIndex}/>
+    <Route path="notes" component={NoteIndex}>
+      <Route path=":noteId" component={NoteDetail}/>
+    </Route>
+    <Route path="notebooks" component={NotebookIndex}/>
     <Route path="session/new" component={LoginForm}/>
     <Route path="users/new" component={SignUpForm}/>
   </Route>

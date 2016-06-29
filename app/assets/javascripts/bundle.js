@@ -59,6 +59,9 @@
 	var NoteStore = __webpack_require__(297);
 	var NoteIndex = __webpack_require__(299);
 	var NoteActions = __webpack_require__(300);
+	var NotebookIndex = __webpack_require__(302);
+	var NoteIndexItem = __webpack_require__(307);
+	var NoteDetail = __webpack_require__(308);
 	
 	window.na = NoteActions;
 	window.ns = NoteStore;
@@ -72,7 +75,7 @@
 	      React.createElement(
 	        'h1',
 	        null,
-	        'Capstone'
+	        'Noteworthy'
 	      ),
 	      this.props.children
 	    );
@@ -83,7 +86,12 @@
 	  Route,
 	  { path: '/', component: App },
 	  React.createElement(IndexRoute, { component: NoteIndex }),
-	  React.createElement(Route, { path: 'notes', component: NoteIndex }),
+	  React.createElement(
+	    Route,
+	    { path: 'notes', component: NoteIndex },
+	    React.createElement(Route, { path: ':noteId', component: NoteDetail })
+	  ),
+	  React.createElement(Route, { path: 'notebooks', component: NotebookIndex }),
 	  React.createElement(Route, { path: 'session/new', component: LoginForm }),
 	  React.createElement(Route, { path: 'users/new', component: SignUpForm })
 	);
@@ -37221,7 +37229,17 @@
 	  });
 	};
 	
+	NoteStore.find = function (id) {
+	  for (var key in _notes) {
+	    if (_notes[key].id == id) {
+	      return _notes[key];
+	    }
+	  }
+	  return null;
+	};
+	
 	function resetNotes(notes) {
+	  console.log(notes);
 	  _notes = notes;
 	}
 	
@@ -37271,13 +37289,17 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	// const SessionActions = require('../actions/session_actions.js');
-	// const hashHistory = require('react-router').hashHistory;
+	var hashHistory = __webpack_require__(168).hashHistory;
 	var NoteStore = __webpack_require__(297);
 	var NoteActions = __webpack_require__(300);
+	var NoteIndexItem = __webpack_require__(307);
 	
 	var NoteIndex = React.createClass({
 	  displayName: 'NoteIndex',
+	  showDetail: function showDetail() {
+	    console.log('you clicked!');
+	    // hashHistory.push('/notes/' + noteId);
+	  },
 	  getInitialState: function getInitialState() {
 	    return { notes: NoteStore.all() };
 	  },
@@ -37293,20 +37315,21 @@
 	  },
 	  render: function render() {
 	    var notes = this.state.notes;
-	    console.log(notes);
+	    var that = this;
 	    return React.createElement(
 	      'div',
 	      null,
 	      React.createElement(
 	        'ul',
-	        null,
+	        { className: 'notes-list' },
 	        notes.map(function (note) {
-	          return React.createElement(
-	            'li',
-	            null,
-	            note.title
-	          );
+	          return React.createElement(NoteIndexItem, { key: note.id, note: note });
 	        })
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        this.props.children
 	      )
 	    );
 	  }
@@ -37374,16 +37397,8 @@
 	    $.ajax({
 	      method: 'GET',
 	      url: 'api/notes',
-	      success: function success(data) {
-	        console.log('success');
-	        console.log(data);
-	        successCB(data);
-	      },
-	      error: function error(data) {
-	        console.log('error');
-	        console.log(data);
-	        errorCB(data);
-	      }
+	      success: successCB,
+	      error: errorCB
 	    });
 	  },
 	  getNote: function getNote(id, successCB, errorCB) {
@@ -37426,6 +37441,305 @@
 	};
 	
 	module.exports = NoteApiUtil;
+
+/***/ },
+/* 302 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	// const SessionActions = require('../actions/session_actions.js');
+	// const hashHistory = require('react-router').hashHistory;
+	var NotebookStore = __webpack_require__(303);
+	var NotebookActions = __webpack_require__(305);
+	
+	var NotebookIndex = React.createClass({
+	  displayName: 'NotebookIndex',
+	  getInitialState: function getInitialState() {
+	    return { notebooks: NotebookStore.all() };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    NotebookActions.fetchNotebooks();
+	    this.notebookListener = NotebookStore.addListener(this._onChange);
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.notebookListener.remove();
+	  },
+	  _onChange: function _onChange() {
+	    this.setState({ notebooks: NotebookStore.all() });
+	  },
+	  render: function render() {
+	    var notebooks = this.state.notebooks;
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'ul',
+	        null,
+	        notebooks.map(function (notebook) {
+	          return React.createElement(
+	            'li',
+	            { key: notebook.id },
+	            notebook.title
+	          );
+	        })
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = NotebookIndex;
+
+/***/ },
+/* 303 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Store = __webpack_require__(277).Store;
+	var AppDispatcher = __webpack_require__(268);
+	var NotebookConstants = __webpack_require__(304);
+	var NotebookStore = new Store(AppDispatcher);
+	
+	var _notebooks = {};
+	
+	NotebookStore.all = function () {
+	  // return Object.assign({}, _notebooks);
+	  return Object.keys(_notebooks).map(function (notebookKey) {
+	    return _notebooks[notebookKey];
+	  });
+	};
+	
+	function resetNotebooks(notebooks) {
+	  _notebooks = notebooks;
+	}
+	
+	function resetSingleNotebook(notebook) {
+	  _notebooks[notebook.id] = notebook;
+	}
+	
+	function removeNotebook(notebook) {
+	  delete _notebooks[notebook.id];
+	}
+	
+	NotebookStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case NotebookConstants.NOTEBOOKS_RECEIVED:
+	      resetNotebooks(payload.notebooks);
+	      break;
+	    case NotebookConstants.NOTEBOOK_RECEIVED:
+	      resetSingleNotebook(payload.notebook);
+	      break;
+	    case NotebookConstants.NOTEBOOK_REMOVED:
+	      removeNotebook(payload.notebook);
+	      break;
+	  }
+	  NotebookStore.__emitChange();
+	};
+	
+	module.exports = NotebookStore;
+
+/***/ },
+/* 304 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var NotebookConstants = {
+	  NOTEBOOKS_RECEIVED: "NOTEBOOKS_RECEIVED",
+	  NOTEBOOK_RECEIVED: "NOTEBOOK_RECEIVED",
+	  NOTEBOOK_REMOVED: "NOTEBOOK_REMOVED"
+	};
+	
+	module.exports = NotebookConstants;
+
+/***/ },
+/* 305 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var AppDispatcher = __webpack_require__(268);
+	var NotebookConstants = __webpack_require__(304);
+	var ErrorActions = __webpack_require__(274);
+	var NotebookApiUtil = __webpack_require__(306);
+	
+	var NotebookActions = {
+	  fetchNotebooks: function fetchNotebooks() {
+	    NotebookApiUtil.fetchNotebooks(NotebookActions.receiveNotebooks, ErrorActions.setErrors);
+	  },
+	  getNotebook: function getNotebook(notebookId) {
+	    NotebookApiUtil.getNotebook(notebookId, NotebookActions.receiveNotebook, ErrorActions.setErrors);
+	  },
+	  createNotebook: function createNotebook(notebook) {
+	    NotebookApiUtil.createNotebook(notebook, NotebookActions.receiveNotebook, ErrorActions.setErrors);
+	  },
+	  editNotebook: function editNotebook(notebook) {
+	    NotebookApiUtil.updateNotebook(notebook, NotebookActions.receiveNotebook, ErrorActions.setErrors);
+	  },
+	  deleteNotebook: function deleteNotebook(notebookId) {
+	    NotebookApiUtil.getNotebook(notebookId, NotebookActions.receiveNotebook, ErrorActions.setErrors);
+	  },
+	  receiveNotebooks: function receiveNotebooks(notebooks) {
+	    AppDispatcher.dispatch({
+	      actionType: NotebookConstants.NOTEBOOKS_RECEIVED,
+	      notebooks: notebooks
+	    });
+	  },
+	  receiveNotebook: function receiveNotebook(notebook) {
+	    AppDispatcher.dispatch({
+	      actionType: NotebookConstants.NOTEBOOK_RECEIVED,
+	      notebook: notebook
+	    });
+	  },
+	  removeNotebook: function removeNotebook(notebook) {
+	    AppDispatcher.dispatch({
+	      actionType: NotebookConstants.NOTEBOOK_REMOVED,
+	      notebook: notebook
+	    });
+	  }
+	};
+	
+	module.exports = NotebookActions;
+
+/***/ },
+/* 306 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var NotebookApiUtil = {
+	  fetchNotebooks: function fetchNotebooks(successCB, errorCB) {
+	    $.ajax({
+	      method: 'GET',
+	      url: 'api/notebooks',
+	      success: function success(data) {
+	        console.log('success');
+	        console.log(data);
+	        successCB(data);
+	      },
+	      error: function error(data) {
+	        console.log('error');
+	        console.log(data);
+	        errorCB(data);
+	      }
+	    });
+	  },
+	  getNotebook: function getNotebook(id, successCB, errorCB) {
+	    $.ajax({
+	      method: 'GET',
+	      url: 'api/notebooks/' + id,
+	      success: successCB,
+	      error: errorCB
+	    });
+	  },
+	  createNotebook: function createNotebook(notebookData, successCB, errorCB) {
+	    $.ajax({
+	      method: 'POST',
+	      url: 'api/notebooks',
+	      data: { notebook: notebookData },
+	      success: successCB,
+	      error: errorCB
+	    });
+	  },
+	  updateNotebook: function updateNotebook(notebookData, successCB, errorCB) {
+	    $.ajax({
+	      method: 'PATCH',
+	      url: 'api/notebooks/' + notebookData.id,
+	      data: { notebook: {
+	          title: notebookData.title,
+	          body: notebookData.body
+	        } },
+	      success: successCB,
+	      error: errorCB
+	    });
+	  },
+	  deleteNotebook: function deleteNotebook(id, successCB, errorCB) {
+	    $.ajax({
+	      method: 'DELETE',
+	      url: 'api/notebooks/' + id,
+	      success: successCB,
+	      error: errorCB
+	    });
+	  }
+	};
+	
+	module.exports = NotebookApiUtil;
+
+/***/ },
+/* 307 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var NoteStore = __webpack_require__(297);
+	var NoteActions = __webpack_require__(300);
+	var hashHistory = __webpack_require__(168).hashHistory;
+	
+	var NoteIndexItem = React.createClass({
+	  displayName: 'NoteIndexItem',
+	  showDetail: function showDetail() {
+	    console.log('you clicked!');
+	    hashHistory.push('/notes/' + this.props.note.id);
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'li',
+	      { onClick: this.showDetail, className: 'notes-list-item' },
+	      this.props.note.title
+	    );
+	  }
+	});
+	
+	module.exports = NoteIndexItem;
+
+/***/ },
+/* 308 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var NoteStore = __webpack_require__(297);
+	
+	var NoteDetail = React.createClass({
+	  displayName: 'NoteDetail',
+	  getInitialState: function getInitialState() {
+	    var note = NoteStore.find(this.props.params.noteId);
+	    return { note: note };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.noteListener = NoteStore.addListener(this._onChange);
+	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    this.setState({ note: NoteStore.find(nextProps.params.noteId) });
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.noteListener.remove();
+	  },
+	  _onChange: function _onChange() {
+	    this.setState({ note: NoteStore.find(this.props.params.noteId) });
+	  },
+	  render: function render() {
+	    if (this.state.note) {
+	      // debugger;
+	      console.log(this.state.note.id);
+	    }
+	    if (this.state.note) {
+	      return React.createElement(
+	        'article',
+	        { className: 'note-detail' },
+	        this.state.note.body
+	      );
+	    } else {
+	      return React.createElement('div', null);
+	    }
+	  }
+	});
+	
+	module.exports = NoteDetail;
 
 /***/ }
 /******/ ]);

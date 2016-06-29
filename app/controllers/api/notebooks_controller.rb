@@ -17,6 +17,11 @@ class Api::NotebooksController < ApplicationController
     render :show
   end
 
+  def index
+    @notebooks = Notebook.all
+    render :index
+  end
+
   def destroy
 
   end

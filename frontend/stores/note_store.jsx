@@ -12,7 +12,17 @@ NoteStore.all = function() {
   });
 };
 
+NoteStore.find = function(id) {
+  for (let key in _notes) {
+    if (_notes[key].id == id) {
+      return _notes[key];
+    }
+  }
+  return null;
+};
+
 function resetNotes(notes) {
+  console.log(notes);
   _notes = notes;
 }
 

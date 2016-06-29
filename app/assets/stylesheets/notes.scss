@@ -1,3 +1,47 @@
 // Place all the styles related to the notes controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 15px;
+  padding: 15px;
+}
+
+h1 {
+  font-size: 64px;
+  color: green;
+  padding: 10px;
+}
+
+.notes-list {
+  float: left;
+  background-color: gray;
+  width: 30%;
+  padding: 15px;
+  margin: 0 10px;
+}
+
+.notes-list-item {
+  background-color: darkgray;
+  padding: 15px;
+  border-top: 2px solid black;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+}
+
+.notes-list-item:hover {
+  cursor: pointer;
+  background-color: gray;
+}
+
+.notes-list-item:last-of-type {
+  border-bottom: 2px solid black;
+}
+
+.note-detail {
+  padding: 15px;
+  float: left;
+  width: 30%;
+  background-color: gray;
+}

@@ -1,10 +1,14 @@
 const React = require('react');
-// const SessionActions = require('../actions/session_actions.js');
-// const hashHistory = require('react-router').hashHistory;
+const hashHistory = require('react-router').hashHistory;
 const NoteStore = require('../../stores/note_store');
 const NoteActions = require('../../actions/note_actions');
+const NoteIndexItem = require('./note_index_item');
 
 const NoteIndex = React.createClass({
+  showDetail(){
+    console.log('you clicked!');
+    // hashHistory.push('/notes/' + noteId);
+  },
   getInitialState() {
     return { notes: NoteStore.all() };
   },
@@ -20,16 +24,17 @@ const NoteIndex = React.createClass({
   },
   render(){
     const notes = this.state.notes;
-    console.log(notes);
+    const that = this;
     return (
       <div>
-        <ul>
+        <ul className="notes-list">
           {
             notes.map( note => {
-              return (<li>{note.title}</li>);
+              return (<NoteIndexItem key={note.id} note={note}/>);
             })
           }
         </ul>
+        <div>{this.props.children}</div>
       </div>
     );
   }

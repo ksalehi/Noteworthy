@@ -1,1 +1,1 @@
-json.partial! 'notebook' collection: @notebooks, as: :notebook
+json.partial! 'notebook', collection: @notebooks, as: :notebook

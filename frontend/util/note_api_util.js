@@ -3,16 +3,8 @@ const NoteApiUtil = {
     $.ajax({
       method: 'GET',
       url: 'api/notes',
-      success(data) {
-        console.log('success');
-        console.log(data);
-        successCB(data);
-      },
-      error(data) {
-        console.log('error');
-        console.log(data);
-        errorCB(data);
-      }
+      success: successCB,
+      error: errorCB
     });
   },
   getNote(id, successCB, errorCB) {

@@ -15,11 +15,16 @@ class Api::NotesController < ApplicationController
 
   def show
     @note = Note.find(params[:id])
-    render :show 
+    render :show
   end
 
   def destroy
 
+  end
+
+  def index
+    @notes = Note.all
+    render :index
   end
 
   def note_params
