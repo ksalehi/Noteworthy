@@ -1,0 +1,7 @@
+const NotebookConstants = {
+  NOTEBOOKS_RECEIVED: "NOTEBOOKS_RECEIVED",
+  NOTEBOOK_RECEIVED: "NOTEBOOK_RECEIVED",
+  NOTEBOOK_REMOVED: "NOTEBOOK_REMOVED"
+};
+
+module.exports = NotebookConstants;

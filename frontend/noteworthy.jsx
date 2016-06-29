@@ -10,7 +10,12 @@ const hashHistory = reactRouter.hashHistory;
 const LoginForm = require('./components/login_form');
 const SignUpForm = require('./components/sign_up_form');
 const ErrorStore = require('./stores/error_store');
-const NoteCreateForm = require('./components/notes/note_create_form');
+const NoteStore = require('./stores/note_store');
+const NoteIndex = require('./components/notes/note_index');
+const NoteActions = require('./actions/note_actions');
+
+window.na = NoteActions;
+window.ns = NoteStore;
 
 const App = React.createClass({
   render(){
@@ -25,9 +30,10 @@ const App = React.createClass({
 
 const routes = (
   <Route path="/" component={App}>
+    <IndexRoute component={NoteIndex}/>
+    <Route path="notes" component={NoteIndex}/>
     <Route path="session/new" component={LoginForm}/>
     <Route path="users/new" component={SignUpForm}/>
-    <Route path="notes/new" component={NoteCreateForm}/>
   </Route>
 );
 
