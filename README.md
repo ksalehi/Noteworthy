@@ -8,7 +8,7 @@
 
 Noteworthy is a web application for note management and storage modeled after Evernote. It will be built using Ruby on Rails and React.js.  By the end of Week 9, this app will, at a minimum, meet the following specifications:
 
-- [X] Hosting on Heroku
+- [ ] Hosting on Heroku
 - [ ] New account creation, login, and guest/demo login
 - [ ] A production README, replacing this README
 - [ ] Notes
@@ -47,31 +47,31 @@ Noteworthy is a web application for note management and storage modeled after Ev
 
 **Objective:** Basic rails project with authentication
 
-- [ ] create new project
-- [ ] create `User` model
-- [ ] roll authentication
-- [ ] create user signup/login pages
-- [ ] create blank landing page after login
+- [X] create new project
+- [X] create `User` model
+- [X] roll authentication
+- [X] create user signup/login pages
+- [X] create blank landing page after login
 
 ### Phase 2: Note model, API, basic APIUtil (1.5 days, due W1 Th 12pm)
 
 **Objective:** Notes can be created, read, updated and destroyed through
 the API.
 
-- [ ] create `Note` model
-- [ ] seed database
-- [ ] create jBuilder views for notes
-- [ ] setup Webpack & Flux scaffold
-- [ ] setup `APIUtil` to interact with the API
-- [ ] test out API in console
+- [X] create `Note` model
+- [X] seed database
+- [X] create jBuilder views for notes
+- [X] setup Webpack & Flux scaffold
+- [X] setup `APIUtil` to interact with the API
+- [X] test out API in console
 
 ### Phase 3: Flux architecture and router (1.5 days, due W1 F 6pm)
 
 **Objective:** Notes can be created, read, updated and destroyed through the
 UI.
 
-- [ ] set up flux loop with skeleton files
-- [ ] setup React Router
+- [X] set up flux loop with skeleton files
+- [X] setup React Router
 - implement each note component, building out the flux loop as needed:
   - [ ] `NotesIndex`
   - [ ] `NoteIndexItem`
@@ -91,7 +91,7 @@ UI.
 
 **Objective:** Notes belong to notebooks, and can be viewed by notebook.
 
-- [ ] create `Notebook` model
+- [X] create `Notebook` model
 - build out API, Flux loop, and components for:
   - [ ] Notebook CRUD
   - [ ] adding notes requires a notebook

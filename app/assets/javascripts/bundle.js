@@ -30035,7 +30035,7 @@
 	  displayName: 'LoginForm',
 	  getInitialState: function getInitialState() {
 	    return {
-	      errors: {},
+	      errors: [],
 	      username: "",
 	      password: ""
 	    };

@@ -7,7 +7,7 @@ const ErrorStore = require('../stores/error_store');
 const LoginForm = React.createClass({
   getInitialState(){
     return ({
-      errors: {},
+      errors: [],
       username: "",
       password: ""
     });
