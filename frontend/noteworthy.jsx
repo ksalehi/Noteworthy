@@ -7,12 +7,11 @@ const Router = reactRouter.Router;
 const Route = reactRouter.Route;
 const IndexRoute = reactRouter.IndexRoute;
 const hashHistory = reactRouter.hashHistory;
-// const SessionApiUtil = require('./util/session_api_util');
-// const SessionActions = require('./actions/session_actions');
 const LoginForm = require('./components/login_form');
 const SignUpForm = require('./components/sign_up_form');
 const ErrorStore = require('./stores/error_store');
-window.es = ErrorStore;
+const NoteCreateForm = require('./components/notes/note_create_form');
+
 const App = React.createClass({
   render(){
     return (
@@ -28,6 +27,7 @@ const routes = (
   <Route path="/" component={App}>
     <Route path="session/new" component={LoginForm}/>
     <Route path="users/new" component={SignUpForm}/>
+    <Route path="notes/new" component={NoteCreateForm}/>
   </Route>
 );
 
