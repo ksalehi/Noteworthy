@@ -40,7 +40,7 @@ const routes = (
     </IndexRoute>
     <Route path="notes" component={NoteIndex}>
       <Route path="new" component={NoteForm}/>
-      <Route path=":noteId" component={NoteDetail}/>
+      <Route path=":noteId" component={NoteForm}/>
     </Route>
     <Route path="notebooks" component={NotebookIndex}/>
     <Route path="users/new" component={SignUpForm}/>

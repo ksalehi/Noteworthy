@@ -89,7 +89,7 @@
 	    Route,
 	    { path: 'notes', component: NoteIndex },
 	    React.createElement(Route, { path: 'new', component: NoteForm }),
-	    React.createElement(Route, { path: ':noteId', component: NoteDetail })
+	    React.createElement(Route, { path: ':noteId', component: NoteForm })
 	  ),
 	  React.createElement(Route, { path: 'notebooks', component: NotebookIndex }),
 	  React.createElement(Route, { path: 'users/new', component: SignUpForm })
@@ -30085,46 +30085,42 @@
 	  render: function render() {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'login-form' },
 	      React.createElement(
 	        'ul',
 	        null,
 	        this.renderErrors()
 	      ),
 	      React.createElement(
-	        'div',
-	        { className: 'form-wrapper' },
+	        'form',
+	        { onSubmit: this.handleSubmit },
 	        React.createElement(
-	          'form',
-	          { onSubmit: this.handleSubmit },
+	          'div',
+	          { className: 'username-input' },
 	          React.createElement(
-	            'div',
-	            { className: 'username-input' },
-	            React.createElement(
-	              'label',
-	              { id: 'username' },
-	              'Username: '
-	            ),
-	            React.createElement('input', { type: 'text',
-	              id: 'username',
-	              value: this.state.description,
-	              onChange: this.changeUsername })
+	            'label',
+	            { id: 'username' },
+	            'Username: '
 	          ),
+	          React.createElement('input', { type: 'text',
+	            id: 'username',
+	            value: this.state.description,
+	            onChange: this.changeUsername })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'password-input' },
 	          React.createElement(
-	            'div',
-	            { className: 'password-input' },
-	            React.createElement(
-	              'label',
-	              { id: 'password' },
-	              'Password: '
-	            ),
-	            React.createElement('input', { type: 'password',
-	              id: 'password',
-	              value: this.state.password,
-	              onChange: this.changePassword })
+	            'label',
+	            { id: 'password' },
+	            'Password: '
 	          ),
-	          React.createElement('input', { type: 'submit', value: 'LOG IN' })
-	        )
+	          React.createElement('input', { type: 'password',
+	            id: 'password',
+	            value: this.state.password,
+	            onChange: this.changePassword })
+	        ),
+	        React.createElement('input', { type: 'submit', value: 'LOG IN' })
 	      )
 	    );
 	  }
@@ -37346,16 +37342,21 @@
 	      'div',
 	      null,
 	      React.createElement(
+	        'button',
+	        { className: 'new-note-button', onClick: this.newNote },
+	        '+'
+	      ),
+	      React.createElement(
 	        'ul',
 	        { className: 'notes-list' },
+	        React.createElement(
+	          'h2',
+	          { className: 'notes-list-header' },
+	          'Notes'
+	        ),
 	        notes.map(function (note) {
 	          return React.createElement(NoteIndexItem, { key: note.id, note: note });
 	        })
-	      ),
-	      React.createElement(
-	        'button',
-	        { onClick: this.newNote },
-	        'New Note'
 	      ),
 	      this.props.children
 	    );
@@ -37442,7 +37443,9 @@
 	      url: 'api/notes',
 	      data: { note: noteData },
 	      success: successCB,
-	      error: errorCB
+	      error: function error(data) {
+	        errorCB(data);
+	      }
 	    });
 	  },
 	  updateNote: function updateNote(noteData, successCB, errorCB) {
@@ -37749,10 +37752,6 @@
 	  },
 	  render: function render() {
 	    if (this.state.note) {
-	      // debugger;
-	      console.log(this.state.note.id);
-	    }
-	    if (this.state.note) {
 	      return React.createElement(
 	        'article',
 	        { className: 'note-detail' },
@@ -37776,10 +37775,16 @@
 	
 	var React = __webpack_require__(1);
 	var ErrorStore = __webpack_require__(294);
+	var hashHistory = __webpack_require__(168).hashHistory;
+	var NoteActions = __webpack_require__(300);
+	var NoteStore = __webpack_require__(297);
 	
 	var NoteForm = React.createClass({
 	  displayName: 'NoteForm',
 	  getInitialState: function getInitialState() {
+	    console.log('getting initial state');
+	    console.log(this.props.params);
+	    var potentialNote = NoteStore.find(this.props.params.noteId);
 	    return {
 	      errors: [],
 	      title: "",
@@ -37811,6 +37816,17 @@
 	      );
 	    });
 	  },
+	  handleSubmit: function handleSubmit(e) {
+	    console.log('handleSubmit triggered');
+	    e.preventDefault();
+	    var noteData = {
+	      title: this.state.title,
+	      body: this.state.body
+	    };
+	    NoteActions.createNote(noteData);
+	    this.setState({ title: "", body: "" });
+	    hashHistory.push('/notes');
+	  },
 	  render: function render() {
 	    console.log('rendering noteform');
 	    return React.createElement(
@@ -37823,7 +37839,8 @@
 	      ),
 	      React.createElement(
 	        'form',
-	        { onSubmit: this.handleSubmit },
+	        { className: 'new-note-form', onSubmit: this.handleSubmit },
+	        React.createElement('input', { type: 'submit', className: 'done-button', value: 'DONE' }),
 	        React.createElement(
 	          'label',
 	          { id: 'title' },
@@ -37832,7 +37849,8 @@
 	        React.createElement('input', { type: 'text',
 	          id: 'title',
 	          value: this.state.title,
-	          onChange: this.handleChange("title") }),
+	          onChange: this.handleChange("title"),
+	          className: 'title-input' }),
 	        React.createElement(
 	          'label',
 	          { id: 'body' },
@@ -37841,8 +37859,8 @@
 	        React.createElement('input', { type: 'text',
 	          id: 'body',
 	          value: this.state.body,
-	          onChange: this.handleChange("body") }),
-	        React.createElement('input', { type: 'submit', value: 'Done' })
+	          onChange: this.handleChange("body"),
+	          className: 'body-input' })
 	      )
 	    );
 	  }
@@ -55933,19 +55951,23 @@
 	  render: function render() {
 	    return React.createElement(
 	      'div',
-	      null,
-	      React.createElement(
-	        'h1',
-	        { className: 'noteworthy' },
-	        'Noteworthy.'
-	      ),
-	      React.createElement(
-	        'p',
-	        { className: 'slogan' },
-	        'You write it. We remember it.'
-	      ),
+	      { className: 'splash-container' },
 	      React.createElement('img', { className: 'cover-photo' }),
-	      React.createElement(LogInForm, null)
+	      React.createElement(
+	        'div',
+	        { className: 'splash-text' },
+	        React.createElement(
+	          'h1',
+	          { className: 'noteworthy' },
+	          'Noteworthy.'
+	        ),
+	        React.createElement(
+	          'p',
+	          { className: 'slogan' },
+	          'You write it. We remember it.'
+	        ),
+	        React.createElement(LogInForm, null)
+	      )
 	    );
 	  }
 	});

@@ -53,27 +53,26 @@ const LoginForm = React.createClass({
   },
   render() {
     return (
-      <div>
+      <div className="login-form">
         <ul>{this.renderErrors()}</ul>
-        <div className="form-wrapper">
-          <form onSubmit={this.handleSubmit}>
-            <div className="username-input">
-              <label id="username">Username: </label>
-              <input type="text"
-                     id="username"
-                     value={this.state.description}
-                     onChange={this.changeUsername}/>
-            </div>
-            <div className="password-input">
-              <label id="password">Password: </label>
-              <input type="password"
-                     id="password"
-                     value={this.state.password}
-                     onChange={this.changePassword}/>
-            </div>
-            <input type="submit" value="LOG IN"/>
-          </form>
-        </div>
+        <form onSubmit={this.handleSubmit}>
+          <div className="username-input">
+            <label id="username">Username: </label>
+            <input type="text"
+                   id="username"
+                   value={this.state.description}
+                   onChange={this.changeUsername}/>
+          </div>
+          <div className="password-input">
+            <label id="password">Password: </label>
+            <input type="password"
+                   id="password"
+                   value={this.state.password}
+                   onChange={this.changePassword}/>
+          </div>
+          <input type="submit" value="LOG IN"/>
+        </form>
+
       </div>
     );
   }

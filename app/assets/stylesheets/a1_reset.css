@@ -15,19 +15,13 @@ span, article, footer {
   box-sizing: inherit;
 }
 
-html {
-  background: darkgray;
-  height: 100%;
-}
-
-body {
+/*body {
   background: whitesmoke;
   margin: 25px auto;
   padding: 25px;
   font-family: Arial, sans-serif;
-  max-width: 1200px;
   height: 100%;
-}
+}*/
 
 ul {
   list-style: none;
@@ -62,7 +56,18 @@ input[type="submit"] {
   clear: both;
 }
 
-.content {
+body {
   position: relative;
-  margin: 15px auto;
+  margin: 25px auto;
+  background: whitesmoke;
+  padding: 25px;
+  max-width: 90%;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.content {
+  background: gray;
+  width: 90%;
+  height: 100%;
 }

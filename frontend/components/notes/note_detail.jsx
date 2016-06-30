@@ -19,10 +19,6 @@ const NoteDetail = React.createClass({
     this.setState({note: NoteStore.find(this.props.params.noteId)});
   },
   render(){
-    if (this.state.note) {
-      // debugger;
-      console.log(this.state.note.id);
-    }
     if (this.state.note){
       return (
         <article className="note-detail">

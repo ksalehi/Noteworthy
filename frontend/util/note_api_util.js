@@ -21,7 +21,9 @@ const NoteApiUtil = {
       url: 'api/notes',
       data: { note: noteData },
       success: successCB,
-      error: errorCB
+      error(data) {
+        errorCB(data);
+      }
     });
   },
   updateNote(noteData, successCB, errorCB){

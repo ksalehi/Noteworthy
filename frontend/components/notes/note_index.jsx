@@ -28,14 +28,15 @@ const NoteIndex = React.createClass({
     const that = this;
     return (
       <div>
+        <button className="new-note-button" onClick={this.newNote}>+</button>
         <ul className="notes-list">
+          <h2 className="notes-list-header">Notes</h2>
           {
             notes.map( note => {
               return (<NoteIndexItem key={note.id} note={note}/>);
             })
           }
         </ul>
-        <button onClick={this.newNote}>New Note</button>
         {this.props.children}
       </div>
     );

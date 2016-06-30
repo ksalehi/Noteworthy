@@ -79,6 +79,7 @@ UI.
 - [ ] save Notes to the DB when the form loses focus or is left idle
   after editing
 - [ ] clean up any remaining login/signup errors / routes
+- [ ] get photos set up on cloudinary
 
 ### Phase 4: Start styling (0.5 days, due W2 M 12pm)
 

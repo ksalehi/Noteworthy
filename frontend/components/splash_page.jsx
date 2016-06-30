@@ -5,11 +5,13 @@ const LogInForm = require('./login_form');
 const SplashPage = React.createClass({
   render() {
     return (
-      <div>
-        <h1 className="noteworthy">Noteworthy.</h1>
-        <p className="slogan">You write it. We remember it.</p>
+      <div className="splash-container">
         <img className="cover-photo"></img>
-        <LogInForm />
+        <div className="splash-text">
+          <h1 className="noteworthy">Noteworthy.</h1>
+          <p className="slogan">You write it. We remember it.</p>
+          <LogInForm />
+        </div>
       </div>
     );
   }
