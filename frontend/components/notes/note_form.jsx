@@ -6,9 +6,6 @@ const NoteStore = require('../../stores/note_store');
 
 const NoteForm = React.createClass({
   getInitialState() {
-    console.log('getting initial state');
-    console.log(this.props.params);
-    const potentialNote = NoteStore.find(this.props.params.noteId);
     return {
       errors: [],
       title: "",
@@ -19,10 +16,19 @@ const NoteForm = React.createClass({
     this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
   componentWillReceiveProps(newProps){
-    console.log('getting receive props ');
-
-    console.log(newProps.params);
-
+    const note = NoteStore.find(newProps.params.noteId);
+    if (note) {
+      this.setState({
+        title: note.title,
+        body: note.body
+      });
+    } else {
+      this.setState({
+        errors: [],
+        title: "",
+        body: ""
+      });
+    }
   },
   componentWillUnmount() {
     this.errorListener.remove();
@@ -63,13 +69,14 @@ const NoteForm = React.createClass({
                  id="title"
                  value={this.state.title}
                  onChange={this.handleChange("title")}
+                 placeholder="Title your note"
                  className="title-input"/>
                <label id="body">Body: </label>
-          <input type="text"
-                 id="body"
-                 value={this.state.body}
-                 onChange={this.handleChange("body")}
-                 className="body-input"/>
+          <textarea id="body"
+                    value={this.state.body}
+                    onChange={this.handleChange("body")}
+                    placeholder="Drag files here or just start typing..."
+                    className="body-input"></textarea>
         </form>
       </div>
     );

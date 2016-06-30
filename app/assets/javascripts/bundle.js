@@ -37783,9 +37783,6 @@
 	var NoteForm = React.createClass({
 	  displayName: 'NoteForm',
 	  getInitialState: function getInitialState() {
-	    console.log('getting initial state');
-	    console.log(this.props.params);
-	    var potentialNote = NoteStore.find(this.props.params.noteId);
 	    return {
 	      errors: [],
 	      title: "",
@@ -37796,9 +37793,19 @@
 	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
-	    console.log('getting receive props ');
-	
-	    console.log(newProps.params);
+	    var note = NoteStore.find(newProps.params.noteId);
+	    if (note) {
+	      this.setState({
+	        title: note.title,
+	        body: note.body
+	      });
+	    } else {
+	      this.setState({
+	        errors: [],
+	        title: "",
+	        body: ""
+	      });
+	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.errorListener.remove();
@@ -37856,16 +37863,17 @@
 	          id: 'title',
 	          value: this.state.title,
 	          onChange: this.handleChange("title"),
+	          placeholder: 'Title your note',
 	          className: 'title-input' }),
 	        React.createElement(
 	          'label',
 	          { id: 'body' },
 	          'Body: '
 	        ),
-	        React.createElement('input', { type: 'text',
-	          id: 'body',
+	        React.createElement('textarea', { id: 'body',
 	          value: this.state.body,
 	          onChange: this.handleChange("body"),
+	          placeholder: 'Drag files here or just start typing...',
 	          className: 'body-input' })
 	      )
 	    );
