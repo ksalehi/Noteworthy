@@ -1,8 +1,8 @@
 # Noteworthy
 
-[Heroku link][heroku]
+[Heroku][heroku]
 
-[heroku]: noteworthyapp.herokuapp.com
+[heroku]: https://noteworthyapp.herokuapp.com
 
 ## Minimum Viable Product
 
@@ -78,6 +78,7 @@ UI.
   - [X] `NoteForm`
 - [ ] save Notes to the DB when the form loses focus or is left idle
   after editing
+- [ ] clean up any remaining login/signup errors / routes
 
 ### Phase 4: Start styling (0.5 days, due W2 M 12pm)
 
