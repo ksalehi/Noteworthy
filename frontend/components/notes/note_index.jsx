@@ -5,10 +5,6 @@ const NoteActions = require('../../actions/note_actions');
 const NoteIndexItem = require('./note_index_item');
 
 const NoteIndex = React.createClass({
-  showDetail(){
-    console.log('you clicked!');
-    // hashHistory.push('/notes/' + noteId);
-  },
   getInitialState() {
     return { notes: NoteStore.all() };
   },
@@ -22,6 +18,11 @@ const NoteIndex = React.createClass({
   _onChange() {
     this.setState({ notes: NoteStore.all() });
   },
+  newNote(e){
+    e.preventDefault();
+    const url = '/notes/new';
+    hashHistory.push(url);
+  },
   render(){
     const notes = this.state.notes;
     const that = this;
@@ -34,7 +35,8 @@ const NoteIndex = React.createClass({
             })
           }
         </ul>
-        <div>{this.props.children}</div>
+        <button onClick={this.newNote}>New Note</button>
+        {this.props.children}
       </div>
     );
   }

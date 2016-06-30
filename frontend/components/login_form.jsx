@@ -7,6 +7,7 @@ const ErrorStore = require('../stores/error_store');
 const LoginForm = React.createClass({
   getInitialState(){
     return ({
+      modalOpen: false,
       errors: [],
       username: "",
       password: ""
@@ -55,17 +56,21 @@ const LoginForm = React.createClass({
       <div>
         <ul>{this.renderErrors()}</ul>
         <form onSubmit={this.handleSubmit}>
-          <label id="username">Username: </label>
-          <input type="text"
-                 id="username"
-                 value={this.state.description}
-                 onChange={this.changeUsername}/>
-               <label id="password">Password: </label>
-          <input type="password"
-                 id="password"
-                 value={this.state.password}
-                 onChange={this.changePassword}/>
-          <input type="submit" value="Log In!"/>
+          <div className="username-input">
+            <label id="username">Username: </label>
+            <input type="text"
+                   id="username"
+                   value={this.state.description}
+                   onChange={this.changeUsername}/>
+          </div>
+          <div className="password-input">
+            <label id="password">Password: </label>
+            <input type="password"
+                   id="password"
+                   value={this.state.password}
+                   onChange={this.changePassword}/>
+          </div>
+          <input type="submit" value="LOG IN"/>
         </form>
       </div>
     );

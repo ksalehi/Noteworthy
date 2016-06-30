@@ -73,9 +73,9 @@ UI.
 - [X] set up flux loop with skeleton files
 - [X] setup React Router
 - implement each note component, building out the flux loop as needed:
-  - [ ] `NotesIndex`
-  - [ ] `NoteIndexItem`
-  - [ ] `NoteForm`
+  - [X] `NotesIndex`
+  - [X] `NoteIndexItem`
+  - [X] `NoteForm`
 - [ ] save Notes to the DB when the form loses focus or is left idle
   after editing
 

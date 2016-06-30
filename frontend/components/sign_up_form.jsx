@@ -53,19 +53,24 @@ const SignUpForm = React.createClass({
     return (
       <div>
         <ul>{this.renderErrors()}</ul>
-        <form onSubmit={this.handleSubmit}>
-          <label id="username">Username: </label>
-          <input type="text"
-                 id="username"
-                 value={this.state.description}
-                 onChange={this.changeUsername}/>
-          <label id="password">Password: </label>
-          <input type="password"
-                 id="password"
-                 value={this.state.password}
-                 onChange={this.changePassword}/>
-          <input type="submit" value="Sign Up!"/>
+          <form onSubmit={this.handleSubmit}>
+            <div className="username-input">
+              <label id="username">Username: </label>
+              <input type="text"
+                     id="username"
+                     value={this.state.description}
+                     onChange={this.changeUsername}/>
+            </div>
+            <div className="password-input">
+              <label id="password">Password: </label>
+              <input type="password"
+                     id="password"
+                     value={this.state.password}
+                     onChange={this.changePassword}/>
+            </div>
+            <input type="submit" value="SIGN UP"/>
         </form>
+
       </div>
     );
   }

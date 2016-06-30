@@ -13,7 +13,19 @@ span, article, footer {
   text-decoration: inherit;
   vertical-align: inherit;
   box-sizing: inherit;
-  background: transparent;
+}
+
+html {
+  background: darkgray;
+}
+
+body {
+  background: whitesmoke;
+  margin: 25px auto;
+  padding: 25px;
+  font-family: Arial, sans-serif;
+  max-width: 1200px;
+  border-radius: 15px; 
 }
 
 ul {
@@ -47,4 +59,9 @@ input[type="submit"] {
   content: "";
   display: block;
   clear: both;
+}
+
+.content {
+  position: relative;
+  margin: 15px auto;
 }

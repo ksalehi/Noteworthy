@@ -4,15 +4,15 @@ const ErrorStore = require('../../stores/error_store');
 const NoteForm = React.createClass({
   getInitialState() {
     return {
-      errors: {},
+      errors: [],
       title: "",
       body: ""
     };
   },
-  componentDidMount: function() {
+  componentDidMount() {
     this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     this.errorListener.remove();
   },
   handleChange(property) {
@@ -29,6 +29,7 @@ const NoteForm = React.createClass({
     });
   },
   render(){
+    console.log('rendering noteform');
     return (
       <div>
         <ul>{this.renderErrors()}</ul>
@@ -43,6 +44,7 @@ const NoteForm = React.createClass({
                  id="body"
                  value={this.state.body}
                  onChange={this.handleChange("body")}/>
+          <input type="submit" value="Done"/>
         </form>
       </div>
     );
