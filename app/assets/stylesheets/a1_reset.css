@@ -66,8 +66,8 @@ body {
   font-family: Arial, sans-serif;
 }
 
-.content {
-  background: gray;
-  width: 90%;
+#content {
+  background: red;
+  width: 90px;
   height: 100%;
 }
