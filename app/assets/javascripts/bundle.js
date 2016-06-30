@@ -88,6 +88,7 @@
 	  React.createElement(
 	    Route,
 	    { path: 'notes', component: NoteIndex },
+	    React.createElement(IndexRoute, { component: NoteForm }),
 	    React.createElement(Route, { path: 'new', component: NoteForm }),
 	    React.createElement(Route, { path: ':noteId', component: NoteForm })
 	  ),
@@ -37793,6 +37794,11 @@
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.errorListener = ErrorStore.addListener(this.handleErrors);
+	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+	    console.log('getting receive props ');
+	
+	    console.log(newProps.params);
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.errorListener.remove();

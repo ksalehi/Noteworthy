@@ -39,6 +39,7 @@ const routes = (
     <IndexRoute component={SplashPage}>
     </IndexRoute>
     <Route path="notes" component={NoteIndex}>
+      <IndexRoute component={NoteForm}/>
       <Route path="new" component={NoteForm}/>
       <Route path=":noteId" component={NoteForm}/>
     </Route>

@@ -18,6 +18,12 @@ const NoteForm = React.createClass({
   componentDidMount() {
     this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
+  componentWillReceiveProps(newProps){
+    console.log('getting receive props ');
+
+    console.log(newProps.params);
+
+  },
   componentWillUnmount() {
     this.errorListener.remove();
   },
