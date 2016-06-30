@@ -37854,24 +37854,12 @@
 	        'form',
 	        { className: 'new-note-form', onSubmit: this.handleSubmit },
 	        React.createElement('input', { type: 'submit', className: 'done-button', value: 'DONE' }),
-	        React.createElement(
-	          'label',
-	          { id: 'title' },
-	          'Title: '
-	        ),
 	        React.createElement('input', { type: 'text',
-	          id: 'title',
 	          value: this.state.title,
 	          onChange: this.handleChange("title"),
 	          placeholder: 'Title your note',
 	          className: 'title-input' }),
-	        React.createElement(
-	          'label',
-	          { id: 'body' },
-	          'Body: '
-	        ),
-	        React.createElement('textarea', { id: 'body',
-	          value: this.state.body,
+	        React.createElement('textarea', { value: this.state.body,
 	          onChange: this.handleChange("body"),
 	          placeholder: 'Drag files here or just start typing...',
 	          className: 'body-input' })

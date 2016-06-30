@@ -64,16 +64,12 @@ const NoteForm = React.createClass({
         <ul>{this.renderErrors()}</ul>
         <form className="new-note-form" onSubmit={this.handleSubmit}>
           <input type="submit" className="done-button" value="DONE"/>
-          <label id="title">Title: </label>
           <input type="text"
-                 id="title"
                  value={this.state.title}
                  onChange={this.handleChange("title")}
                  placeholder="Title your note"
                  className="title-input"/>
-               <label id="body">Body: </label>
-          <textarea id="body"
-                    value={this.state.body}
+          <textarea value={this.state.body}
                     onChange={this.handleChange("body")}
                     placeholder="Drag files here or just start typing..."
                     className="body-input"></textarea>
