@@ -8,7 +8,9 @@ let _form = "";
 
 ErrorStore.formErrors = function(form){
   if (form === _form) {
-    return _errors;
+    return Object.keys(_errors).map( errorId => {
+      return _errors[errorId];
+    });
   }
 };
 

@@ -2,11 +2,13 @@ const Store = require('flux/utils').Store;
 const AppDispatcher = require('../dispatcher/dispatcher');
 const SessionStore = new Store(AppDispatcher);
 const SessionConstants = require('../constants/session_constants');
+const hashHistory = require('react-router').hashHistory;
 
 let _currentUser = {};
 
 SessionStore._login = function(currentUser) {
   _currentUser = currentUser;
+  hashHistory.push('notes');
   SessionStore.__emitChange();
 };
 

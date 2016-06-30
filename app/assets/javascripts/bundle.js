@@ -63,6 +63,7 @@
 	var NoteIndexItem = __webpack_require__(307);
 	var NoteDetail = __webpack_require__(308);
 	var NoteForm = __webpack_require__(309);
+	var SplashPage = __webpack_require__(460);
 	
 	var Modal = __webpack_require__(310);
 	
@@ -71,24 +72,10 @@
 	
 	var App = React.createClass({
 	  displayName: 'App',
-	  logIn: function logIn() {
-	    // redirect to login form, or eventually show modal
-	  },
 	  render: function render() {
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(
-	        'h1',
-	        { className: 'noteworthy' },
-	        'Noteworthy.'
-	      ),
-	      React.createElement(
-	        'p',
-	        { className: 'slogan' },
-	        'You write it. We remember it.'
-	      ),
-	      React.createElement('button', { onClick: this.logIn }),
 	      this.props.children
 	    );
 	  }
@@ -97,7 +84,7 @@
 	var routes = React.createElement(
 	  Route,
 	  { path: '/', component: App },
-	  React.createElement(IndexRoute, { component: NoteIndex }),
+	  React.createElement(IndexRoute, { component: SplashPage }),
 	  React.createElement(
 	    Route,
 	    { path: 'notes', component: NoteIndex },
@@ -105,7 +92,6 @@
 	    React.createElement(Route, { path: ':noteId', component: NoteDetail })
 	  ),
 	  React.createElement(Route, { path: 'notebooks', component: NotebookIndex }),
-	  React.createElement(Route, { path: 'session/new', component: LoginForm }),
 	  React.createElement(Route, { path: 'users/new', component: SignUpForm })
 	);
 	
@@ -30106,35 +30092,39 @@
 	        this.renderErrors()
 	      ),
 	      React.createElement(
-	        'form',
-	        { onSubmit: this.handleSubmit },
+	        'div',
+	        { className: 'form-wrapper' },
 	        React.createElement(
-	          'div',
-	          { className: 'username-input' },
+	          'form',
+	          { onSubmit: this.handleSubmit },
 	          React.createElement(
-	            'label',
-	            { id: 'username' },
-	            'Username: '
+	            'div',
+	            { className: 'username-input' },
+	            React.createElement(
+	              'label',
+	              { id: 'username' },
+	              'Username: '
+	            ),
+	            React.createElement('input', { type: 'text',
+	              id: 'username',
+	              value: this.state.description,
+	              onChange: this.changeUsername })
 	          ),
-	          React.createElement('input', { type: 'text',
-	            id: 'username',
-	            value: this.state.description,
-	            onChange: this.changeUsername })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'password-input' },
 	          React.createElement(
-	            'label',
-	            { id: 'password' },
-	            'Password: '
+	            'div',
+	            { className: 'password-input' },
+	            React.createElement(
+	              'label',
+	              { id: 'password' },
+	              'Password: '
+	            ),
+	            React.createElement('input', { type: 'password',
+	              id: 'password',
+	              value: this.state.password,
+	              onChange: this.changePassword })
 	          ),
-	          React.createElement('input', { type: 'password',
-	            id: 'password',
-	            value: this.state.password,
-	            onChange: this.changePassword })
-	        ),
-	        React.createElement('input', { type: 'submit', value: 'LOG IN' })
+	          React.createElement('input', { type: 'submit', value: 'LOG IN' })
+	        )
 	      )
 	    );
 	  }
@@ -30603,11 +30593,13 @@
 	var AppDispatcher = __webpack_require__(268);
 	var SessionStore = new Store(AppDispatcher);
 	var SessionConstants = __webpack_require__(272);
+	var hashHistory = __webpack_require__(168).hashHistory;
 	
 	var _currentUser = {};
 	
 	SessionStore._login = function (currentUser) {
 	  _currentUser = currentUser;
+	  hashHistory.push('notes');
 	  SessionStore.__emitChange();
 	};
 	
@@ -37099,7 +37091,9 @@
 	
 	ErrorStore.formErrors = function (form) {
 	  if (form === _form) {
-	    return _errors;
+	    return Object.keys(_errors).map(function (errorId) {
+	      return _errors[errorId];
+	    });
 	  }
 	};
 	
@@ -37482,8 +37476,6 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	// const SessionActions = require('../actions/session_actions.js');
-	// const hashHistory = require('react-router').hashHistory;
 	var NotebookStore = __webpack_require__(303);
 	var NotebookActions = __webpack_require__(305);
 	
@@ -55925,6 +55917,40 @@
 	  else this.add(className)
 	}
 
+
+/***/ },
+/* 460 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var hashHistory = __webpack_require__(168).hashHistory;
+	var LogInForm = __webpack_require__(266);
+	
+	var SplashPage = React.createClass({
+	  displayName: 'SplashPage',
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        { className: 'noteworthy' },
+	        'Noteworthy.'
+	      ),
+	      React.createElement(
+	        'p',
+	        { className: 'slogan' },
+	        'You write it. We remember it.'
+	      ),
+	      React.createElement('img', { className: 'cover-photo' }),
+	      React.createElement(LogInForm, null)
+	    );
+	  }
+	});
+	
+	module.exports = SplashPage;
 
 /***/ }
 /******/ ]);
