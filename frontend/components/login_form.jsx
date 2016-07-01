@@ -51,6 +51,20 @@ const LoginForm = React.createClass({
     };
     SessionActions.logIn(loginData);
   },
+  signUp(){
+    const signupData = {
+      username: this.state.username,
+      password: this.state.password,
+    };
+    SessionActions.signUp(signupData);
+  },
+  guestDemo(){
+    const demoData = {
+      username: "guest",
+      password: "password"
+    };
+    SessionActions.logIn(demoData);
+  },
   render() {
     return (
       <div className="login-form">
@@ -68,9 +82,10 @@ const LoginForm = React.createClass({
                    value={this.state.password}
                    onChange={this.changePassword}/>
           </div>
-          <input type="submit" className="login-button" value="LOG IN"/>
+          <input type="submit" className="splash-button" value="LOG IN"/>
         </form>
-
+        <button className="splash-button" onClick={this.signUp} value="SIGN UP">SIGN UP</button>
+        <button className="splash-button" onClick={this.guestDemo} value="GUEST DEMO">GUEST DEMO</button>
       </div>
     );
   }

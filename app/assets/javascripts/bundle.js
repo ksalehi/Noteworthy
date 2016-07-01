@@ -30083,6 +30083,20 @@
 	    };
 	    SessionActions.logIn(loginData);
 	  },
+	  signUp: function signUp() {
+	    var signupData = {
+	      username: this.state.username,
+	      password: this.state.password
+	    };
+	    SessionActions.signUp(signupData);
+	  },
+	  guestDemo: function guestDemo() {
+	    var demoData = {
+	      username: "guest",
+	      password: "password"
+	    };
+	    SessionActions.logIn(demoData);
+	  },
 	  render: function render() {
 	    return React.createElement(
 	      'div',
@@ -30111,7 +30125,17 @@
 	            value: this.state.password,
 	            onChange: this.changePassword })
 	        ),
-	        React.createElement('input', { type: 'submit', className: 'login-button', value: 'LOG IN' })
+	        React.createElement('input', { type: 'submit', className: 'splash-button', value: 'LOG IN' })
+	      ),
+	      React.createElement(
+	        'button',
+	        { className: 'splash-button', onClick: this.signUp, value: 'SIGN UP' },
+	        'SIGN UP'
+	      ),
+	      React.createElement(
+	        'button',
+	        { className: 'splash-button', onClick: this.guestDemo, value: 'GUEST DEMO' },
+	        'GUEST DEMO'
 	      )
 	    );
 	  }
@@ -37325,6 +37349,8 @@
 	  render: function render() {
 	    var notes = this.state.notes;
 	    var that = this;
+	    var path = this.props.location.pathname;
+	
 	    return React.createElement(
 	      'div',
 	      null,
@@ -37342,8 +37368,11 @@
 	          'Notes'
 	        ),
 	        notes.map(function (note) {
-	
-	          return React.createElement(NoteIndexItem, { key: note.id, note: note });
+	          return React.createElement(NoteIndexItem, {
+	            key: note.id,
+	            note: note,
+	            selected: path === '/notes/' + note.id ? true : false
+	          });
 	        })
 	      ),
 	      this.props.children
@@ -37414,7 +37443,9 @@
 	      method: 'GET',
 	      url: 'api/notes',
 	      success: successCB,
-	      error: errorCB
+	      error: function error(response) {
+	        errorCB("notes_index", response.responseJSON);
+	      }
 	    });
 	  },
 	  getNote: function getNote(id, successCB, errorCB) {
@@ -37422,7 +37453,9 @@
 	      method: 'GET',
 	      url: 'api/notes/' + id,
 	      success: successCB,
-	      error: errorCB
+	      error: function error(response) {
+	        errorCB("note_index_item", response.responseJSON);
+	      }
 	    });
 	  },
 	  createNote: function createNote(noteData, successCB, errorCB) {
@@ -37431,8 +37464,8 @@
 	      url: 'api/notes',
 	      data: { note: noteData },
 	      success: successCB,
-	      error: function error(data) {
-	        errorCB(data);
+	      error: function error(response) {
+	        errorCB("note_form", response.responseJSON);
 	      }
 	    });
 	  },
@@ -37445,7 +37478,9 @@
 	          body: noteData.body
 	        } },
 	      success: successCB,
-	      error: errorCB
+	      error: function error(response) {
+	        errorCB("note_form", response.responseJSON);
+	      }
 	    });
 	  },
 	  deleteNote: function deleteNote(id, successCB, errorCB) {
@@ -37453,7 +37488,9 @@
 	      method: 'DELETE',
 	      url: 'api/notes/' + id,
 	      success: successCB,
-	      error: errorCB
+	      error: function error(response) {
+	        errorCB("delete_note", response.responseJSON);
+	      }
 	    });
 	  }
 	};
@@ -37701,9 +37738,15 @@
 	    hashHistory.push('/notes/' + this.props.note.id);
 	  },
 	  render: function render() {
+	    var klass = void 0;
+	    if (this.props.selected) {
+	      klass = " selected";
+	    } else {
+	      klass = "";
+	    }
 	    return React.createElement(
 	      'li',
-	      { onClick: this.showDetail, className: 'notes-list-item' },
+	      { onClick: this.showDetail, className: "notes-list-item" + klass },
 	      this.props.note.title
 	    );
 	  }
@@ -37808,7 +37851,6 @@
 	    };
 	  },
 	  handleErrors: function handleErrors() {
-	    debugger;
 	    this.setState({ errors: ErrorStore.formErrors("note_form") });
 	  },
 	  renderErrors: function renderErrors() {
@@ -37830,10 +37872,10 @@
 	    if (this.state.update) {
 	      noteData['id'] = this.props.params.noteId;
 	      NoteActions.editNote(noteData);
-	      console.log('after note actions');
 	    } else {
 	      NoteActions.createNote(noteData);
 	    }
+	    this.setState({ update: false });
 	  },
 	  render: function render() {
 	    console.log('rendering noteform');

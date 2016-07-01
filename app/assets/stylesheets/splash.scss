@@ -57,20 +57,22 @@ input {
   color: gray;
 }
 
-.login-button {
+.splash-button {
   padding: 8px;
   border-radius: 5px;
-  background-color: black;
+  background-color: #346B64;
   display: block;
-  margin: 0 auto;
+  margin: 5px auto;
   font-size: 14px;
   color: white;
+  width: 25%;
+  text-align: center;
 }
 
 .username-input, .password-input {
     display: block;
     padding: 5px;
-    margin: 15px auto;
+    margin: 10px auto;
     border-radius: 5px;
     width: 260px;
 }

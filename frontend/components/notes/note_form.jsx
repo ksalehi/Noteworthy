@@ -40,7 +40,6 @@ const NoteForm = React.createClass({
     return (e) => this.setState({[property]: e.target.value});
   },
   handleErrors(){
-    debugger;
     this.setState({errors: ErrorStore.formErrors("note_form")});
   },
   renderErrors(){
@@ -60,10 +59,10 @@ const NoteForm = React.createClass({
     if (this.state.update) {
       noteData['id'] = this.props.params.noteId;
       NoteActions.editNote(noteData);
-      console.log('after note actions');
     } else {
       NoteActions.createNote(noteData);
     }
+    this.setState({update: false});
   },
   render(){
     console.log('rendering noteform');

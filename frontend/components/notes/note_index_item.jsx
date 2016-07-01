@@ -10,8 +10,14 @@ const NoteIndexItem = React.createClass({
     hashHistory.push('/notes/' + this.props.note.id);
   },
   render(){
+    let klass;
+    if (this.props.selected) {
+      klass = " selected";
+    } else {
+      klass = "";
+    }
     return (
-      <li onClick={this.showDetail} className="notes-list-item">
+      <li onClick={this.showDetail} className={"notes-list-item" + klass}>
         {this.props.note.title}
       </li>
     );

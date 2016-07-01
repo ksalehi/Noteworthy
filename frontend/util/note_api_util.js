@@ -4,7 +4,9 @@ const NoteApiUtil = {
       method: 'GET',
       url: 'api/notes',
       success: successCB,
-      error: errorCB
+      error(response) {
+        errorCB("notes_index", response.responseJSON);
+      }
     });
   },
   getNote(id, successCB, errorCB) {
@@ -12,7 +14,9 @@ const NoteApiUtil = {
       method: 'GET',
       url: `api/notes/${id}`,
       success: successCB,
-      error: errorCB
+      error(response) {
+        errorCB("note_index_item", response.responseJSON);
+      }
     });
   },
   createNote(noteData, successCB, errorCB){
@@ -21,8 +25,8 @@ const NoteApiUtil = {
       url: 'api/notes',
       data: { note: noteData },
       success: successCB,
-      error(data) {
-        errorCB(data);
+      error(response) {
+        errorCB("note_form", response.responseJSON);
       }
     });
   },
@@ -35,7 +39,9 @@ const NoteApiUtil = {
         body: noteData.body
       }},
       success: successCB,
-      error: errorCB
+      error(response) {
+        errorCB("note_form", response.responseJSON);
+      }
     });
   },
   deleteNote(id, successCB, errorCB){
@@ -43,7 +49,9 @@ const NoteApiUtil = {
       method: 'DELETE',
       url: `api/notes/${id}`,
       success: successCB,
-      error: errorCB
+      error(response) {
+        errorCB("delete_note", response.responseJSON);
+      }
     });
   }
 };

@@ -80,3 +80,7 @@
 .done-button:hover {
   background-color: gray;
 }
+
+.selected, .selected:hover {
+  border: 4px solid green;
+}

@@ -26,6 +26,8 @@ const NoteIndex = React.createClass({
   render(){
     const notes = this.state.notes;
     const that = this;
+    const path =this.props.location.pathname;
+
     return (
       <div>
         <button className="new-note-button" onClick={this.newNote}>+</button>
@@ -33,10 +35,13 @@ const NoteIndex = React.createClass({
           <h2 className="notes-list-header">Notes</h2>
           {
             notes.map( note => {
-
-              return (<NoteIndexItem key={note.id} note={note}/>);
-            })
-          }
+              return (<NoteIndexItem
+                key={note.id}
+                note={note}
+                selected={ path === `/notes/${note.id}` ? true : false }
+                />);
+              })
+            }
         </ul>
         {this.props.children}
       </div>
