@@ -76,10 +76,11 @@ UI.
   - [X] `NotesIndex`
   - [X] `NoteIndexItem`
   - [X] `NoteForm`
+- [X] highlight the NoteIndexItem of the note currently being edited
 - [ ] save Notes to the DB when the form loses focus or is left idle
-  after editing
+after editing
 - [ ] clean up any remaining login/signup errors / routes
-- [ ] get photos set up on cloudinary
+- [ ] notes display how long ago they were created
 
 ### Phase 4: Start styling (0.5 days, due W2 M 12pm)
 
