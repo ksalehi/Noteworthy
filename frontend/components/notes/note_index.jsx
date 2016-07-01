@@ -33,6 +33,7 @@ const NoteIndex = React.createClass({
           <h2 className="notes-list-header">Notes</h2>
           {
             notes.map( note => {
+
               return (<NoteIndexItem key={note.id} note={note}/>);
             })
           }

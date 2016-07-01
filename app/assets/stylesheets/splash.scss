@@ -1,16 +1,9 @@
 .noteworthy {
   font-size: 64px;
-
-  // left: 794px;
-  // top: 250px;
 }
 
 .slogan {
-  // text-align: center;
   font-size: 24px;
-  // position: absolute;
-  // top: 347px;
-  // left: 805px;
 }
 
 .splash-text {
@@ -40,9 +33,8 @@
 }
 
 .login-form {
-//   position: relative;
-  background-color: rgba(0,0,0,0.5);
-  width: 50%;
+  background-color: rgba(74,74,74,0.5);
+  width: 40%;
   margin: auto;
   border-radius: 10px;
   padding: 10px;
@@ -57,9 +49,15 @@ label {
 input {
   padding: 5px;
   border-radius: 5px;
+  text-align: left;
+  background-color: #E0D7C3;
 }
 
-input[type="submit"] {
+::-webkit-input-placeholder {
+  color: gray;
+}
+
+.login-button {
   padding: 8px;
   border-radius: 5px;
   background-color: black;

@@ -57,20 +57,18 @@ const LoginForm = React.createClass({
         <ul>{this.renderErrors()}</ul>
         <form onSubmit={this.handleSubmit}>
           <div className="username-input">
-            <label id="username">Username: </label>
             <input type="text"
-                   id="username"
+                   placeholder="Username"
                    value={this.state.description}
                    onChange={this.changeUsername}/>
           </div>
           <div className="password-input">
-            <label id="password">Password: </label>
             <input type="password"
-                   id="password"
+                   placeholder="Password"
                    value={this.state.password}
                    onChange={this.changePassword}/>
           </div>
-          <input type="submit" value="LOG IN"/>
+          <input type="submit" className="login-button" value="LOG IN"/>
         </form>
 
       </div>

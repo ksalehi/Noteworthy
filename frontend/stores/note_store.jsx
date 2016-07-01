@@ -6,24 +6,20 @@ const NoteStore = new Store(AppDispatcher);
 let _notes = {};
 
 NoteStore.all = function() {
-  // return Object.assign({}, _notes);
   return Object.keys(_notes).map( noteKey => {
     return _notes[noteKey];
   });
 };
 
 NoteStore.find = function(id) {
-  for (let key in _notes) {
-    if (_notes[key].id == id) {
-      return _notes[key];
-    }
-  }
-  return null;
+  return _notes[id];
 };
 
 function resetNotes(notes) {
-  console.log(notes);
-  _notes = notes;
+  for (let i = 0; i < notes.length; i++) {
+    let note = notes[i];
+    _notes[note.id] = note;
+  }
 }
 
 function resetSingleNote(note) {

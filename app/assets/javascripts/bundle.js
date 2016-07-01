@@ -30098,30 +30098,20 @@
 	        React.createElement(
 	          'div',
 	          { className: 'username-input' },
-	          React.createElement(
-	            'label',
-	            { id: 'username' },
-	            'Username: '
-	          ),
 	          React.createElement('input', { type: 'text',
-	            id: 'username',
+	            placeholder: 'Username',
 	            value: this.state.description,
 	            onChange: this.changeUsername })
 	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'password-input' },
-	          React.createElement(
-	            'label',
-	            { id: 'password' },
-	            'Password: '
-	          ),
 	          React.createElement('input', { type: 'password',
-	            id: 'password',
+	            placeholder: 'Password',
 	            value: this.state.password,
 	            onChange: this.changePassword })
 	        ),
-	        React.createElement('input', { type: 'submit', value: 'LOG IN' })
+	        React.createElement('input', { type: 'submit', className: 'login-button', value: 'LOG IN' })
 	      )
 	    );
 	  }
@@ -37245,24 +37235,20 @@
 	var _notes = {};
 	
 	NoteStore.all = function () {
-	  // return Object.assign({}, _notes);
 	  return Object.keys(_notes).map(function (noteKey) {
 	    return _notes[noteKey];
 	  });
 	};
 	
 	NoteStore.find = function (id) {
-	  for (var key in _notes) {
-	    if (_notes[key].id == id) {
-	      return _notes[key];
-	    }
-	  }
-	  return null;
+	  return _notes[id];
 	};
 	
 	function resetNotes(notes) {
-	  console.log(notes);
-	  _notes = notes;
+	  for (var i = 0; i < notes.length; i++) {
+	    var note = notes[i];
+	    _notes[note.id] = note;
+	  }
 	}
 	
 	function resetSingleNote(note) {
@@ -37356,6 +37342,7 @@
 	          'Notes'
 	        ),
 	        notes.map(function (note) {
+	
 	          return React.createElement(NoteIndexItem, { key: note.id, note: note });
 	        })
 	      ),
@@ -37786,7 +37773,8 @@
 	    return {
 	      errors: [],
 	      title: "",
-	      body: ""
+	      body: "",
+	      update: false
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
@@ -37797,7 +37785,9 @@
 	    if (note) {
 	      this.setState({
 	        title: note.title,
-	        body: note.body
+	        body: note.body,
+	        update: true,
+	        errors: []
 	      });
 	    } else {
 	      this.setState({
@@ -37818,27 +37808,32 @@
 	    };
 	  },
 	  handleErrors: function handleErrors() {
+	    debugger;
 	    this.setState({ errors: ErrorStore.formErrors("note_form") });
 	  },
 	  renderErrors: function renderErrors() {
-	    return this.state.errors.map(function (error, idx) {
+	    var errors = this.state.errors.map(function (error, idx) {
 	      return React.createElement(
 	        'li',
 	        { key: idx },
 	        error
 	      );
 	    });
+	    return errors;
 	  },
 	  handleSubmit: function handleSubmit(e) {
-	    console.log('handleSubmit triggered');
 	    e.preventDefault();
 	    var noteData = {
 	      title: this.state.title,
 	      body: this.state.body
 	    };
-	    NoteActions.createNote(noteData);
-	    this.setState({ title: "", body: "" });
-	    hashHistory.push('/notes');
+	    if (this.state.update) {
+	      noteData['id'] = this.props.params.noteId;
+	      NoteActions.editNote(noteData);
+	      console.log('after note actions');
+	    } else {
+	      NoteActions.createNote(noteData);
+	    }
 	  },
 	  render: function render() {
 	    console.log('rendering noteform');

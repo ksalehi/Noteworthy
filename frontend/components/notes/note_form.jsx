@@ -9,7 +9,8 @@ const NoteForm = React.createClass({
     return {
       errors: [],
       title: "",
-      body: ""
+      body: "",
+      update: false
     };
   },
   componentDidMount() {
@@ -20,7 +21,9 @@ const NoteForm = React.createClass({
     if (note) {
       this.setState({
         title: note.title,
-        body: note.body
+        body: note.body,
+        update: true,
+        errors: []
       });
     } else {
       this.setState({
@@ -37,25 +40,30 @@ const NoteForm = React.createClass({
     return (e) => this.setState({[property]: e.target.value});
   },
   handleErrors(){
+    debugger;
     this.setState({errors: ErrorStore.formErrors("note_form")});
   },
   renderErrors(){
-    return this.state.errors.map((error, idx) => {
+    const errors = this.state.errors.map((error, idx) => {
       return (
         <li key={idx}>{error}</li>
       );
     });
+    return errors;
   },
   handleSubmit(e){
-    console.log('handleSubmit triggered');
     e.preventDefault();
     const noteData = {
       title: this.state.title,
       body: this.state.body
     };
-    NoteActions.createNote(noteData);
-    this.setState({ title: "", body: "" });
-    hashHistory.push('/notes');
+    if (this.state.update) {
+      noteData['id'] = this.props.params.noteId;
+      NoteActions.editNote(noteData);
+      console.log('after note actions');
+    } else {
+      NoteActions.createNote(noteData);
+    }
   },
   render(){
     console.log('rendering noteform');

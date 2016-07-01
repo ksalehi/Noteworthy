@@ -41,7 +41,7 @@
 .note-detail, .new-note-form {
   padding: 15px;
   float: left;
-  width: 55%;
+  width: 58%;
   background-color: gray;
 }
 
@@ -62,12 +62,21 @@
 .title-input, .body-input {
     display: block;
     padding: 5px;
-    margin: 15px 10px;
-    width: 100%;
+    margin: 15px auto;
+    width: 98%;
     border-radius: 5px;
+}
+
+.body-input {
+  height: 200px;
 }
 
 .done-button {
   float: right;
-  margin: 10px;
+  margin: 10px 0px;
+  background-color: darkgray;
+}
+
+.done-button:hover {
+  background-color: gray;
 }
