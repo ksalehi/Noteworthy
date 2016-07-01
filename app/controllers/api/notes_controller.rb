@@ -33,7 +33,12 @@ class Api::NotesController < ApplicationController
   end
 
   def destroy
-
+    @note = Note.find(params[:id])
+    if @note.destroy
+      render :show
+    else
+      render json: @note.errors.full_messages, status: 422
+    end
   end
 
 

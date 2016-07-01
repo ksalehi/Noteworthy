@@ -64,13 +64,24 @@ const NoteForm = React.createClass({
     }
     this.setState({update: false});
   },
+  deleteNote(e){
+    e.preventDefault();
+    // alert('Are you sure you want to delete this note?');
+    if (this.props.params.noteId) {
+      console.log('deleting?');
+      NoteActions.deleteNote(this.props.params.noteId);
+      // this doesn't show the note has been deleted
+    } else {
+      // how do I set a custom error?
+    }
+  },
   render(){
     console.log('rendering noteform');
     return (
       <div>
         <ul>{this.renderErrors()}</ul>
         <form className="new-note-form" onSubmit={this.handleSubmit}>
-          <input type="submit" className="done-button" value="DONE"/>
+          <input type="submit" className="save-button" value="SAVE"/>
           <input type="text"
                  value={this.state.title}
                  onChange={this.handleChange("title")}
@@ -81,6 +92,7 @@ const NoteForm = React.createClass({
                     placeholder="Drag files here or just start typing..."
                     className="body-input"></textarea>
         </form>
+
       </div>
     );
   }

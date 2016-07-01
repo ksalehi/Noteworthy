@@ -16,6 +16,7 @@ const NoteIndex = React.createClass({
     this.noteListener.remove();
   },
   _onChange() {
+    // debugger; // this is triggered when I delete a note, yet the NoteStore shows both notes still there
     this.setState({ notes: NoteStore.all() });
   },
   newNote(e){
@@ -26,7 +27,7 @@ const NoteIndex = React.createClass({
   render(){
     const notes = this.state.notes;
     const that = this;
-    const path =this.props.location.pathname;
+    const path = this.props.location.pathname;
 
     return (
       <div>

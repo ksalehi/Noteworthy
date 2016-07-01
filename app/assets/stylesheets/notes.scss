@@ -11,18 +11,20 @@
 }
 
 .notes-list-header {
+  font-size: 24px;
   padding: 25px;
+  font-family: Scope One, serif;
   background: whitesmoke;
   text-align: center;
-  border: 2px solid black;
+  border: 1px solid black;
 }
 
 .notes-list-item {
   background-color: darkgray;
-  padding: 15px;
-  border-top: 2px solid black;
-  border-left: 2px solid black;
-  border-right: 2px solid black;
+  padding: 25px;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
 }
 
 .notes-list-item:hover {
@@ -31,7 +33,8 @@
 }
 
 .notes-list-item:last-of-type {
-  border-bottom: 2px solid black;
+
+  border-bottom: 1px solid black;
 }
 
 .notes-list-item:first-of-type {
@@ -41,11 +44,12 @@
 .note-detail, .new-note-form {
   padding: 15px;
   float: left;
-  width: 58%;
+  width: 59%;
   background-color: gray;
 }
 
 .new-note-button {
+  border: 1px solid black;
   float: left;
   border-radius: 50%;
   height: 40px;
@@ -59,28 +63,50 @@
   background-color: gray;
 }
 
-.title-input, .body-input {
-    display: block;
-    padding: 5px;
-    margin: 15px auto;
-    width: 98%;
-    border-radius: 5px;
+.title-input {
+  font-family: Scope One, serif;
+  font-size: 32px;
+  display: block;
+  padding: 10px 10px;
+  margin: 5px auto;
+  width: 96%;
 }
 
 .body-input {
-  height: 200px;
+  height: 500px;
+  display: block;
+  padding: 10px;
+  margin: 5px auto;
+  width: 96%;
 }
 
-.done-button {
+.save-button {
+  border: 1px solid black;
+  font-size: 14px;
   float: right;
-  margin: 10px 0px;
+  margin: 10px 5px;
+  padding: 8px;
+  background-color: whitesmoke;
+  border-radius: 5px;
+}
+
+.save-button:hover {
   background-color: darkgray;
 }
 
-.done-button:hover {
-  background-color: gray;
+.delete-button {
+  background: url('trashcan.png') no-repeat 2px;
+  background-size: 100%;
+  height: 25px;
+  width: 25px;
+  float: right;
+  border-radius: 5px;
 }
 
-.selected, .selected:hover {
-  border: 4px solid green;
+.selected {
+  box-shadow: 0 0 20px white inset;
+}
+
+.selected:hover {
+  background-color: darkgray;
 }

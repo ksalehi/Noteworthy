@@ -30113,6 +30113,7 @@
 	          'div',
 	          { className: 'username-input' },
 	          React.createElement('input', { type: 'text',
+	            className: 'login-input',
 	            placeholder: 'Username',
 	            value: this.state.description,
 	            onChange: this.changeUsername })
@@ -30121,6 +30122,7 @@
 	          'div',
 	          { className: 'password-input' },
 	          React.createElement('input', { type: 'password',
+	            className: 'login-input',
 	            placeholder: 'Password',
 	            value: this.state.password,
 	            onChange: this.changePassword })
@@ -37339,6 +37341,7 @@
 	    this.noteListener.remove();
 	  },
 	  _onChange: function _onChange() {
+	    // debugger; // this is triggered when I delete a note, yet the NoteStore shows both notes still there
 	    this.setState({ notes: NoteStore.all() });
 	  },
 	  newNote: function newNote(e) {
@@ -37407,7 +37410,7 @@
 	    NoteApiUtil.updateNote(note, NoteActions.receiveNote, ErrorActions.setErrors);
 	  },
 	  deleteNote: function deleteNote(noteId) {
-	    NoteApiUtil.getNote(noteId, NoteActions.receiveNote, ErrorActions.setErrors);
+	    NoteApiUtil.deleteNote(noteId, NoteActions.receiveNote, ErrorActions.setErrors);
 	  },
 	  receiveNotes: function receiveNotes(notes) {
 	    AppDispatcher.dispatch({
@@ -37733,9 +37736,33 @@
 	
 	var NoteIndexItem = React.createClass({
 	  displayName: 'NoteIndexItem',
+	
+	  // getInitialState() {
+	  //   return { notes: NoteStore.all() };
+	  // },
+	  // componentDidMount() {
+	  //   NoteActions.fetchNotes();
+	  //   this.noteListener = NoteStore.addListener(this._onChange);
+	  // },
+	  // componentWillUnmount() {
+	  //   this.noteListener.remove();
+	  // },
+	  // _onChange() {
+	  //   this.setState({ notes: NoteStore.all() });
+	  // },
 	  showDetail: function showDetail() {
 	    console.log('you clicked!');
 	    hashHistory.push('/notes/' + this.props.note.id);
+	  },
+	  deleteNote: function deleteNote(e) {
+	    e.preventDefault();
+	    // alert('Are you sure you want to delete this note?');
+	    if (this.props.note.id) {
+	      NoteActions.deleteNote(this.props.note.id);
+	      // this doesn't show the note has been deleted
+	    } else {
+	        // how do I set a custom error?
+	      }
 	  },
 	  render: function render() {
 	    var klass = void 0;
@@ -37747,7 +37774,8 @@
 	    return React.createElement(
 	      'li',
 	      { onClick: this.showDetail, className: "notes-list-item" + klass },
-	      this.props.note.title
+	      this.props.note.title,
+	      React.createElement('button', { onClick: this.deleteNote, className: 'delete-button', value: 'DELETE' })
 	    );
 	  }
 	});
@@ -37877,6 +37905,17 @@
 	    }
 	    this.setState({ update: false });
 	  },
+	  deleteNote: function deleteNote(e) {
+	    e.preventDefault();
+	    // alert('Are you sure you want to delete this note?');
+	    if (this.props.params.noteId) {
+	      console.log('deleting?');
+	      NoteActions.deleteNote(this.props.params.noteId);
+	      // this doesn't show the note has been deleted
+	    } else {
+	        // how do I set a custom error?
+	      }
+	  },
 	  render: function render() {
 	    console.log('rendering noteform');
 	    return React.createElement(
@@ -37890,7 +37929,7 @@
 	      React.createElement(
 	        'form',
 	        { className: 'new-note-form', onSubmit: this.handleSubmit },
-	        React.createElement('input', { type: 'submit', className: 'done-button', value: 'DONE' }),
+	        React.createElement('input', { type: 'submit', className: 'save-button', value: 'SAVE' }),
 	        React.createElement('input', { type: 'text',
 	          value: this.state.title,
 	          onChange: this.handleChange("title"),

@@ -1,16 +1,20 @@
 .noteworthy {
   font-size: 64px;
+  font-weight: 700;
+  font-family: Scope One, serif;
 }
 
 .slogan {
   font-size: 24px;
+  font-weight: 700;
+  font-family: Scope One, serif;
 }
 
 .splash-text {
   position: absolute;
   width: 100%;
   height: 100%;
-  top: 40%;
+  top: 30%;
   text-align: center;
 }
 
@@ -46,7 +50,7 @@ label {
 }
 
 
-input {
+input.login-input {
   padding: 5px;
   border-radius: 5px;
   text-align: left;

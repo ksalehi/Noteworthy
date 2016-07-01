@@ -32,7 +32,7 @@ const NoteActions = {
     );
   },
   deleteNote(noteId){
-    NoteApiUtil.getNote(
+    NoteApiUtil.deleteNote(
       noteId,
       NoteActions.receiveNote,
       ErrorActions.setErrors
