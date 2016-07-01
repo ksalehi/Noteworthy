@@ -6,15 +6,75 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Note.create(title: "Note1", body: "Body1", author_id: 1, notebook_id: 1)
-Note.create(title: "Note2", body: "Body2", author_id: 1, notebook_id: 1)
-Note.create(title: "Note3", body: "Body3", author_id: 1, notebook_id: 3)
-Note.create(title: "Note4", author_id: 2, notebook_id: 2)
-Note.create(title: "Note5", author_id: 2, notebook_id: 2)
+Note.create(title: "Kia's to-do list",
+            body: "1. Add sign-up / guest demo options to splash page
+2. Add more seed data X
+3. Get multiple accounts working
+4. Get automatic save working
+5. Have note in focus look selected somehow
+6. Use CLEAR_ERRORS",
+            author_id: 1,
+            notebook_id: 1)
+Note.create(title: "Groceries", body: "Bread
+Avocado
+Granola bars
+Cereal
+Almond milk
+Tortilla chips
+Cookies
+", author_id: 1, notebook_id: 1)
+Note.create(title: "Good cat names", body: "Swiffer
+Banjo
+Wednesday
+Mango
+Peaches
+Basil", author_id: 1, notebook_id: 3)
+Note.create(title: "Songs I know on guitar", body: "Skinny Love
+Wagon Wheel
+We’re All In This Together
+Take 'Em Away
+Country Roads
+Furr
+Black River Killer
+Nobody Knows Me At All
+Thirteen
+The Biggest Lie
+Yeah! Oh Yeah!
+Far From Me
+Lua
+The Temptation Of Adam
+Friend of the Devil
+Idaho
+Grass Stain
+Swan Dive?
+You Don’t Make It Easy Babe
+Between the Bars
+Piazza, New York Catcher
+All I Want Is You", author_id: 2, notebook_id: 2)
+Note.create(title: "To read", body: "Articles:
+
+I miss you - the New Yorker
+Choosing Queer: I was not born this way
+Riding the relationship escalator (or not)
+Serial
+The racist housing policy that made your neighborhood
+
+Books:
+
+The Fifth Season
+Bad feminist
+Scientific Revolutions
+Half of a Yellow Sun
+Annihilation
+Infinite Jest
+
+To look into:
+
+Latino USA podcast", author_id: 2, notebook_id: 2)
 
 Notebook.create(title: 'Notebook1', description: 'Desc1', author_id: 1)
 Notebook.create(title: 'Notebook2', description: 'Desc2', author_id: 2)
 Notebook.create(title: 'Notebook3', author_id: 1)
 
 User.create(username: "kia", password: "kiakia")
-User.create(username: "muenster", password: "salehi")
+User.create(username: "guest", password: "password")
