@@ -3,21 +3,7 @@ const NoteStore = require('../../stores/note_store');
 const NoteActions = require('../../actions/note_actions');
 const hashHistory = require('react-router').hashHistory;
 
-
 const NoteIndexItem = React.createClass({
-  // getInitialState() {
-  //   return { notes: NoteStore.all() };
-  // },
-  // componentDidMount() {
-  //   NoteActions.fetchNotes();
-  //   this.noteListener = NoteStore.addListener(this._onChange);
-  // },
-  // componentWillUnmount() {
-  //   this.noteListener.remove();
-  // },
-  // _onChange() {
-  //   this.setState({ notes: NoteStore.all() });
-  // },
   showDetail(){
     console.log('you clicked!');
     hashHistory.push('/notes/' + this.props.note.id);
@@ -27,9 +13,6 @@ const NoteIndexItem = React.createClass({
     // alert('Are you sure you want to delete this note?');
     if (this.props.note.id) {
       NoteActions.deleteNote(this.props.note.id);
-      // this doesn't show the note has been deleted
-    } else {
-      // how do I set a custom error?
     }
   },
   render(){

@@ -3,6 +3,7 @@ const hashHistory = require('react-router').hashHistory;
 const NoteStore = require('../../stores/note_store');
 const NoteActions = require('../../actions/note_actions');
 const NoteIndexItem = require('./note_index_item');
+const SessionActions = require('../../actions/session_actions');
 
 const NoteIndex = React.createClass({
   getInitialState() {
@@ -16,13 +17,19 @@ const NoteIndex = React.createClass({
     this.noteListener.remove();
   },
   _onChange() {
-    // debugger; // this is triggered when I delete a note, yet the NoteStore shows both notes still there
+    debugger;
     this.setState({ notes: NoteStore.all() });
   },
   newNote(e){
     e.preventDefault();
     const url = '/notes/new';
     hashHistory.push(url);
+  },
+  logOut(e){
+    e.preventDefault();
+    SessionActions.logOut();
+    console.log('logged out');
+    hashHistory.push('/');
   },
   render(){
     const notes = this.state.notes;
@@ -32,6 +39,7 @@ const NoteIndex = React.createClass({
     return (
       <div>
         <button className="new-note-button" onClick={this.newNote}>+</button>
+        <button className="logout-button" onClick={this.logOut}>LOGOUT</button>
         <ul className="notes-list">
           <h2 className="notes-list-header">Notes</h2>
           {

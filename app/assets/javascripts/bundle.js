@@ -56,19 +56,21 @@
 	var LoginForm = __webpack_require__(266);
 	var SignUpForm = __webpack_require__(295);
 	var ErrorStore = __webpack_require__(294);
-	var NoteStore = __webpack_require__(297);
-	var NoteIndex = __webpack_require__(299);
-	var NoteActions = __webpack_require__(300);
+	var NoteStore = __webpack_require__(296);
+	var NoteIndex = __webpack_require__(298);
+	var NoteActions = __webpack_require__(299);
 	var NotebookIndex = __webpack_require__(302);
-	var NoteIndexItem = __webpack_require__(307);
-	var NoteDetail = __webpack_require__(308);
-	var NoteForm = __webpack_require__(309);
-	var SplashPage = __webpack_require__(460);
-	
+	var NoteIndexItem = __webpack_require__(301);
+	var NoteDetail = __webpack_require__(307);
+	var NoteForm = __webpack_require__(308);
+	var SplashPage = __webpack_require__(309);
+	var SessionStore = __webpack_require__(276);
+	var SessionActions = __webpack_require__(267);
 	var Modal = __webpack_require__(310);
 	
 	window.na = NoteActions;
 	window.ns = NoteStore;
+	window.hh = hashHistory;
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -81,23 +83,38 @@
 	  }
 	});
 	
+	function _requireAnonymous() {
+	  if (SessionStore.isUserLoggedIn()) {
+	    hashHistory.push('notes');
+	  }
+	}
+	
+	function _ensureLoggedIn(nextState, replace) {
+	  if (!SessionStore.isUserLoggedIn()) {
+	    replace('/');
+	  }
+	}
+	
 	var routes = React.createElement(
 	  Route,
 	  { path: '/', component: App },
-	  React.createElement(IndexRoute, { component: SplashPage }),
+	  React.createElement(IndexRoute, { component: SplashPage, onEnter: _requireAnonymous }),
 	  React.createElement(
 	    Route,
-	    { path: 'notes', component: NoteIndex },
+	    { path: 'notes', component: NoteIndex, onEnter: _ensureLoggedIn },
 	    React.createElement(IndexRoute, { component: NoteForm }),
 	    React.createElement(Route, { path: 'new', component: NoteForm }),
 	    React.createElement(Route, { path: ':noteId', component: NoteForm })
 	  ),
-	  React.createElement(Route, { path: 'notebooks', component: NotebookIndex }),
-	  React.createElement(Route, { path: 'users/new', component: SignUpForm })
+	  React.createElement(Route, { path: 'notebooks', component: NotebookIndex, onEnter: _ensureLoggedIn })
 	);
 	
 	document.addEventListener("DOMContentLoaded", function () {
-	  Modal.setAppElement(document.body); //disable entire body when modal is up
+	  Modal.setAppElement(document.body);
+	  if (window.currentUser) {
+	    SessionActions.receiveCurrentUser(window.currentUser);
+	  }
+	
 	  ReactDOM.render(React.createElement(
 	    Router,
 	    { history: hashHistory },
@@ -30044,11 +30061,11 @@
 	  },
 	
 	  componentDidMount: function componentDidMount() {
-	    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
+	    // this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
 	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
-	    this.sessionListener.remove();
+	    // this.sessionListener.remove();
 	    this.errorListener.remove();
 	  },
 	  handleErrors: function handleErrors() {
@@ -30063,11 +30080,6 @@
 	      );
 	    });
 	  },
-	  redirectIfLoggedIn: function redirectIfLoggedIn() {
-	    if (SessionStore.isUserLoggedIn()) {
-	      hashHistory.push('/');
-	    }
-	  },
 	  changeUsername: function changeUsername(e) {
 	    this.setState({ username: e.target.value });
 	  },
@@ -30076,7 +30088,6 @@
 	  },
 	  handleSubmit: function handleSubmit(e) {
 	    e.preventDefault();
-	    console.log(e);
 	    var loginData = {
 	      username: this.state.username,
 	      password: this.state.password
@@ -30613,19 +30624,18 @@
 	SessionStore._login = function (currentUser) {
 	  _currentUser = currentUser;
 	  hashHistory.push('notes');
-	  SessionStore.__emitChange();
 	};
 	
 	SessionStore._logout = function () {
 	  _currentUser = {};
-	  SessionStore.__emitChange();
+	  hashHistory.push('/');
 	};
 	
 	SessionStore.currentUser = function () {
 	  return Object.assign({}, _currentUser);
 	};
 	
-	SessionStore.isUserLoggedIn = function (user) {
+	SessionStore.isUserLoggedIn = function () {
 	  if (_currentUser.id) {
 	    return true;
 	  }
@@ -30641,6 +30651,7 @@
 	      SessionStore._logout();
 	      break;
 	  }
+	  SessionStore.__emitChange();
 	};
 	
 	module.exports = SessionStore;
@@ -37247,15 +37258,14 @@
 	module.exports = SignUpForm;
 
 /***/ },
-/* 296 */,
-/* 297 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Store = __webpack_require__(277).Store;
 	var AppDispatcher = __webpack_require__(268);
-	var NoteConstants = __webpack_require__(298);
+	var NoteConstants = __webpack_require__(297);
 	var NoteStore = new Store(AppDispatcher);
 	
 	var _notes = {};
@@ -37303,7 +37313,7 @@
 	module.exports = NoteStore;
 
 /***/ },
-/* 298 */
+/* 297 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -37317,16 +37327,17 @@
 	module.exports = NoteConstants;
 
 /***/ },
-/* 299 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
 	var hashHistory = __webpack_require__(168).hashHistory;
-	var NoteStore = __webpack_require__(297);
-	var NoteActions = __webpack_require__(300);
-	var NoteIndexItem = __webpack_require__(307);
+	var NoteStore = __webpack_require__(296);
+	var NoteActions = __webpack_require__(299);
+	var NoteIndexItem = __webpack_require__(301);
+	var SessionActions = __webpack_require__(267);
 	
 	var NoteIndex = React.createClass({
 	  displayName: 'NoteIndex',
@@ -37341,13 +37352,19 @@
 	    this.noteListener.remove();
 	  },
 	  _onChange: function _onChange() {
-	    // debugger; // this is triggered when I delete a note, yet the NoteStore shows both notes still there
+	    debugger;
 	    this.setState({ notes: NoteStore.all() });
 	  },
 	  newNote: function newNote(e) {
 	    e.preventDefault();
 	    var url = '/notes/new';
 	    hashHistory.push(url);
+	  },
+	  logOut: function logOut(e) {
+	    e.preventDefault();
+	    SessionActions.logOut();
+	    console.log('logged out');
+	    hashHistory.push('/');
 	  },
 	  render: function render() {
 	    var notes = this.state.notes;
@@ -37361,6 +37378,11 @@
 	        'button',
 	        { className: 'new-note-button', onClick: this.newNote },
 	        '+'
+	      ),
+	      React.createElement(
+	        'button',
+	        { className: 'logout-button', onClick: this.logOut },
+	        'LOGOUT'
 	      ),
 	      React.createElement(
 	        'ul',
@@ -37386,15 +37408,15 @@
 	module.exports = NoteIndex;
 
 /***/ },
-/* 300 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var AppDispatcher = __webpack_require__(268);
-	var NoteConstants = __webpack_require__(298);
+	var NoteConstants = __webpack_require__(297);
 	var ErrorActions = __webpack_require__(274);
-	var NoteApiUtil = __webpack_require__(301);
+	var NoteApiUtil = __webpack_require__(300);
 	
 	var NoteActions = {
 	  fetchNotes: function fetchNotes() {
@@ -37410,7 +37432,7 @@
 	    NoteApiUtil.updateNote(note, NoteActions.receiveNote, ErrorActions.setErrors);
 	  },
 	  deleteNote: function deleteNote(noteId) {
-	    NoteApiUtil.deleteNote(noteId, NoteActions.receiveNote, ErrorActions.setErrors);
+	    NoteApiUtil.deleteNote(noteId, NoteActions.removeNote, ErrorActions.setErrors);
 	  },
 	  receiveNotes: function receiveNotes(notes) {
 	    AppDispatcher.dispatch({
@@ -37435,7 +37457,7 @@
 	module.exports = NoteActions;
 
 /***/ },
-/* 301 */
+/* 300 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37499,6 +37521,48 @@
 	};
 	
 	module.exports = NoteApiUtil;
+
+/***/ },
+/* 301 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var NoteStore = __webpack_require__(296);
+	var NoteActions = __webpack_require__(299);
+	var hashHistory = __webpack_require__(168).hashHistory;
+	
+	var NoteIndexItem = React.createClass({
+	  displayName: 'NoteIndexItem',
+	  showDetail: function showDetail() {
+	    console.log('you clicked!');
+	    hashHistory.push('/notes/' + this.props.note.id);
+	  },
+	  deleteNote: function deleteNote(e) {
+	    e.preventDefault();
+	    // alert('Are you sure you want to delete this note?');
+	    if (this.props.note.id) {
+	      NoteActions.deleteNote(this.props.note.id);
+	    }
+	  },
+	  render: function render() {
+	    var klass = void 0;
+	    if (this.props.selected) {
+	      klass = " selected";
+	    } else {
+	      klass = "";
+	    }
+	    return React.createElement(
+	      'li',
+	      { onClick: this.showDetail, className: "notes-list-item" + klass },
+	      this.props.note.title,
+	      React.createElement('button', { onClick: this.deleteNote, className: 'delete-button', value: 'DELETE' })
+	    );
+	  }
+	});
+	
+	module.exports = NoteIndexItem;
 
 /***/ },
 /* 302 */
@@ -37730,66 +37794,7 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var NoteStore = __webpack_require__(297);
-	var NoteActions = __webpack_require__(300);
-	var hashHistory = __webpack_require__(168).hashHistory;
-	
-	var NoteIndexItem = React.createClass({
-	  displayName: 'NoteIndexItem',
-	
-	  // getInitialState() {
-	  //   return { notes: NoteStore.all() };
-	  // },
-	  // componentDidMount() {
-	  //   NoteActions.fetchNotes();
-	  //   this.noteListener = NoteStore.addListener(this._onChange);
-	  // },
-	  // componentWillUnmount() {
-	  //   this.noteListener.remove();
-	  // },
-	  // _onChange() {
-	  //   this.setState({ notes: NoteStore.all() });
-	  // },
-	  showDetail: function showDetail() {
-	    console.log('you clicked!');
-	    hashHistory.push('/notes/' + this.props.note.id);
-	  },
-	  deleteNote: function deleteNote(e) {
-	    e.preventDefault();
-	    // alert('Are you sure you want to delete this note?');
-	    if (this.props.note.id) {
-	      NoteActions.deleteNote(this.props.note.id);
-	      // this doesn't show the note has been deleted
-	    } else {
-	        // how do I set a custom error?
-	      }
-	  },
-	  render: function render() {
-	    var klass = void 0;
-	    if (this.props.selected) {
-	      klass = " selected";
-	    } else {
-	      klass = "";
-	    }
-	    return React.createElement(
-	      'li',
-	      { onClick: this.showDetail, className: "notes-list-item" + klass },
-	      this.props.note.title,
-	      React.createElement('button', { onClick: this.deleteNote, className: 'delete-button', value: 'DELETE' })
-	    );
-	  }
-	});
-	
-	module.exports = NoteIndexItem;
-
-/***/ },
-/* 308 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var NoteStore = __webpack_require__(297);
+	var NoteStore = __webpack_require__(296);
 	
 	var NoteDetail = React.createClass({
 	  displayName: 'NoteDetail',
@@ -37825,43 +37830,43 @@
 	module.exports = NoteDetail;
 
 /***/ },
-/* 309 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
 	var React = __webpack_require__(1);
 	var ErrorStore = __webpack_require__(294);
 	var hashHistory = __webpack_require__(168).hashHistory;
-	var NoteActions = __webpack_require__(300);
-	var NoteStore = __webpack_require__(297);
+	var NoteActions = __webpack_require__(299);
+	var NoteStore = __webpack_require__(296);
 	
 	var NoteForm = React.createClass({
 	  displayName: 'NoteForm',
 	  getInitialState: function getInitialState() {
 	    return {
+	      noteId: null,
 	      errors: [],
 	      title: "",
-	      body: "",
-	      update: false
+	      body: ""
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+	    debugger;
 	    var note = NoteStore.find(newProps.params.noteId);
 	    if (note) {
 	      this.setState({
+	        noteId: note.id,
 	        title: note.title,
 	        body: note.body,
-	        update: true,
 	        errors: []
 	      });
 	    } else {
 	      this.setState({
+	        noteId: null,
 	        errors: [],
 	        title: "",
 	        body: ""
@@ -37871,12 +37876,13 @@
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.errorListener.remove();
 	  },
-	  handleChange: function handleChange(property) {
-	    var _this = this;
-	
-	    return function (e) {
-	      return _this.setState(_defineProperty({}, property, e.target.value));
-	    };
+	  changeTitle: function changeTitle(e) {
+	    this.setState({ title: e.target.value });
+	    this.autoSave();
+	  },
+	  changeBody: function changeBody(e) {
+	    this.setState({ body: e.target.value });
+	    this.autoSave();
 	  },
 	  handleErrors: function handleErrors() {
 	    this.setState({ errors: ErrorStore.formErrors("note_form") });
@@ -37897,27 +37903,41 @@
 	      title: this.state.title,
 	      body: this.state.body
 	    };
-	    if (this.state.update) {
-	      noteData['id'] = this.props.params.noteId;
+	    var note = NoteStore.find(this.state.noteId);
+	    if (note) {
+	      noteData['id'] = this.state.noteId;
 	      NoteActions.editNote(noteData);
 	    } else {
 	      NoteActions.createNote(noteData);
 	    }
-	    this.setState({ update: false });
 	  },
 	  deleteNote: function deleteNote(e) {
+	    // currently not being used but might be added
 	    e.preventDefault();
-	    // alert('Are you sure you want to delete this note?');
-	    if (this.props.params.noteId) {
-	      console.log('deleting?');
-	      NoteActions.deleteNote(this.props.params.noteId);
-	      // this doesn't show the note has been deleted
-	    } else {
-	        // how do I set a custom error?
+	    // modal ('Are you sure you want to delete this note?');
+	    if (this.state.noteId) {
+	      NoteActions.deleteNote(this.state.noteId);
+	    }
+	  },
+	  autoSave: function autoSave() {
+	    if (this.state.title || this.state.body) {
+	      console.log('hit autosave');
+	      var noteData = {
+	        title: this.state.title,
+	        body: this.state.body
+	      };
+	      var note = NoteStore.find(this.state.noteId);
+	      if (note) {
+	        noteData['id'] = note.id;
+	        NoteActions.editNote(noteData);
+	      } else {
+	        NoteActions.createNote(noteData);
 	      }
+	    }
 	  },
 	  render: function render() {
-	    console.log('rendering noteform');
+	    debugger;
+	    // add a couple functions here to check if a note already exists
 	    return React.createElement(
 	      'div',
 	      null,
@@ -37932,11 +37952,11 @@
 	        React.createElement('input', { type: 'submit', className: 'save-button', value: 'SAVE' }),
 	        React.createElement('input', { type: 'text',
 	          value: this.state.title,
-	          onChange: this.handleChange("title"),
+	          onInput: this.changeTitle,
 	          placeholder: 'Title your note',
 	          className: 'title-input' }),
 	        React.createElement('textarea', { value: this.state.body,
-	          onChange: this.handleChange("body"),
+	          onInput: this.changeBody,
 	          placeholder: 'Drag files here or just start typing...',
 	          className: 'body-input' })
 	      )
@@ -37945,6 +37965,100 @@
 	});
 	
 	module.exports = NoteForm;
+
+/***/ },
+/* 309 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var hashHistory = __webpack_require__(168).hashHistory;
+	var LogInForm = __webpack_require__(266);
+	var SessionStore = __webpack_require__(276);
+	var Modal = __webpack_require__(310);
+	
+	var SplashPage = React.createClass({
+	  displayName: 'SplashPage',
+	
+	  getInitialState: function getInitialState() {
+	    return { modalOpen: false };
+	  },
+	  closeModal: function closeModal() {
+	    this.setState({ modalOpen: false });
+	  },
+	  openModal: function openModal() {
+	    this.setState({ modalOpen: true });
+	  },
+	  render: function render() {
+	    var style = {
+	      overlay: {
+	        position: 'fixed',
+	        top: 0,
+	        left: 0,
+	        right: 0,
+	        bottom: 0,
+	        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+	        zIndex: 10
+	      },
+	      content: {
+	        position: 'fixed',
+	        top: '200px',
+	        left: '450px',
+	        right: '450px',
+	        bottom: '130px',
+	        border: '1px solid #ccc',
+	        padding: '5px',
+	        zIndex: 11,
+	        borderRadius: '10px'
+	      }
+	    };
+	    return React.createElement(
+	      'div',
+	      { className: 'splash-container' },
+	      React.createElement('img', { className: 'cover-photo' }),
+	      React.createElement(
+	        'div',
+	        { className: 'splash-text' },
+	        React.createElement(
+	          'h1',
+	          { className: 'noteworthy' },
+	          'Noteworthy.'
+	        ),
+	        React.createElement(
+	          'p',
+	          { className: 'slogan' },
+	          'You write it. We remember it.'
+	        ),
+	        React.createElement(
+	          'button',
+	          { className: 'splash-button', onClick: this.openModal, value: 'LOG IN' },
+	          'LOG IN'
+	        ),
+	        React.createElement(
+	          'button',
+	          { className: 'splash-button', onClick: this.openModal, value: 'SIGN UP' },
+	          'SIGN UP'
+	        ),
+	        React.createElement(
+	          'button',
+	          { className: 'splash-button', onClick: this.openModal, value: 'GUEST DEMO' },
+	          'GUEST DEMO'
+	        ),
+	        React.createElement(
+	          Modal,
+	          {
+	            style: style,
+	            isOpen: this.state.modalOpen,
+	            onRequestClose: this.closeModal },
+	          React.createElement(LogInForm, null)
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = SplashPage;
 
 /***/ },
 /* 310 */
@@ -56013,44 +56127,6 @@
 	  else this.add(className)
 	}
 
-
-/***/ },
-/* 460 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var hashHistory = __webpack_require__(168).hashHistory;
-	var LogInForm = __webpack_require__(266);
-	
-	var SplashPage = React.createClass({
-	  displayName: 'SplashPage',
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'splash-container' },
-	      React.createElement('img', { className: 'cover-photo' }),
-	      React.createElement(
-	        'div',
-	        { className: 'splash-text' },
-	        React.createElement(
-	          'h1',
-	          { className: 'noteworthy' },
-	          'Noteworthy.'
-	        ),
-	        React.createElement(
-	          'p',
-	          { className: 'slogan' },
-	          'You write it. We remember it.'
-	        ),
-	        React.createElement(LogInForm, null)
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = SplashPage;
 
 /***/ }
 /******/ ]);

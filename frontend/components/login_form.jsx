@@ -14,11 +14,11 @@ const LoginForm = React.createClass({
     });
   },
   componentDidMount: function() {
-    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
+    // this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
     this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
   componentWillUnmount: function() {
-    this.sessionListener.remove();
+    // this.sessionListener.remove();
     this.errorListener.remove();
   },
   handleErrors(){
@@ -31,11 +31,6 @@ const LoginForm = React.createClass({
       );
     });
   },
-  redirectIfLoggedIn() {
-    if (SessionStore.isUserLoggedIn()) {
-      hashHistory.push('/');
-    }
-  },
   changeUsername(e){
     this.setState({username: e.target.value});
   },
@@ -44,7 +39,6 @@ const LoginForm = React.createClass({
   },
   handleSubmit(e){
     e.preventDefault();
-    console.log(e);
     const loginData = {
       username: this.state.username,
       password: this.state.password,

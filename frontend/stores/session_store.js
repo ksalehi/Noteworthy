@@ -9,19 +9,18 @@ let _currentUser = {};
 SessionStore._login = function(currentUser) {
   _currentUser = currentUser;
   hashHistory.push('notes');
-  SessionStore.__emitChange();
 };
 
 SessionStore._logout = function() {
   _currentUser = {};
-  SessionStore.__emitChange();
+  hashHistory.push('/');
 };
 
 SessionStore.currentUser = function() {
   return Object.assign({}, _currentUser);
 };
 
-SessionStore.isUserLoggedIn = function(user) {
+SessionStore.isUserLoggedIn = function() {
   if (_currentUser.id) {
     return true;
   }
@@ -37,6 +36,7 @@ SessionStore.__onDispatch = function(payload) {
       SessionStore._logout();
       break;
   }
+  SessionStore.__emitChange();
 };
 
 module.exports = SessionStore;

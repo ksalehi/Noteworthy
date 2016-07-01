@@ -34,7 +34,7 @@ const NoteActions = {
   deleteNote(noteId){
     NoteApiUtil.deleteNote(
       noteId,
-      NoteActions.receiveNote,
+      NoteActions.removeNote,
       ErrorActions.setErrors
     );
   },

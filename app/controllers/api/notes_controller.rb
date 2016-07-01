@@ -1,12 +1,12 @@
 class Api::NotesController < ApplicationController
 
   def index
-    @notes = Note.all
+    @notes = current_user.notes
     render :index
   end
 
   def show
-    @note = Note.find(params[:id])
+    @note = current_user.notes.find(params[:id])
     render :show
   end
 
@@ -23,7 +23,7 @@ class Api::NotesController < ApplicationController
   end
 
   def update
-    @note = Note.find(params[:id])
+    @note = current_user.notes.find(params[:id])
 
     if @note.update_attributes(note_params)
       render :show
@@ -33,7 +33,7 @@ class Api::NotesController < ApplicationController
   end
 
   def destroy
-    @note = Note.find(params[:id])
+    @note = current_user.notes.find(params[:id])
     if @note.destroy
       render :show
     else

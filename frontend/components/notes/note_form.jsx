@@ -7,26 +7,28 @@ const NoteStore = require('../../stores/note_store');
 const NoteForm = React.createClass({
   getInitialState() {
     return {
+      noteId: null,
       errors: [],
       title: "",
       body: "",
-      update: false
     };
   },
   componentDidMount() {
     this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
   componentWillReceiveProps(newProps){
+    debugger;
     const note = NoteStore.find(newProps.params.noteId);
     if (note) {
       this.setState({
+        noteId: note.id,
         title: note.title,
         body: note.body,
-        update: true,
         errors: []
       });
     } else {
       this.setState({
+        noteId: null,
         errors: [],
         title: "",
         body: ""
@@ -36,8 +38,13 @@ const NoteForm = React.createClass({
   componentWillUnmount() {
     this.errorListener.remove();
   },
-  handleChange(property) {
-    return (e) => this.setState({[property]: e.target.value});
+  changeTitle(e) {
+    this.setState({title: e.target.value});
+    this.autoSave();
+  },
+  changeBody(e) {
+    this.setState({body: e.target.value});
+    this.autoSave();
   },
   handleErrors(){
     this.setState({errors: ErrorStore.formErrors("note_form")});
@@ -56,27 +63,41 @@ const NoteForm = React.createClass({
       title: this.state.title,
       body: this.state.body
     };
-    if (this.state.update) {
-      noteData['id'] = this.props.params.noteId;
+    const note = NoteStore.find(this.state.noteId);
+    if (note) {
+      noteData['id'] = this.state.noteId;
       NoteActions.editNote(noteData);
     } else {
       NoteActions.createNote(noteData);
     }
-    this.setState({update: false});
   },
   deleteNote(e){
+    // currently not being used but might be added
     e.preventDefault();
-    // alert('Are you sure you want to delete this note?');
-    if (this.props.params.noteId) {
-      console.log('deleting?');
-      NoteActions.deleteNote(this.props.params.noteId);
-      // this doesn't show the note has been deleted
-    } else {
-      // how do I set a custom error?
+    // modal ('Are you sure you want to delete this note?');
+    if (this.state.noteId) {
+      NoteActions.deleteNote(this.state.noteId);
+    }
+  },
+  autoSave() {
+    if (this.state.title || this.state.body) {
+      console.log('hit autosave');
+      const noteData = {
+        title: this.state.title,
+        body: this.state.body
+      };
+      const note = NoteStore.find(this.state.noteId);
+      if (note) {
+        noteData['id'] = note.id;
+        NoteActions.editNote(noteData);
+      } else {
+        NoteActions.createNote(noteData);
+      }
     }
   },
   render(){
-    console.log('rendering noteform');
+    debugger;
+    // add a couple functions here to check if a note already exists
     return (
       <div>
         <ul>{this.renderErrors()}</ul>
@@ -84,11 +105,11 @@ const NoteForm = React.createClass({
           <input type="submit" className="save-button" value="SAVE"/>
           <input type="text"
                  value={this.state.title}
-                 onChange={this.handleChange("title")}
+                 onInput={this.changeTitle}
                  placeholder="Title your note"
                  className="title-input"/>
           <textarea value={this.state.body}
-                    onChange={this.handleChange("body")}
+                    onInput={this.changeBody}
                     placeholder="Drag files here or just start typing..."
                     className="body-input"></textarea>
         </form>
