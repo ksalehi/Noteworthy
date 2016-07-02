@@ -14,7 +14,7 @@ const LoginForm = React.createClass({
     });
   },
   componentDidMount: function() {
-    // this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
+    ErrorStore.clearErrors();
     this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
   componentWillUnmount: function() {

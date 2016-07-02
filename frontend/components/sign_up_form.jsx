@@ -13,6 +13,7 @@ const SignUpForm = React.createClass({
     });
   },
   componentDidMount: function() {
+    ErrorStore.clearErrors();
     this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
     this.errorListener = ErrorStore.addListener(this.handleErrors);
   },

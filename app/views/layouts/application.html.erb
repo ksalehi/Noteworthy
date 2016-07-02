@@ -12,6 +12,9 @@
       upload_preset: '<%= ENV['UPLOAD_PRESET'] %>'
     };
   </script>
+  <% if current_user %>
+    <p>You are currently logged in as <%=current_user.username%></p>
+  <% end %>
 </head>
 <body>
     <%= yield %>

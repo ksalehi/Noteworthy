@@ -15,6 +15,7 @@ const NoteForm = React.createClass({
     };
   },
   componentDidMount() {
+    ErrorStore.clearErrors();
     this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
   componentWillReceiveProps(newProps){

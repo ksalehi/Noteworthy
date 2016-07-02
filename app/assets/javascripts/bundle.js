@@ -30062,7 +30062,7 @@
 	  },
 	
 	  componentDidMount: function componentDidMount() {
-	    // this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
+	    ErrorStore.clearErrors();
 	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
@@ -30629,7 +30629,9 @@
 	
 	SessionStore._logout = function () {
 	  _currentUser = {};
-	  hashHistory.push('/');
+	  setTimeout(function () {
+	    hashHistory.push('/');
+	  }, 0);
 	};
 	
 	SessionStore.currentUser = function () {
@@ -37119,6 +37121,8 @@
 	    return Object.keys(_errors).map(function (errorId) {
 	      return _errors[errorId];
 	    });
+	  } else {
+	    return [];
 	  }
 	};
 	
@@ -37129,14 +37133,12 @@
 	function setErrors(form, errors) {
 	  _form = form;
 	  _errors = errors;
-	  ErrorStore.__emitChange();
 	}
 	
-	function clearErrors() {
+	ErrorStore.clearErrors = function () {
 	  _form = "";
 	  _errors = {};
-	  ErrorStore.__emitChange();
-	}
+	};
 	
 	ErrorStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
@@ -37144,9 +37146,10 @@
 	      setErrors(payload.form, payload.errors);
 	      break;
 	    case ErrorConstants.CLEAR_ERRORS:
-	      clearErrors();
+	      ErrorStore.clearErrors();
 	      break;
 	  }
+	  ErrorStore.__emitChange();
 	};
 	
 	module.exports = ErrorStore;
@@ -37174,6 +37177,7 @@
 	  },
 	
 	  componentDidMount: function componentDidMount() {
+	    ErrorStore.clearErrors();
 	    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
 	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	  },
@@ -37343,15 +37347,18 @@
 	var NoteActions = __webpack_require__(299);
 	var NoteIndexItem = __webpack_require__(301);
 	var SessionActions = __webpack_require__(267);
+	var SessionStore = __webpack_require__(276);
 	
 	var NoteIndex = React.createClass({
 	  displayName: 'NoteIndex',
 	  getInitialState: function getInitialState() {
-	    return { notes: NoteStore.all() };
+	    return { notes: [] };
 	  },
 	  componentDidMount: function componentDidMount() {
-	    NoteActions.fetchNotes();
-	    this.noteListener = NoteStore.addListener(this._onChange);
+	    if (SessionStore.isUserLoggedIn()) {
+	      NoteActions.fetchNotes();
+	      this.noteListener = NoteStore.addListener(this._onChange);
+	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.noteListener.remove();
@@ -37372,14 +37379,11 @@
 	  logOut: function logOut(e) {
 	    e.preventDefault();
 	    SessionActions.logOut();
-	    console.log('logged out');
-	    hashHistory.push('/');
 	  },
 	  render: function render() {
 	    var notes = this.state.notes;
 	    var that = this;
 	    var path = this.props.location.pathname;
-	
 	    return React.createElement(
 	      'div',
 	      null,
@@ -37405,7 +37409,8 @@
 	          return React.createElement(NoteIndexItem, {
 	            key: note.id,
 	            note: note,
-	            selected: path === '/notes/' + note.id ? true : false
+	            selected: path === '/notes/' + note.id ? true : false,
+	            updatedAt: note.updated_at
 	          });
 	        })
 	      ),
@@ -37541,6 +37546,7 @@
 	var NoteStore = __webpack_require__(296);
 	var NoteActions = __webpack_require__(299);
 	var hashHistory = __webpack_require__(168).hashHistory;
+	var timeSince = __webpack_require__(461);
 	
 	var NoteIndexItem = React.createClass({
 	  displayName: 'NoteIndexItem',
@@ -37561,10 +37567,18 @@
 	    } else {
 	      klass = "";
 	    }
+	
+	    var date = new Date(this.props.updatedAt);
 	    return React.createElement(
 	      'li',
 	      { onClick: this.showDetail, className: "notes-list-item" + klass },
 	      this.props.note.title,
+	      React.createElement('br', null),
+	      React.createElement(
+	        'span',
+	        { className: 'time-since' },
+	        timeSince(date)
+	      ),
 	      React.createElement('button', { onClick: this.deleteNote, className: 'delete-button', value: 'DELETE' })
 	    );
 	  }
@@ -37861,6 +37875,7 @@
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
+	    ErrorStore.clearErrors();
 	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
@@ -56143,6 +56158,63 @@
 	  else this.add(className)
 	}
 
+
+/***/ },
+/* 460 */,
+/* 461 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	function timeSince(date) {
+	
+	  var seconds = Math.floor((new Date() - date) / 1000);
+	
+	  var interval = Math.floor(seconds / 31536000);
+	
+	  if (interval >= 1) {
+	    if (interval > 1) {
+	      return interval + " years ago";
+	    } else {
+	      return "1 year ago";
+	    }
+	  }
+	  interval = Math.floor(seconds / 2592000);
+	  if (interval >= 1) {
+	    if (interval > 1) {
+	      return interval + " months ago";
+	    } else {
+	      return "1 month ago";
+	    }
+	  }
+	  interval = Math.floor(seconds / 86400);
+	  if (interval >= 1) {
+	    if (interval > 1) {
+	      return interval + " days ago";
+	    } else {
+	      return "1 day ago";
+	    }
+	  }
+	  interval = Math.floor(seconds / 3600);
+	  if (interval >= 1) {
+	    if (interval > 1) {
+	      return interval + " hours ago";
+	    } else {
+	      return "1 hour ago";
+	    }
+	  }
+	  interval = Math.floor(seconds / 60);
+	  if (interval >= 1) {
+	    if (interval > 1) {
+	      return interval + " minutes ago";
+	    } else {
+	      return "1 minute ago";
+	    }
+	  }
+	  return "Moments ago";
+	}
+	
+	module.exports = timeSince;
 
 /***/ }
 /******/ ]);

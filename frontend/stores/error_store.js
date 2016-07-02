@@ -11,6 +11,8 @@ ErrorStore.formErrors = function(form){
     return Object.keys(_errors).map( errorId => {
       return _errors[errorId];
     });
+  } else {
+    return [];
   }
 };
 
@@ -21,14 +23,12 @@ ErrorStore.form = function(){
 function setErrors(form, errors) {
   _form = form;
   _errors = errors;
-  ErrorStore.__emitChange();
 }
 
-function clearErrors(){
+ErrorStore.clearErrors = function(){
   _form = "";
   _errors = {};
-  ErrorStore.__emitChange();
-}
+};
 
 ErrorStore.__onDispatch = function(payload) {
   switch(payload.actionType) {
@@ -36,9 +36,10 @@ ErrorStore.__onDispatch = function(payload) {
       setErrors(payload.form, payload.errors);
       break;
     case  ErrorConstants.CLEAR_ERRORS:
-      clearErrors();
+      ErrorStore.clearErrors();
       break;
   }
+  ErrorStore.__emitChange();
 };
 
 

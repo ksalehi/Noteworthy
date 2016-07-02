@@ -4,14 +4,17 @@ const NoteStore = require('../../stores/note_store');
 const NoteActions = require('../../actions/note_actions');
 const NoteIndexItem = require('./note_index_item');
 const SessionActions = require('../../actions/session_actions');
+const SessionStore = require('../../stores/session_store');
 
 const NoteIndex = React.createClass({
   getInitialState() {
-    return { notes: NoteStore.all() };
+    return { notes: [] };
   },
   componentDidMount() {
-    NoteActions.fetchNotes();
-    this.noteListener = NoteStore.addListener(this._onChange);
+    if (SessionStore.isUserLoggedIn()) {
+      NoteActions.fetchNotes();
+      this.noteListener = NoteStore.addListener(this._onChange);
+    }
   },
   componentWillUnmount() {
     this.noteListener.remove();
@@ -32,14 +35,11 @@ const NoteIndex = React.createClass({
   logOut(e){
     e.preventDefault();
     SessionActions.logOut();
-    console.log('logged out');
-    hashHistory.push('/');
   },
   render(){
     const notes = this.state.notes;
     const that = this;
     const path = this.props.location.pathname;
-
     return (
       <div>
         <button className="new-note-button" onClick={this.newNote}>+</button>
@@ -52,6 +52,7 @@ const NoteIndex = React.createClass({
                 key={note.id}
                 note={note}
                 selected={ path === `/notes/${note.id}` ? true : false }
+                updatedAt={note.updated_at}
                 />);
               })
             }

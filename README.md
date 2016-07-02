@@ -8,7 +8,7 @@
 
 Noteworthy is a web application for note management and storage modeled after Evernote. It will be built using Ruby on Rails and React.js.  By the end of Week 9, this app will, at a minimum, meet the following specifications:
 
-- [ ] Hosting on Heroku
+- [X] Hosting on Heroku
 - [ ] New account creation, login, and guest/demo login
 - [ ] A production README, replacing this README
 - [ ] Notes
@@ -77,10 +77,8 @@ UI.
   - [X] `NoteIndexItem`
   - [X] `NoteForm`
 - [X] highlight the NoteIndexItem of the note currently being edited
-- [ ] save Notes to the DB when the form loses focus or is left idle
 after editing
-- [ ] clean up any remaining login/signup errors / routes
-- [ ] notes display how long ago they were created
+- [X] clean up any remaining login/signup errors / routes
 
 ### Phase 4: Start styling (0.5 days, due W2 M 12pm)
 
@@ -89,6 +87,8 @@ after editing
 - [ ] create basic style guide
 - [ ] position elements on the page
 - [ ] add basic colors & styles
+- [ ] notes display how long ago they were created
+- [ ] save notes to the DB when the form loses focus or is left idle
 
 ### Phase 5: Notebooks (1 day, due W2 Tu 12pm)
 

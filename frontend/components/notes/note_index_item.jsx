@@ -2,6 +2,7 @@ const React = require('react');
 const NoteStore = require('../../stores/note_store');
 const NoteActions = require('../../actions/note_actions');
 const hashHistory = require('react-router').hashHistory;
+const timeSince = require('./time_since');
 
 const NoteIndexItem = React.createClass({
   showDetail(){
@@ -21,9 +22,14 @@ const NoteIndexItem = React.createClass({
     } else {
       klass = "";
     }
+
+    const date = new Date(this.props.updatedAt);
     return (
       <li onClick={this.showDetail} className={"notes-list-item" + klass}>
+
         {this.props.note.title}
+        <br></br>
+        <span className="time-since">{timeSince(date)}</span>
         <button onClick={this.deleteNote} className="delete-button" value="DELETE"></button>
       </li>
     );
