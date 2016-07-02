@@ -5,7 +5,6 @@ const hashHistory = require('react-router').hashHistory;
 
 const NoteIndexItem = React.createClass({
   showDetail(){
-    console.log('you clicked!');
     hashHistory.push('/notes/' + this.props.note.id);
   },
   deleteNote(e){

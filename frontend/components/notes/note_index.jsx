@@ -17,11 +17,15 @@ const NoteIndex = React.createClass({
     this.noteListener.remove();
   },
   _onChange() {
-    debugger;
     this.setState({ notes: NoteStore.all() });
   },
   newNote(e){
     e.preventDefault();
+    const noteData = {
+      title: "Title your note",
+      body: "Drag files here or start typing..."
+    };
+    NoteActions.createNote(noteData);
     const url = '/notes/new';
     hashHistory.push(url);
   },

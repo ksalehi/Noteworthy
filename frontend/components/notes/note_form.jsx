@@ -11,13 +11,13 @@ const NoteForm = React.createClass({
       errors: [],
       title: "",
       body: "",
+      update: false,
     };
   },
   componentDidMount() {
     this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
   componentWillReceiveProps(newProps){
-    debugger;
     const note = NoteStore.find(newProps.params.noteId);
     if (note) {
       this.setState({
@@ -40,11 +40,11 @@ const NoteForm = React.createClass({
   },
   changeTitle(e) {
     this.setState({title: e.target.value});
-    this.autoSave();
+    setTimeout(()=>{this.autoSave();}, 0);
   },
   changeBody(e) {
     this.setState({body: e.target.value});
-    this.autoSave();
+    setTimeout(()=>{this.autoSave();}, 0);
   },
   handleErrors(){
     this.setState({errors: ErrorStore.formErrors("note_form")});
@@ -69,6 +69,7 @@ const NoteForm = React.createClass({
       NoteActions.editNote(noteData);
     } else {
       NoteActions.createNote(noteData);
+      // setState({update: true});
     }
   },
   deleteNote(e){
@@ -92,12 +93,11 @@ const NoteForm = React.createClass({
         NoteActions.editNote(noteData);
       } else {
         NoteActions.createNote(noteData);
+        this.new = false;
       }
     }
   },
   render(){
-    debugger;
-    // add a couple functions here to check if a note already exists
     return (
       <div>
         <ul>{this.renderErrors()}</ul>

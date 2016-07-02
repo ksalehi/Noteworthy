@@ -102,6 +102,7 @@
 	  React.createElement(
 	    Route,
 	    { path: 'notes', component: NoteIndex, onEnter: _ensureLoggedIn },
+	    '// ',
 	    React.createElement(IndexRoute, { component: NoteForm }),
 	    React.createElement(Route, { path: 'new', component: NoteForm }),
 	    React.createElement(Route, { path: ':noteId', component: NoteForm })
@@ -37294,6 +37295,10 @@
 	function removeNote(note) {
 	  delete _notes[note.id];
 	}
+	//
+	// NoteStore.find_last_note = function() {
+	//
+	// };
 	
 	NoteStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
@@ -37352,11 +37357,15 @@
 	    this.noteListener.remove();
 	  },
 	  _onChange: function _onChange() {
-	    debugger;
 	    this.setState({ notes: NoteStore.all() });
 	  },
 	  newNote: function newNote(e) {
 	    e.preventDefault();
+	    var noteData = {
+	      title: "Title your note",
+	      body: "Drag files here or start typing..."
+	    };
+	    NoteActions.createNote(noteData);
 	    var url = '/notes/new';
 	    hashHistory.push(url);
 	  },
@@ -37536,7 +37545,6 @@
 	var NoteIndexItem = React.createClass({
 	  displayName: 'NoteIndexItem',
 	  showDetail: function showDetail() {
-	    console.log('you clicked!');
 	    hashHistory.push('/notes/' + this.props.note.id);
 	  },
 	  deleteNote: function deleteNote(e) {
@@ -37848,14 +37856,14 @@
 	      noteId: null,
 	      errors: [],
 	      title: "",
-	      body: ""
+	      body: "",
+	      update: false
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
-	    debugger;
 	    var note = NoteStore.find(newProps.params.noteId);
 	    if (note) {
 	      this.setState({
@@ -37877,12 +37885,20 @@
 	    this.errorListener.remove();
 	  },
 	  changeTitle: function changeTitle(e) {
+	    var _this = this;
+	
 	    this.setState({ title: e.target.value });
-	    this.autoSave();
+	    setTimeout(function () {
+	      _this.autoSave();
+	    }, 0);
 	  },
 	  changeBody: function changeBody(e) {
+	    var _this2 = this;
+	
 	    this.setState({ body: e.target.value });
-	    this.autoSave();
+	    setTimeout(function () {
+	      _this2.autoSave();
+	    }, 0);
 	  },
 	  handleErrors: function handleErrors() {
 	    this.setState({ errors: ErrorStore.formErrors("note_form") });
@@ -37909,6 +37925,7 @@
 	      NoteActions.editNote(noteData);
 	    } else {
 	      NoteActions.createNote(noteData);
+	      // setState({update: true});
 	    }
 	  },
 	  deleteNote: function deleteNote(e) {
@@ -37932,12 +37949,11 @@
 	        NoteActions.editNote(noteData);
 	      } else {
 	        NoteActions.createNote(noteData);
+	        this.new = false;
 	      }
 	    }
 	  },
 	  render: function render() {
-	    debugger;
-	    // add a couple functions here to check if a note already exists
 	    return React.createElement(
 	      'div',
 	      null,

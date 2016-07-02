@@ -15,6 +15,7 @@
   width: 100%;
   height: 100%;
   top: 30%;
+  margin: 15px;
   text-align: center;
 }
 
@@ -66,11 +67,15 @@ input.login-input {
   border-radius: 5px;
   background-color: #346B64;
   display: block;
-  margin: 5px auto;
+  margin: 10px auto;
   font-size: 14px;
   color: white;
   width: 25%;
   text-align: center;
+}
+
+.splash-button:hover {
+  background-color: #17524A; // #165743;
 }
 
 .username-input, .password-input {

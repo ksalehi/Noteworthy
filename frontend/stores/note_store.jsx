@@ -29,6 +29,10 @@ function resetSingleNote(note) {
 function removeNote(note) {
   delete _notes[note.id];
 }
+// 
+// NoteStore.find_last_note = function() {
+//
+// };
 
 NoteStore.__onDispatch = function(payload) {
   switch(payload.actionType) {

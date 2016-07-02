@@ -52,7 +52,7 @@ const routes = (
   <Route path="/" component={App}>
     <IndexRoute component={SplashPage} onEnter={_requireAnonymous}/>
     <Route path="notes" component={NoteIndex} onEnter={_ensureLoggedIn}>
-      <IndexRoute component={NoteForm} />
+      // <IndexRoute component={NoteForm} />
       <Route path="new" component={NoteForm} />
       <Route path=":noteId" component={NoteForm} />
     </Route>
