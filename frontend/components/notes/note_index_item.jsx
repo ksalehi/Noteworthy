@@ -23,11 +23,17 @@ const NoteIndexItem = React.createClass({
       klass = "";
     }
 
+    let title;
+    if (this.props.note.title === '') {
+      title = 'Title Your Note';
+    } else {
+      title = this.props.note.title;
+    }
+
     const date = new Date(this.props.updatedAt);
     return (
       <li onClick={this.showDetail} className={"notes-list-item" + klass}>
-
-        {this.props.note.title}
+        {title}
         <br></br>
         <span className="time-since">{timeSince(date)}</span>
         <button onClick={this.deleteNote} className="delete-button" value="DELETE"></button>

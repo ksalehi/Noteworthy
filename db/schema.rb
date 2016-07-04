@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160629030656) do
+ActiveRecord::Schema.define(version: 20160704181656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20160629030656) do
   add_index "notebooks", ["author_id"], name: "index_notebooks_on_author_id", using: :btree
 
   create_table "notes", force: :cascade do |t|
-    t.string   "title",       null: false
+    t.string   "title"
     t.text     "body"
     t.integer  "author_id",   null: false
     t.integer  "notebook_id", null: false

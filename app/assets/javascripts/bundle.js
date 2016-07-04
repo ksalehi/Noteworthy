@@ -102,9 +102,6 @@
 	  React.createElement(
 	    Route,
 	    { path: 'notes', component: NoteIndex, onEnter: _ensureLoggedIn },
-	    '// ',
-	    React.createElement(IndexRoute, { component: NoteForm }),
-	    React.createElement(Route, { path: 'new', component: NoteForm }),
 	    React.createElement(Route, { path: ':noteId', component: NoteForm })
 	  ),
 	  React.createElement(Route, { path: 'notebooks', component: NotebookIndex, onEnter: _ensureLoggedIn })
@@ -37299,10 +37296,6 @@
 	function removeNote(note) {
 	  delete _notes[note.id];
 	}
-	//
-	// NoteStore.find_last_note = function() {
-	//
-	// };
 	
 	NoteStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
@@ -37364,17 +37357,22 @@
 	    this.noteListener.remove();
 	  },
 	  _onChange: function _onChange() {
-	    this.setState({ notes: NoteStore.all() });
+	    this.setState({
+	      notes: NoteStore.all()
+	    });
+	  },
+	  noteCB: function noteCB(note) {
+	    console.log('in callback');
+	    var url = '/notes/' + note.id;
+	    hashHistory.push(url);
 	  },
 	  newNote: function newNote(e) {
 	    e.preventDefault();
 	    var noteData = {
-	      title: "Title your note",
-	      body: "Drag files here or start typing..."
+	      title: "Title Your Note",
+	      body: ""
 	    };
-	    NoteActions.createNote(noteData);
-	    var url = '/notes/new';
-	    hashHistory.push(url);
+	    NoteActions.createNote(noteData, this.noteCB);
 	  },
 	  logOut: function logOut(e) {
 	    e.preventDefault();
@@ -37439,8 +37437,11 @@
 	  getNote: function getNote(noteId) {
 	    NoteApiUtil.getNote(noteId, NoteActions.receiveNote, ErrorActions.setErrors);
 	  },
-	  createNote: function createNote(note) {
-	    NoteApiUtil.createNote(note, NoteActions.receiveNote, ErrorActions.setErrors);
+	  getLastNote: function getLastNote() {
+	    NoteApiUtil.getLastNote(NoteActions.receiveLastNote, ErrorActions.setErrors);
+	  },
+	  createNote: function createNote(note, callback) {
+	    NoteApiUtil.createNote(note, NoteActions.receiveNote, ErrorActions.setErrors, callback);
 	  },
 	  editNote: function editNote(note) {
 	    NoteApiUtil.updateNote(note, NoteActions.receiveNote, ErrorActions.setErrors);
@@ -37497,12 +37498,17 @@
 	      }
 	    });
 	  },
-	  createNote: function createNote(noteData, successCB, errorCB) {
+	  createNote: function createNote(noteData, successCB, errorCB, optionalCB) {
 	    $.ajax({
 	      method: 'POST',
 	      url: 'api/notes',
 	      data: { note: noteData },
-	      success: successCB,
+	      success: function success(data) {
+	        successCB(data);
+	        if (optionalCB) {
+	          optionalCB(data);
+	        }
+	      },
 	      error: function error(response) {
 	        errorCB("note_form", response.responseJSON);
 	      }
@@ -37568,11 +37574,18 @@
 	      klass = "";
 	    }
 	
+	    var title = void 0;
+	    if (this.props.note.title === '') {
+	      title = 'Title Your Note';
+	    } else {
+	      title = this.props.note.title;
+	    }
+	
 	    var date = new Date(this.props.updatedAt);
 	    return React.createElement(
 	      'li',
 	      { onClick: this.showDetail, className: "notes-list-item" + klass },
-	      this.props.note.title,
+	      title,
 	      React.createElement('br', null),
 	      React.createElement(
 	        'span',
@@ -37858,6 +37871,7 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(38);
 	var ErrorStore = __webpack_require__(294);
 	var hashHistory = __webpack_require__(168).hashHistory;
 	var NoteActions = __webpack_require__(299);
@@ -37866,20 +37880,28 @@
 	var NoteForm = React.createClass({
 	  displayName: 'NoteForm',
 	  getInitialState: function getInitialState() {
+	    var noteId = this.props.params.noteId;
+	    var note = NoteStore.find(noteId);
 	    return {
-	      noteId: null,
-	      errors: [],
-	      title: "",
-	      body: "",
-	      update: false
+	      noteId: note.id,
+	      title: note.title,
+	      body: note.body,
+	      errors: []
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
+	    console.log('component mounting');
+	    ReactDOM.findDOMNode(this.refs.titleInput).focus();
 	    ErrorStore.clearErrors();
 	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+	    console.log('receiving props');
 	    var note = NoteStore.find(newProps.params.noteId);
+	    if (note.title === '') {
+	      console.log('hitting focus line');
+	      ReactDOM.findDOMNode(this.refs.titleInput).focus(); // focus on title if empty
+	    }
 	    if (note) {
 	      this.setState({
 	        noteId: note.id,
@@ -37888,12 +37910,7 @@
 	        errors: []
 	      });
 	    } else {
-	      this.setState({
-	        noteId: null,
-	        errors: [],
-	        title: "",
-	        body: ""
-	      });
+	      console.log('note doesn\'t exist');
 	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
@@ -37922,7 +37939,7 @@
 	    var errors = this.state.errors.map(function (error, idx) {
 	      return React.createElement(
 	        'li',
-	        { key: idx },
+	        { className: 'errors-list', key: idx },
 	        error
 	      );
 	    });
@@ -37940,7 +37957,6 @@
 	      NoteActions.editNote(noteData);
 	    } else {
 	      NoteActions.createNote(noteData);
-	      // setState({update: true});
 	    }
 	  },
 	  deleteNote: function deleteNote(e) {
@@ -37952,21 +37968,14 @@
 	    }
 	  },
 	  autoSave: function autoSave() {
-	    if (this.state.title || this.state.body) {
-	      console.log('hit autosave');
-	      var noteData = {
-	        title: this.state.title,
-	        body: this.state.body
-	      };
-	      var note = NoteStore.find(this.state.noteId);
-	      if (note) {
-	        noteData['id'] = note.id;
-	        NoteActions.editNote(noteData);
-	      } else {
-	        NoteActions.createNote(noteData);
-	        this.new = false;
-	      }
-	    }
+	    console.log('hit autosave');
+	    var noteData = {
+	      title: this.state.title,
+	      body: this.state.body
+	    };
+	    var note = NoteStore.find(this.state.noteId);
+	    noteData['id'] = note.id;
+	    NoteActions.editNote(noteData);
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -37978,18 +37987,37 @@
 	        this.renderErrors()
 	      ),
 	      React.createElement(
-	        'form',
-	        { className: 'new-note-form', onSubmit: this.handleSubmit },
-	        React.createElement('input', { type: 'submit', className: 'save-button', value: 'SAVE' }),
-	        React.createElement('input', { type: 'text',
-	          value: this.state.title,
-	          onInput: this.changeTitle,
-	          placeholder: 'Title your note',
-	          className: 'title-input' }),
-	        React.createElement('textarea', { value: this.state.body,
-	          onInput: this.changeBody,
-	          placeholder: 'Drag files here or just start typing...',
-	          className: 'body-input' })
+	        'div',
+	        null,
+	        React.createElement(
+	          'form',
+	          { className: 'new-note-form', onSubmit: this.handleSubmit },
+	          React.createElement(
+	            'div',
+	            { id: 'toolbar' },
+	            React.createElement(
+	              'button',
+	              { 'class': 'ql-bold' },
+	              'Bold'
+	            ),
+	            React.createElement(
+	              'button',
+	              { 'class': 'ql-italic' },
+	              'Italic'
+	            )
+	          ),
+	          React.createElement('input', { type: 'submit', className: 'save-button', value: 'SAVE' }),
+	          React.createElement('input', { type: 'text',
+	            ref: 'titleInput',
+	            value: this.state.title,
+	            onChange: this.changeTitle,
+	            placeholder: 'what?',
+	            className: 'title-input' }),
+	          React.createElement('textarea', { value: this.state.body,
+	            onChange: this.changeBody,
+	            placeholder: 'Drag files here or just start typing...',
+	            className: 'body-input' })
+	        )
 	      )
 	    );
 	  }

@@ -20,17 +20,22 @@ const NoteIndex = React.createClass({
     this.noteListener.remove();
   },
   _onChange() {
-    this.setState({ notes: NoteStore.all() });
+    this.setState({
+      notes: NoteStore.all()
+    });
+  },
+  noteCB(note) {
+    console.log('in callback');
+    const url = `/notes/${note.id}`;
+    hashHistory.push(url);
   },
   newNote(e){
     e.preventDefault();
     const noteData = {
-      title: "Title your note",
-      body: "Drag files here or start typing..."
+      title: "Title Your Note",
+      body: ""
     };
-    NoteActions.createNote(noteData);
-    const url = '/notes/new';
-    hashHistory.push(url);
+    NoteActions.createNote(noteData, this.noteCB);
   },
   logOut(e){
     e.preventDefault();

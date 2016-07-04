@@ -17,11 +17,18 @@ const NoteActions = {
       ErrorActions.setErrors
     );
   },
-  createNote(note){
+  getLastNote() {
+    NoteApiUtil.getLastNote(
+      NoteActions.receiveLastNote,
+      ErrorActions.setErrors
+    );
+  },
+  createNote(note, callback){
     NoteApiUtil.createNote(
       note,
       NoteActions.receiveNote,
-      ErrorActions.setErrors
+      ErrorActions.setErrors,
+      callback
     );
   },
   editNote(note){
@@ -49,6 +56,7 @@ const NoteActions = {
       actionType: NoteConstants.NOTE_RECEIVED,
       note: note
     });
+
   },
   removeNote(note){
     AppDispatcher.dispatch({

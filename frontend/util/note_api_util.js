@@ -19,12 +19,17 @@ const NoteApiUtil = {
       }
     });
   },
-  createNote(noteData, successCB, errorCB){
+  createNote(noteData, successCB, errorCB, optionalCB){
     $.ajax({
       method: 'POST',
       url: 'api/notes',
       data: { note: noteData },
-      success: successCB,
+      success(data) {
+        successCB(data);
+        if (optionalCB) {
+          optionalCB(data);
+        }
+      },
       error(response) {
         errorCB("note_form", response.responseJSON);
       }
