@@ -109,7 +109,6 @@
 	  React.createElement(
 	    Route,
 	    { path: 'notebooks', component: NotebookIndex, onEnter: _ensureLoggedIn },
-	    React.createElement(Route, { path: 'new', component: NewNotebookForm }),
 	    React.createElement(Route, { path: ':notebookId', component: NotebookDetail })
 	  )
 	);
@@ -56322,7 +56321,7 @@
 	  displayName: 'NavBar',
 	  newNotebookForm: function newNotebookForm(e) {
 	    e.preventDefault();
-	    hashHistory.push('/notebooks/new');
+	    hashHistory.push('/notebooks');
 	  },
 	  newNote: function newNote(e) {
 	    e.preventDefault();

@@ -4,7 +4,7 @@
 
 .notes-list {
   float: left;
-  background-color: gray;
+  background-color: white;
   width: 30%;
   padding: 15px;
   margin: 0 10px;
@@ -14,18 +14,19 @@
   font-size: 24px;
   padding: 25px;
   font-family: Scope One, serif;
-  background: whitesmoke;
+  background: #575757;
+  color: white;
   text-align: center;
   border: 1px solid black;
 }
 
 .notes-list-item {
   font-size: 20px;
-  background-color: darkgray;
+  background-color: white;
   padding: 25px;
-  border-top: 1px solid black;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
+  border-top: 1px solid gray;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
   position: relative;
 }
 
@@ -36,12 +37,12 @@
 
 .notes-list-item:hover {
   cursor: pointer;
-  background-color: gray;
+  background-color: #2CA36E;
 }
 
 .notes-list-item:last-of-type {
 
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid gray;
 }
 
 .notes-list-item:first-of-type {
@@ -52,7 +53,7 @@
   padding: 15px;
   float: left;
   width: 59%;
-  background-color: gray;
+  background-color: white;
 }
 
 .nav-bar {
@@ -61,7 +62,7 @@
 }
 
 .new-note-button, .logout-button {
-  border: 1px solid black;
+  border: 1px solid gray;
   float: left;
   border-radius: 50%;
   height: 40px;
@@ -69,6 +70,7 @@
   font-size: 20px;
   text-align: center;
   margin: 5px auto;
+  background: white;
 }
 
 .new-notebook-button {
@@ -76,8 +78,8 @@
   background-size: 80%;
   background-position: center;
   padding: 5px;
-  background-color: darkgray;
-  border: 1px solid black;
+  background-color: white;
+  border: 1px solid gray;
   float: left;
   border-radius: 50%;
   height: 30px;
@@ -88,12 +90,13 @@
 .new-note-button:hover,
 .new-notebook-button:hover,
 .logout-button:hover {
-  background-color: gray;
+  background-color: #2CA36E;
 }
 
 .title-input {
   font-family: Scope One, serif;
   font-size: 32px;
+  color: #00B029;
   display: block;
   padding: 10px 10px;
   margin: 5px auto;
@@ -103,23 +106,10 @@
 .body-input {
   height: 500px;
   display: block;
-  padding: 10px;
+  padding: 25px 0;
   margin: 5px auto;
   width: 96%;
-}
-
-.save-button {
-  border: 1px solid black;
-  font-size: 14px;
-  float: right;
-  margin: 10px 5px;
-  padding: 8px;
-  background-color: whitesmoke;
-  border-radius: 5px;
-}
-
-.save-button:hover {
-  background-color: darkgray;
+  border-top: 1px solid darkgray;
 }
 
 .delete-button {
@@ -139,9 +129,9 @@
 }
 
 .selected {
-  box-shadow: 0 0 20px white inset;
+  box-shadow: 0 0 20px #00B029 inset;
 }
 
 .selected:hover {
-  background-color: darkgray;
+  background-color: white;
 }

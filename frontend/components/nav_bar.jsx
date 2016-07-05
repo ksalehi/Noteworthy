@@ -7,7 +7,7 @@ const SessionActions = require('../actions/session_actions');
 const NavBar = React.createClass({
   newNotebookForm(e){
     e.preventDefault();
-    hashHistory.push('/notebooks/new');
+    hashHistory.push('/notebooks');
   },
   newNote(e){
     e.preventDefault();

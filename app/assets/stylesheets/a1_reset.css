@@ -13,6 +13,7 @@ span, article, footer {
   text-decoration: inherit;
   vertical-align: inherit;
   box-sizing: inherit;
+  transition: all 0.2s ease;
 }
 
 ul, li {
@@ -51,7 +52,7 @@ input[type="submit"] {
 body {
   position: relative;
   margin: 25px auto;
-  background: whitesmoke;
+  background: white;
   padding: 0 25px;
   max-width: 90%;
   height: 100%;
