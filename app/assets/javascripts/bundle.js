@@ -37118,14 +37118,12 @@
 	var ErrorStore = new Store(AppDispatcher);
 	var ErrorConstants = __webpack_require__(275);
 	
-	var _errors = {};
+	var _errors = [];
 	var _form = "";
 	
 	ErrorStore.formErrors = function (form) {
 	  if (form === _form) {
-	    return Object.keys(_errors).map(function (errorId) {
-	      return _errors[errorId];
-	    });
+	    return _errors;
 	  } else {
 	    return [];
 	  }
@@ -37142,7 +37140,7 @@
 	
 	ErrorStore.clearErrors = function () {
 	  _form = "";
-	  _errors = {};
+	  _errors = [];
 	};
 	
 	ErrorStore.__onDispatch = function (payload) {

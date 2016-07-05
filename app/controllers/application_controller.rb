@@ -13,8 +13,7 @@ class ApplicationController < ActionController::Base
     if params[:notebookId]
       return Notebook.find(params[:notebookId])
     else
-      notebook_title = "#{current_user.username}'s Notebook"
-      return Notebook.find_by(title: notebook_title)
+      return current_user.notebooks.first
     end
   end
 

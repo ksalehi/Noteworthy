@@ -3,14 +3,12 @@ const AppDispatcher = require('../dispatcher/dispatcher');
 const ErrorStore = new Store(AppDispatcher);
 const ErrorConstants = require('../constants/error_constants');
 
-let _errors = {};
+let _errors = [];
 let _form = "";
 
 ErrorStore.formErrors = function(form){
   if (form === _form) {
-    return Object.keys(_errors).map( errorId => {
-      return _errors[errorId];
-    });
+    return _errors;
   } else {
     return [];
   }
@@ -27,7 +25,7 @@ function setErrors(form, errors) {
 
 ErrorStore.clearErrors = function(){
   _form = "";
-  _errors = {};
+  _errors = [];
 };
 
 ErrorStore.__onDispatch = function(payload) {
