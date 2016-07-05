@@ -53,23 +53,24 @@
 	var Route = reactRouter.Route;
 	var IndexRoute = reactRouter.IndexRoute;
 	var hashHistory = reactRouter.hashHistory;
-	var LoginForm = __webpack_require__(266);
-	var SignUpForm = __webpack_require__(295);
-	var ErrorStore = __webpack_require__(294);
-	var NoteStore = __webpack_require__(296);
+	// const LoginForm = require('./components/login_form');
+	// const SignUpForm = require('./components/sign_up_form');
+	// const ErrorStore = require('./stores/error_store');
+	// const NoteStore = require('./stores/note_store');
 	var NoteIndex = __webpack_require__(298);
-	var NoteActions = __webpack_require__(299);
+	// const NoteActions = require('./actions/note_actions');
 	var NotebookIndex = __webpack_require__(302);
-	var NoteIndexItem = __webpack_require__(301);
-	var NoteDetail = __webpack_require__(307);
+	// const NoteIndexItem = require('./components/notes/note_index_item');
+	// const NoteDetail = require('./components/notes/note_detail');
 	var NoteForm = __webpack_require__(308);
 	var SplashPage = __webpack_require__(309);
 	var SessionStore = __webpack_require__(276);
 	var SessionActions = __webpack_require__(267);
 	var Modal = __webpack_require__(310);
-	var NewNotebookForm = __webpack_require__(463);
-	var NotebookIndexItem = __webpack_require__(464);
-	var NotebookDetail = __webpack_require__(465);
+	// const NewNotebookForm = require('./components/notebooks/new_notebook_form');
+	// const NotebookIndexItem = require('./components/notebooks/notebook_index_item');
+	// const NotebookDetail = require('./components/notebooks/notebook_detail');
+	var NoteIndexByNotebook = __webpack_require__(466);
 	
 	window.hh = hashHistory;
 	
@@ -86,6 +87,7 @@
 	
 	function _requireAnonymous() {
 	  if (SessionStore.isUserLoggedIn()) {
+	    debugger;
 	    hashHistory.push('notes');
 	  }
 	}
@@ -109,7 +111,11 @@
 	  React.createElement(
 	    Route,
 	    { path: 'notebooks', component: NotebookIndex, onEnter: _ensureLoggedIn },
-	    React.createElement(Route, { path: ':notebookId', component: NotebookDetail })
+	    React.createElement(
+	      Route,
+	      { path: ':notebookId', component: NoteIndex },
+	      React.createElement(Route, { path: ':noteId', component: NoteForm })
+	    )
 	  )
 	);
 	
@@ -30136,7 +30142,7 @@
 	          React.createElement('input', { type: 'text',
 	            className: 'login-input',
 	            placeholder: 'Username',
-	            value: guestStatus ? 'guest' : this.state.username,
+	            value: guestStatus ? 'guest_user' : this.state.username,
 	            onChange: this.changeUsername })
 	        ),
 	        React.createElement(
@@ -37154,114 +37160,7 @@
 	module.exports = ErrorStore;
 
 /***/ },
-/* 295 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var SessionActions = __webpack_require__(267);
-	var hashHistory = __webpack_require__(168).hashHistory;
-	var SessionStore = __webpack_require__(276);
-	var ErrorStore = __webpack_require__(294);
-	
-	var SignUpForm = React.createClass({
-	  displayName: 'SignUpForm',
-	  getInitialState: function getInitialState() {
-	    return {
-	      errors: [],
-	      username: "",
-	      password: ""
-	    };
-	  },
-	
-	  componentDidMount: function componentDidMount() {
-	    ErrorStore.clearErrors();
-	    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
-	    this.errorListener = ErrorStore.addListener(this.handleErrors);
-	  },
-	  componentWillUnmount: function componentWillUnmount() {
-	    this.sessionListener.remove();
-	    this.errorListener.remove();
-	  },
-	  redirectIfLoggedIn: function redirectIfLoggedIn() {
-	    if (SessionStore.isUserLoggedIn()) {
-	      hashHistory.push('/');
-	    }
-	  },
-	  handleErrors: function handleErrors() {
-	    this.setState({ errors: ErrorStore.formErrors("signup") });
-	  },
-	  renderErrors: function renderErrors() {
-	    return this.state.errors.map(function (error, idx) {
-	      return React.createElement(
-	        'li',
-	        { key: idx },
-	        error
-	      );
-	    });
-	  },
-	  changeUsername: function changeUsername(e) {
-	    this.setState({ username: e.target.value });
-	  },
-	  changePassword: function changePassword(e) {
-	    this.setState({ password: e.target.value });
-	  },
-	  handleSubmit: function handleSubmit(e) {
-	    e.preventDefault();
-	    var signUpData = {
-	      username: this.state.username,
-	      password: this.state.password
-	    };
-	    SessionActions.signUp(signUpData);
-	  },
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'ul',
-	        null,
-	        this.renderErrors()
-	      ),
-	      React.createElement(
-	        'form',
-	        { onSubmit: this.handleSubmit },
-	        React.createElement(
-	          'div',
-	          { className: 'username-input' },
-	          React.createElement(
-	            'label',
-	            { id: 'username' },
-	            'Username: '
-	          ),
-	          React.createElement('input', { type: 'text',
-	            id: 'username',
-	            value: this.state.description,
-	            onChange: this.changeUsername })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'password-input' },
-	          React.createElement(
-	            'label',
-	            { id: 'password' },
-	            'Password: '
-	          ),
-	          React.createElement('input', { type: 'password',
-	            id: 'password',
-	            value: this.state.password,
-	            onChange: this.changePassword })
-	        ),
-	        React.createElement('input', { type: 'submit', value: 'SIGN UP' })
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = SignUpForm;
-
-/***/ },
+/* 295 */,
 /* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -37307,6 +37206,7 @@
 	};
 	
 	function resetNotes(notes) {
+	  _notes = {};
 	  for (var i = 0; i < notes.length; i++) {
 	    var note = notes[i];
 	    _notes[note.id] = note;
@@ -37388,7 +37288,7 @@
 	  },
 	  componentDidMount: function componentDidMount() {
 	    if (SessionStore.isUserLoggedIn()) {
-	      NoteActions.fetchNotes();
+	      NoteActions.fetchNotes(this.props.params.notebookId);
 	      this.noteListener = NoteStore.addListener(this._onChange);
 	    }
 	  },
@@ -37400,12 +37300,17 @@
 	      notes: NoteStore.all()
 	    });
 	
+	    var latestNote = NoteStore.getLatestNote();
 	    if (this.props.location.pathname === '/notes') {
-	      var latestNote = NoteStore.getLatestNote();
 	      hashHistory.push('/notes/' + latestNote.id);
+	    } else if (this.props.location.pathname === '/notebooks/' + this.props.params.notebookId) {
+	      hashHistory.push('/notebooks/' + this.props.params.notebookId + '/' + latestNote.id);
 	    }
 	  },
 	  render: function render() {
+	    var _this = this;
+	
+	    console.log('rendering note index');
 	    var notes = this.state.notes;
 	    var path = this.props.location.pathname;
 	    return React.createElement(
@@ -37425,7 +37330,9 @@
 	            key: note.id,
 	            note: note,
 	            selected: path === '/notes/' + note.id ? true : false,
-	            updatedAt: note.updated_at
+	            updatedAt: note.updated_at,
+	            pathname: _this.props.location.pathname,
+	            notebookId: _this.props.params.notebookId
 	          });
 	        })
 	      ),
@@ -37448,11 +37355,8 @@
 	var NoteApiUtil = __webpack_require__(300);
 	
 	var NoteActions = {
-	  fetchNotes: function fetchNotes() {
-	    NoteApiUtil.fetchNotes(NoteActions.receiveNotes, ErrorActions.setErrors);
-	  },
-	  fetchNotesByNotebook: function fetchNotesByNotebook(notebookId) {
-	    NoteApiUtil.fetchNotesByNotebook(notebookId, NoteActions.receiveNotesByNotebook, ErrorActions.setErrors);
+	  fetchNotes: function fetchNotes(notebookId) {
+	    NoteApiUtil.fetchNotes(NoteActions.receiveNotes, ErrorActions.setErrors, notebookId);
 	  },
 	  getNote: function getNote(noteId) {
 	    NoteApiUtil.getNote(noteId, NoteActions.receiveNote, ErrorActions.setErrors);
@@ -37504,10 +37408,11 @@
 	'use strict';
 	
 	var NoteApiUtil = {
-	  fetchNotes: function fetchNotes(successCB, errorCB) {
+	  fetchNotes: function fetchNotes(successCB, errorCB, notebookId) {
 	    $.ajax({
 	      method: 'GET',
 	      url: 'api/notes',
+	      data: { notebookId: notebookId },
 	      success: successCB,
 	      error: function error(response) {
 	        errorCB("notes_index", response.responseJSON);
@@ -37593,7 +37498,11 @@
 	var NoteIndexItem = React.createClass({
 	  displayName: 'NoteIndexItem',
 	  showDetail: function showDetail() {
-	    hashHistory.push('/notes/' + this.props.note.id);
+	    if (this.props.pathname.match('/notes/[^ ]*')) {
+	      hashHistory.push('/notes/' + this.props.note.id);
+	    } else {
+	      hashHistory.push('/notebooks/' + this.props.notebookId + '/' + this.props.note.id);
+	    }
 	  },
 	  deleteNote: function deleteNote(e) {
 	    e.preventDefault();
@@ -37664,29 +37573,35 @@
 	  render: function render() {
 	    var notebooks = this.state.notebooks;
 	    var path = this.props.location.pathname;
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'ul',
-	        { className: 'notes-list' },
+	    if (path === '/notebooks') {
+	      return React.createElement(
+	        'div',
+	        null,
 	        React.createElement(
-	          'h2',
-	          { className: 'notes-list-header' },
-	          'Notes'
-	        ),
-	        notebooks.map(function (notebook) {
-	          return React.createElement(NotebookIndexItem, {
-	            key: notebook.id,
-	            notebook: notebook,
-	            selected: path === '/notebooks/' + notebook.id ? true : false,
-	            updatedAt: notebook.updated_at
-	          });
-	        })
-	      ),
-	      this.props.children
-	    );
+	          'ul',
+	          { className: 'notes-list' },
+	          React.createElement(
+	            'h2',
+	            { className: 'notes-list-header' },
+	            'Notebooks'
+	          ),
+	          notebooks.map(function (notebook) {
+	            return React.createElement(NotebookIndexItem, {
+	              key: notebook.id,
+	              notebook: notebook,
+	              selected: path === '/notebooks/' + notebook.id ? true : false,
+	              updatedAt: notebook.updated_at
+	            });
+	          })
+	        )
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        null,
+	        this.props.children
+	      );
+	    }
 	  }
 	});
 	
@@ -37875,48 +37790,7 @@
 	module.exports = NotebookApiUtil;
 
 /***/ },
-/* 307 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var NoteStore = __webpack_require__(296);
-	
-	var NoteDetail = React.createClass({
-	  displayName: 'NoteDetail',
-	  getInitialState: function getInitialState() {
-	    var note = NoteStore.find(this.props.params.noteId);
-	    return { note: note };
-	  },
-	  componentDidMount: function componentDidMount() {
-	    this.noteListener = NoteStore.addListener(this._onChange);
-	  },
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    this.setState({ note: NoteStore.find(nextProps.params.noteId) });
-	  },
-	  componentWillUnmount: function componentWillUnmount() {
-	    this.noteListener.remove();
-	  },
-	  _onChange: function _onChange() {
-	    this.setState({ note: NoteStore.find(this.props.params.noteId) });
-	  },
-	  render: function render() {
-	    if (this.state.note) {
-	      return React.createElement(
-	        'article',
-	        { className: 'note-detail' },
-	        this.state.note.body
-	      );
-	    } else {
-	      return React.createElement('div', null);
-	    }
-	  }
-	});
-	
-	module.exports = NoteDetail;
-
-/***/ },
+/* 307 */,
 /* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -37941,6 +37815,8 @@
 	  },
 	  componentDidMount: function componentDidMount() {
 	    ErrorStore.clearErrors();
+	    this._onChange();
+	    this.noteListener = NoteStore.addListener(this._onChange);
 	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
@@ -37953,6 +37829,7 @@
 	      }, 0); // focus on title if empty
 	    }
 	    var note = NoteStore.find(newProps.params.noteId);
+	
 	    if (note) {
 	      this.setState({
 	        noteId: note.id,
@@ -37960,26 +37837,36 @@
 	        body: note.body,
 	        errors: []
 	      });
-	    } else {
-	      this.setState({
-	        noteId: null,
-	        title: "",
-	        body: "",
-	        errors: []
-	      });
 	    }
-	    if (newProps.location.pathname === '/notes') {
-	      setTimeout(function () {
-	        var latestNote = NoteStore.getLatestNote();
-	        hashHistory.push('/notes/' + latestNote.id);
-	      });
-	    }
-	    if (newProps.location.pathname === '/notebooks/1') {
-	      debugger;
-	    }
+	    // if (newProps.location.pathname === '/notes') {
+	    //   setTimeout(()=>{
+	    //     const latestNote = NoteStore.getLatestNote();
+	    //     hashHistory.push(`/notes/${latestNote.id}`);
+	    //   });
+	    // }
+	
+	    // if (newProps.location.pathname === `/notebooks`) {
+	    //   debugger;
+	    // }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.errorListener.remove();
+	    this.noteListener.remove();
+	  },
+	  _onChange: function _onChange() {
+	    if (this.props.location.pathname === '/notes') {
+	      var latestNote = NoteStore.getLatestNote();
+	      hashHistory.push('/notes/' + latestNote.id);
+	    }
+	    var note = NoteStore.find(this.props.params.noteId);
+	    if (note) {
+	      this.setState({
+	        noteId: note.id,
+	        title: note.title,
+	        body: note.body,
+	        errors: []
+	      });
+	    }
 	  },
 	  changeTitle: function changeTitle(e) {
 	    var _this2 = this;
@@ -56363,43 +56250,7 @@
 	module.exports = NavBar;
 
 /***/ },
-/* 463 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	
-	var NewNotebookForm = React.createClass({
-	  displayName: "NewNotebookForm",
-	  getInitialState: function getInitialState() {
-	    return {
-	      title: "",
-	      description: ""
-	    };
-	  },
-	  render: function render() {
-	    return React.createElement(
-	      "div",
-	      null,
-	      React.createElement(
-	        "form",
-	        { onSubmit: this.handleSubmit, value: "Create Notebook" },
-	        React.createElement("input", { type: "text",
-	          ref: "titleInput",
-	          value: this.state.title,
-	          onChange: this.changeTitle,
-	          placeholder: "Title Your Note",
-	          className: "title-input" })
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = NewNotebookForm;
-
-/***/ },
+/* 463 */,
 /* 464 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -56413,7 +56264,7 @@
 	
 	var NotebookIndexItem = React.createClass({
 	  displayName: 'NotebookIndexItem',
-	  showDetail: function showDetail() {
+	  redirectToNoteIndex: function redirectToNoteIndex() {
 	    hashHistory.push('/notebooks/' + this.props.notebook.id);
 	  },
 	  deleteNotebook: function deleteNotebook(e) {
@@ -56441,7 +56292,7 @@
 	    var date = new Date(this.props.updatedAt);
 	    return React.createElement(
 	      'li',
-	      { onClick: this.showDetail, className: "notes-list-item" + klass },
+	      { onClick: this.redirectToNoteIndex, className: "notes-list-item" + klass },
 	      title,
 	      React.createElement('br', null),
 	      React.createElement(
@@ -56457,54 +56308,67 @@
 	module.exports = NotebookIndexItem;
 
 /***/ },
-/* 465 */
+/* 465 */,
+/* 466 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
+	var hashHistory = __webpack_require__(168).hashHistory;
 	var NoteStore = __webpack_require__(296);
 	var NoteActions = __webpack_require__(299);
-	var NoteForm = __webpack_require__(308);
+	var NoteIndexItem = __webpack_require__(301);
+	var SessionStore = __webpack_require__(276);
+	var NavBar = __webpack_require__(462);
 	
-	var NotebookDetail = React.createClass({
-	  displayName: 'NotebookDetail',
+	var NoteIndexByNotebook = React.createClass({
+	  displayName: 'NoteIndexByNotebook',
 	  getInitialState: function getInitialState() {
-	    return {
-	      notes: []
-	    };
+	    return { notes: [] };
 	  },
 	  componentDidMount: function componentDidMount() {
-	    NoteActions.fetchNotesByNotebook(this.props.params.notebookId);
-	    this.listener = NoteStore.addListener(this._onChange);
+	    if (SessionStore.isUserLoggedIn()) {
+	      NoteActions.fetchNotesByNotebook(this.props.params.notebookId);
+	      this.noteListener = NoteStore.addListener(this._onChange);
+	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
-	    this.listener.remove();
+	    this.noteListener.remove();
 	  },
 	  _onChange: function _onChange() {
 	    this.setState({
-	      notes: NoteStore.allByNotebook(this.props.params.notebookId)
+	      notes: NoteStore.allByNotebook()
 	    });
 	  },
 	  render: function render() {
 	    var notes = this.state.notes;
-	
-	    console.log('rendering notebook detail');
 	    return React.createElement(
 	      'div',
 	      null,
-	      notes.map(function (note) {
-	        return React.createElement(
-	          'li',
-	          { key: note.id },
-	          React.createElement(NoteForm, { note: note })
-	        );
-	      })
+	      React.createElement(NavBar, null),
+	      React.createElement(
+	        'ul',
+	        { className: 'notes-list' },
+	        React.createElement(
+	          'h2',
+	          { className: 'notes-list-header' },
+	          'Notes'
+	        ),
+	        notes.map(function (note) {
+	          return React.createElement(NoteIndexItem, {
+	            key: note.id,
+	            note: note,
+	            updatedAt: note.updated_at
+	          });
+	        })
+	      ),
+	      this.props.children
 	    );
 	  }
 	});
 	
-	module.exports = NotebookDetail;
+	module.exports = NoteIndexByNotebook;
 
 /***/ }
 /******/ ]);

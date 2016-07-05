@@ -6,13 +6,13 @@ const NoteIndexItem = require('./note_index_item');
 const SessionStore = require('../../stores/session_store');
 const NavBar = require('../nav_bar');
 
-const NoteIndex = React.createClass({
+const NoteIndexByNotebook = React.createClass({
   getInitialState() {
     return { notes: [] };
   },
   componentDidMount() {
     if (SessionStore.isUserLoggedIn()) {
-      NoteActions.fetchNotes(this.props.params.notebookId);
+      NoteActions.fetchNotesByNotebook(this.props.params.notebookId);
       this.noteListener = NoteStore.addListener(this._onChange);
     }
   },
@@ -21,20 +21,11 @@ const NoteIndex = React.createClass({
   },
   _onChange() {
     this.setState({
-      notes: NoteStore.all()
+      notes: NoteStore.allByNotebook()
     });
-
-    const latestNote = NoteStore.getLatestNote();
-    if (this.props.location.pathname === '/notes') {
-      hashHistory.push(`/notes/${latestNote.id}`);
-    } else if (this.props.location.pathname === `/notebooks/${this.props.params.notebookId}`) {
-      hashHistory.push(`/notebooks/${this.props.params.notebookId}/${latestNote.id}`);
-    }
   },
   render(){
-    console.log('rendering note index');
     const notes = this.state.notes;
-    const path = this.props.location.pathname;
     return (
       <div>
         <NavBar />
@@ -45,10 +36,7 @@ const NoteIndex = React.createClass({
               return (<NoteIndexItem
                 key={note.id}
                 note={note}
-                selected={ path === `/notes/${note.id}` ? true : false }
                 updatedAt={note.updated_at}
-                pathname={ this.props.location.pathname }
-                notebookId={ this.props.params.notebookId }
                 />);
               })
             }
@@ -59,4 +47,4 @@ const NoteIndex = React.createClass({
   }
 });
 
-module.exports = NoteIndex;
+module.exports = NoteIndexByNotebook;

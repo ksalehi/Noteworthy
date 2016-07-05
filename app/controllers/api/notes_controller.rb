@@ -2,6 +2,9 @@ class Api::NotesController < ApplicationController
 
   def index
     @notes = current_user.notes
+    if params[:notebookId]
+      @notes = current_notebook.notes
+    end
     render :index
   end
 

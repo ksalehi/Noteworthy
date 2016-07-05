@@ -16,6 +16,8 @@ const NoteForm = React.createClass({
   },
   componentDidMount() {
     ErrorStore.clearErrors();
+    this._onChange();
+    this.noteListener = NoteStore.addListener(this._onChange);
     this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
   componentWillReceiveProps(newProps){
@@ -24,6 +26,7 @@ const NoteForm = React.createClass({
       setTimeout(() => {ReactDOM.findDOMNode(this.refs.titleInput).focus();}, 0); // focus on title if empty
     }
     const note = NoteStore.find(newProps.params.noteId);
+
     if (note) {
       this.setState({
         noteId: note.id,
@@ -31,26 +34,36 @@ const NoteForm = React.createClass({
         body: note.body,
         errors: []
       });
-    } else {
-      this.setState({
-        noteId: null,
-        title: "",
-        body: "",
-        errors: []
-      });
     }
-    if (newProps.location.pathname === '/notes') {
-      setTimeout(()=>{
-        const latestNote = NoteStore.getLatestNote();
-        hashHistory.push(`/notes/${latestNote.id}`);
-      });
-    }
-    if (newProps.location.pathname === '/notebooks/1') {
-      debugger;
-    }
+    // if (newProps.location.pathname === '/notes') {
+    //   setTimeout(()=>{
+    //     const latestNote = NoteStore.getLatestNote();
+    //     hashHistory.push(`/notes/${latestNote.id}`);
+    //   });
+    // }
+
+    // if (newProps.location.pathname === `/notebooks`) {
+    //   debugger;
+    // }
   },
   componentWillUnmount() {
     this.errorListener.remove();
+    this.noteListener.remove();
+  },
+  _onChange(){
+    if (this.props.location.pathname === '/notes') {
+      const latestNote = NoteStore.getLatestNote();
+      hashHistory.push(`/notes/${latestNote.id}`);
+    }
+    const note = NoteStore.find(this.props.params.noteId);
+    if (note) {
+      this.setState({
+        noteId: note.id,
+        title: note.title,
+        body: note.body,
+        errors: []
+      });
+    }
   },
   changeTitle(e) {
     this.setState({title: e.target.value});

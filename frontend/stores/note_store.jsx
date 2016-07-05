@@ -38,6 +38,7 @@ NoteStore.find = function(id) {
 };
 
 function resetNotes(notes) {
+  _notes = {};
   for (let i = 0; i < notes.length; i++) {
     let note = notes[i];
     _notes[note.id] = note;

@@ -1,7 +1,8 @@
 const React = require('react');
 const NoteStore = require('../../stores/note_store');
 const NoteActions = require('../../actions/note_actions');
-const NoteForm = require('../../components/notes/note_form');
+const NoteIndexItem = require('../../components/notes/note_index_item');
+const NoteIndex = require('../../components/notes/note_index');
 
 const NotebookDetail = React.createClass({
   getInitialState() {
@@ -27,15 +28,7 @@ const NotebookDetail = React.createClass({
     console.log('rendering notebook detail');
     return (
       <div >
-        {
-          notes.map( note => {
-            return (
-              <li key={note.id}>
-                <NoteForm note={note} />
-              </li>
-            );
-          })
-        }
+        <NoteIndex />
       </div>
     );
   }

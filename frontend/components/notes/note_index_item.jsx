@@ -6,7 +6,11 @@ const timeSince = require('./time_since');
 
 const NoteIndexItem = React.createClass({
   showDetail(){
-    hashHistory.push('/notes/' + this.props.note.id);
+    if (this.props.pathname.match('/notes/[^ ]*')) {
+      hashHistory.push('/notes/' + this.props.note.id);
+    } else {
+      hashHistory.push('/notebooks/' + this.props.notebookId + '/' + this.props.note.id);
+    }
   },
   deleteNote(e){
     e.preventDefault();

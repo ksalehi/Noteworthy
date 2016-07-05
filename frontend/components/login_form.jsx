@@ -74,7 +74,7 @@ const LoginForm = React.createClass({
             <input type="text"
                    className="login-input"
                    placeholder="Username"
-                   value={guestStatus ? 'guest' : this.state.username}
+                   value={guestStatus ? 'guest_user' : this.state.username}
                    onChange={this.changeUsername}/>
           </div>
           <div className="password-input">

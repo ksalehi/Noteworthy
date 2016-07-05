@@ -10,11 +10,12 @@ class ApplicationController < ActionController::Base
   end
 
   def current_notebook
-    # if params contains notebook_id use it
-    # else
-    notebook_title = "Notebook1" # should eventually say "#{current_user}'s notebook"
-    notebook = Notebook.find_by(title: notebook_title)
-    return notebook
+    if params[:notebookId]
+      return Notebook.find(params[:notebookId])
+    else
+      notebook_title = "#{current_user.username}'s Notebook"
+      return Notebook.find_by(title: notebook_title)
+    end
   end
 
   def log_in(user)

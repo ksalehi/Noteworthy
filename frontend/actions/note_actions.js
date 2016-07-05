@@ -4,17 +4,11 @@ const ErrorActions = require('./error_actions');
 const NoteApiUtil = require('../util/note_api_util');
 
 const NoteActions = {
-  fetchNotes(){
+  fetchNotes(notebookId){
     NoteApiUtil.fetchNotes(
       NoteActions.receiveNotes,
-      ErrorActions.setErrors
-    );
-  },
-  fetchNotesByNotebook(notebookId) {
-    NoteApiUtil.fetchNotesByNotebook(
-      notebookId,
-      NoteActions.receiveNotesByNotebook,
-      ErrorActions.setErrors
+      ErrorActions.setErrors,
+      notebookId
     );
   },
   getNote(noteId){

@@ -5,7 +5,7 @@ const hashHistory = require('react-router').hashHistory;
 const timeSince = require('../notes/time_since');
 
 const NotebookIndexItem = React.createClass({
-  showDetail(){
+  redirectToNoteIndex(){
     hashHistory.push('/notebooks/' + this.props.notebook.id);
   },
   deleteNotebook(e){
@@ -32,7 +32,7 @@ const NotebookIndexItem = React.createClass({
 
     const date = new Date(this.props.updatedAt);
     return (
-      <li onClick={this.showDetail} className={"notes-list-item" + klass}>
+      <li onClick={this.redirectToNoteIndex} className={"notes-list-item" + klass}>
         {title}
         <br></br>
         <span className="time-since">{timeSince(date)}</span>

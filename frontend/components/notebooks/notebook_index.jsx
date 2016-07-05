@@ -20,25 +20,31 @@ const NotebookIndex = React.createClass({
   render(){
     const notebooks = this.state.notebooks;
     const path = this.props.location.pathname;
-
-    return (
-      <div>
-        <ul className="notes-list">
-          <h2 className="notes-list-header">Notes</h2>
-          {
-            notebooks.map( notebook => {
-              return (<NotebookIndexItem
-                key={notebook.id}
-                notebook={notebook}
-                selected={ path === `/notebooks/${notebook.id}` ? true : false }
-                updatedAt={notebook.updated_at}
-                />);
-              })
-            }
-        </ul>
-        {this.props.children}
-      </div>
-    );
+    if (path === '/notebooks') {
+      return (
+        <div>
+          <ul className="notes-list">
+            <h2 className="notes-list-header">Notebooks</h2>
+            {
+              notebooks.map( notebook => {
+                return (<NotebookIndexItem
+                  key={notebook.id}
+                  notebook={notebook}
+                  selected={ path === `/notebooks/${notebook.id}` ? true : false }
+                  updatedAt={notebook.updated_at}
+                  />);
+                })
+              }
+          </ul>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          {this.props.children}
+        </div>
+      );
+    }
   }
 });
 
