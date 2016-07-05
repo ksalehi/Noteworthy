@@ -11,30 +11,41 @@ const SplashPage = React.createClass({
   closeModal: function(){
     this.setState({ modalOpen: false });
   },
-  openModal: function(){
-    this.setState({ modalOpen: true });
+  openModal: function(buttonText){
+    let guestStatus;
+    if (buttonText === 'GUEST DEMO') {
+      guestStatus = true;
+    } else {
+      guestStatus = false;
+    }
+    this.setState({
+      modalOpen: true,
+      buttonText: buttonText,
+      guestStatus: guestStatus
+    });
   },
   render() {
     const style = {
       overlay : {
-        position        : 'fixed',
-        top             : 0,
-        left            : 0,
-        right           : 0,
-        bottom          : 0,
-        backgroundColor : 'rgba(255, 255, 255, 0.5)',
-        zIndex         : 10
+        position         : 'fixed',
+        top              : 0,
+        left             : 0,
+        right            : 0,
+        bottom           : 0,
+        backgroundColor  : 'rgba(255, 255, 255, 0.5)',
+        zIndex           : 10
       },
       content : {
-        position        : 'fixed',
-        top             : '200px',
-        left            : '450px',
-        right           : '450px',
-        bottom          : '130px',
-        border          : '1px solid #ccc',
-        padding         : '5px',
-        zIndex          : 11,
-        borderRadius   : '10px'
+        position         : 'relative',
+        width            : '35%',
+        height           : '35%',
+        margin           : '250px auto',
+        border           : '1px solid #ccc',
+        padding          : '5px',
+        zIndex           : 11,
+        borderRadius     : '10px',
+        backgroundColor  : 'rgba(140, 140, 140, 0.95)',
+        display          : 'table'
       }
     };
       return (
@@ -43,18 +54,16 @@ const SplashPage = React.createClass({
           <div className="splash-text">
             <h1 className="noteworthy">Noteworthy.</h1>
             <p className="slogan">You write it. We remember it.</p>
-            <button className="splash-button" onClick={this.openModal} value="LOG IN">LOG IN</button>
-            <button className="splash-button" onClick={this.openModal} value="SIGN UP">SIGN UP</button>
-            <button className="splash-button" onClick={this.openModal} value="GUEST DEMO">GUEST DEMO</button>
-
-
-
+            <button className="splash-button" onClick={this.openModal.bind(this, 'LOG IN')} value="LOG IN">LOG IN</button>
+            <button className="splash-button" onClick={this.openModal.bind(this, 'SIGN UP')} value="SIGN UP">SIGN UP</button>
+            <button className="splash-button" onClick={this.openModal.bind(this, 'GUEST DEMO')} value="GUEST DEMO">GUEST DEMO</button>
 
             <Modal
               style={style}
               isOpen={this.state.modalOpen}
               onRequestClose={this.closeModal}>
-                <LogInForm />
+                <LogInForm buttonText={this.state.buttonText}
+                           guestStatus={this.state.guestStatus}/>
             </Modal>
           </div>
         </div>

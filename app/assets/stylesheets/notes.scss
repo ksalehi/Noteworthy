@@ -55,7 +55,12 @@
   background-color: gray;
 }
 
-.new-note-button {
+.nav-bar {
+  float: left;
+  width: 4%;
+}
+
+.new-note-button, .logout-button {
   border: 1px solid black;
   float: left;
   border-radius: 50%;
@@ -63,9 +68,26 @@
   width: 40px;
   font-size: 20px;
   text-align: center;
+  margin: 5px auto;
 }
 
-.new-note-button:hover {
+.new-notebook-button {
+  background: url('notebook2.png') no-repeat;
+  background-size: 80%;
+  background-position: center;
+  padding: 5px;
+  background-color: darkgray;
+  border: 1px solid black;
+  float: left;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  margin: 5px auto;
+}
+
+.new-note-button:hover,
+.new-notebook-button:hover,
+.logout-button:hover {
   background-color: gray;
 }
 
@@ -107,9 +129,13 @@
   width: 25px;
   position: absolute;
   top: 40%;
-  left: 90%;
+  left: 85%;
   border-radius: 5px;
-  vertical-align: middle;
+  margin: 5px;
+}
+
+.delete-button:hover {
+
 }
 
 .selected {

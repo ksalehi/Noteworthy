@@ -3,7 +3,6 @@ const hashHistory = require('react-router').hashHistory;
 const NoteStore = require('../../stores/note_store');
 const NoteActions = require('../../actions/note_actions');
 const NoteIndexItem = require('./note_index_item');
-const SessionActions = require('../../actions/session_actions');
 const SessionStore = require('../../stores/session_store');
 const NavBar = require('../nav_bar');
 
@@ -30,17 +29,12 @@ const NoteIndex = React.createClass({
       hashHistory.push(`/notes/${latestNote.id}`);
     }
   },
-  logOut(e){
-    e.preventDefault();
-    SessionActions.logOut();
-  },
   render(){
     const notes = this.state.notes;
     const path = this.props.location.pathname;
     return (
       <div>
         <NavBar />
-        <button className="logout-button" onClick={this.logOut}>LOGOUT</button>
         <ul className="notes-list">
           <h2 className="notes-list-header">Notes</h2>
           {

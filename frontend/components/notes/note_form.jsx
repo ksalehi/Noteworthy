@@ -108,11 +108,6 @@ const NoteForm = React.createClass({
         <ul>{this.renderErrors()}</ul>
         <div>
           <form className="new-note-form" onSubmit={this.handleSubmit}>
-            <div id="toolbar">
-              <button class="ql-bold">Bold</button>
-              <button class="ql-italic">Italic</button>
-            </div>
-            <input type="submit" className="save-button" value="SAVE"/>
             <input type="text"
                    ref="titleInput"
                    value={this.state.title}

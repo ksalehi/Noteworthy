@@ -39,27 +39,33 @@ const LoginForm = React.createClass({
   },
   handleSubmit(e){
     e.preventDefault();
-    const loginData = {
-      username: this.state.username,
-      password: this.state.password,
-    };
-    SessionActions.logIn(loginData);
-  },
-  signUp(){
-    const signupData = {
-      username: this.state.username,
-      password: this.state.password,
-    };
-    SessionActions.signUp(signupData);
-  },
-  guestDemo(){
-    const demoData = {
-      username: "guest",
-      password: "password"
-    };
-    SessionActions.logIn(demoData);
+    switch(this.props.buttonText) {
+      case 'LOG IN':
+        const loginData = {
+          username: this.state.username,
+          password: this.state.password,
+        };
+        SessionActions.logIn(loginData);
+        break;
+      case 'SIGN UP':
+        const signupData = {
+          username: this.state.username,
+          password: this.state.password,
+        };
+        SessionActions.signUp(signupData);
+        break;
+      case 'GUEST DEMO':
+        const demoData = {
+          username: "guest",
+          password: "password"
+        };
+        SessionActions.logIn(demoData);
+        break;
+    }
   },
   render() {
+    const guestStatus = this.props.guestStatus;
+    const buttonText = this.props.buttonText;
     return (
       <div className="login-form">
         <ul>{this.renderErrors()}</ul>
@@ -68,20 +74,18 @@ const LoginForm = React.createClass({
             <input type="text"
                    className="login-input"
                    placeholder="Username"
-                   value={this.state.description}
+                   value={guestStatus ? 'guest' : this.state.username}
                    onChange={this.changeUsername}/>
           </div>
           <div className="password-input">
             <input type="password"
                    className="login-input"
                    placeholder="Password"
-                   value={this.state.password}
+                   value={guestStatus ? 'password' : this.state.password}
                    onChange={this.changePassword}/>
           </div>
-          <input type="submit" className="splash-button" value="LOG IN"/>
+          <input type="submit" className="modal-splash-button" value={buttonText} />
         </form>
-        <button className="splash-button" onClick={this.signUp} value="SIGN UP">SIGN UP</button>
-        <button className="splash-button" onClick={this.guestDemo} value="GUEST DEMO">GUEST DEMO</button>
       </div>
     );
   }

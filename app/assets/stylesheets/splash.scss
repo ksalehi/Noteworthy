@@ -38,8 +38,8 @@
 }
 
 .login-form {
-  // background-color: rgba(74,74,74,0.5);
-  // width: 40%;
+  display: table-cell;
+  vertical-align: middle;
   margin: auto;
   border-radius: 10px;
   padding: 10px;
@@ -52,9 +52,10 @@ label {
 
 
 input.login-input {
-  padding: 5px;
+  padding: 8px;
   border-radius: 5px;
   text-align: left;
+  width: 90%;
   background-color: #E0D7C3;
 }
 
@@ -74,7 +75,19 @@ input.login-input {
   text-align: center;
 }
 
-.splash-button:hover {
+.modal-splash-button {
+  padding: 8px;
+  border-radius: 5px;
+  background-color: #346B64;
+  display: block;
+  margin: 12px auto;
+  font-size: 14px;
+  color: white;
+  width: 180px;
+  text-align: center;
+}
+
+.splash-button:hover, .modal-splash-button:hover {
   background-color: #17524A; // #165743;
 }
 
@@ -83,5 +96,5 @@ input.login-input {
     padding: 5px;
     margin: 10px auto;
     border-radius: 5px;
-    width: 260px;
+    width: 200px;
 }

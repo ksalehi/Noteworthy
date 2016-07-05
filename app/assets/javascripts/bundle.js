@@ -30093,27 +30093,33 @@
 	  },
 	  handleSubmit: function handleSubmit(e) {
 	    e.preventDefault();
-	    var loginData = {
-	      username: this.state.username,
-	      password: this.state.password
-	    };
-	    SessionActions.logIn(loginData);
-	  },
-	  signUp: function signUp() {
-	    var signupData = {
-	      username: this.state.username,
-	      password: this.state.password
-	    };
-	    SessionActions.signUp(signupData);
-	  },
-	  guestDemo: function guestDemo() {
-	    var demoData = {
-	      username: "guest",
-	      password: "password"
-	    };
-	    SessionActions.logIn(demoData);
+	    switch (this.props.buttonText) {
+	      case 'LOG IN':
+	        var loginData = {
+	          username: this.state.username,
+	          password: this.state.password
+	        };
+	        SessionActions.logIn(loginData);
+	        break;
+	      case 'SIGN UP':
+	        var signupData = {
+	          username: this.state.username,
+	          password: this.state.password
+	        };
+	        SessionActions.signUp(signupData);
+	        break;
+	      case 'GUEST DEMO':
+	        var demoData = {
+	          username: "guest",
+	          password: "password"
+	        };
+	        SessionActions.logIn(demoData);
+	        break;
+	    }
 	  },
 	  render: function render() {
+	    var guestStatus = this.props.guestStatus;
+	    var buttonText = this.props.buttonText;
 	    return React.createElement(
 	      'div',
 	      { className: 'login-form' },
@@ -30131,7 +30137,7 @@
 	          React.createElement('input', { type: 'text',
 	            className: 'login-input',
 	            placeholder: 'Username',
-	            value: this.state.description,
+	            value: guestStatus ? 'guest' : this.state.username,
 	            onChange: this.changeUsername })
 	        ),
 	        React.createElement(
@@ -30140,20 +30146,10 @@
 	          React.createElement('input', { type: 'password',
 	            className: 'login-input',
 	            placeholder: 'Password',
-	            value: this.state.password,
+	            value: guestStatus ? 'password' : this.state.password,
 	            onChange: this.changePassword })
 	        ),
-	        React.createElement('input', { type: 'submit', className: 'splash-button', value: 'LOG IN' })
-	      ),
-	      React.createElement(
-	        'button',
-	        { className: 'splash-button', onClick: this.signUp, value: 'SIGN UP' },
-	        'SIGN UP'
-	      ),
-	      React.createElement(
-	        'button',
-	        { className: 'splash-button', onClick: this.guestDemo, value: 'GUEST DEMO' },
-	        'GUEST DEMO'
+	        React.createElement('input', { type: 'submit', className: 'modal-splash-button', value: buttonText })
 	      )
 	    );
 	  }
@@ -37383,7 +37379,6 @@
 	var NoteStore = __webpack_require__(296);
 	var NoteActions = __webpack_require__(299);
 	var NoteIndexItem = __webpack_require__(301);
-	var SessionActions = __webpack_require__(267);
 	var SessionStore = __webpack_require__(276);
 	var NavBar = __webpack_require__(462);
 	
@@ -37411,10 +37406,6 @@
 	      hashHistory.push('/notes/' + latestNote.id);
 	    }
 	  },
-	  logOut: function logOut(e) {
-	    e.preventDefault();
-	    SessionActions.logOut();
-	  },
 	  render: function render() {
 	    var notes = this.state.notes;
 	    var path = this.props.location.pathname;
@@ -37422,11 +37413,6 @@
 	      'div',
 	      null,
 	      React.createElement(NavBar, null),
-	      React.createElement(
-	        'button',
-	        { className: 'logout-button', onClick: this.logOut },
-	        'LOGOUT'
-	      ),
 	      React.createElement(
 	        'ul',
 	        { className: 'notes-list' },
@@ -38071,21 +38057,6 @@
 	        React.createElement(
 	          'form',
 	          { className: 'new-note-form', onSubmit: this.handleSubmit },
-	          React.createElement(
-	            'div',
-	            { id: 'toolbar' },
-	            React.createElement(
-	              'button',
-	              { 'class': 'ql-bold' },
-	              'Bold'
-	            ),
-	            React.createElement(
-	              'button',
-	              { 'class': 'ql-italic' },
-	              'Italic'
-	            )
-	          ),
-	          React.createElement('input', { type: 'submit', className: 'save-button', value: 'SAVE' }),
 	          React.createElement('input', { type: 'text',
 	            ref: 'titleInput',
 	            value: this.state.title,
@@ -38125,8 +38096,18 @@
 	  closeModal: function closeModal() {
 	    this.setState({ modalOpen: false });
 	  },
-	  openModal: function openModal() {
-	    this.setState({ modalOpen: true });
+	  openModal: function openModal(buttonText) {
+	    var guestStatus = void 0;
+	    if (buttonText === 'GUEST DEMO') {
+	      guestStatus = true;
+	    } else {
+	      guestStatus = false;
+	    }
+	    this.setState({
+	      modalOpen: true,
+	      buttonText: buttonText,
+	      guestStatus: guestStatus
+	    });
 	  },
 	  render: function render() {
 	    var style = {
@@ -38140,15 +38121,16 @@
 	        zIndex: 10
 	      },
 	      content: {
-	        position: 'fixed',
-	        top: '200px',
-	        left: '450px',
-	        right: '450px',
-	        bottom: '130px',
+	        position: 'relative',
+	        width: '35%',
+	        height: '35%',
+	        margin: '250px auto',
 	        border: '1px solid #ccc',
 	        padding: '5px',
 	        zIndex: 11,
-	        borderRadius: '10px'
+	        borderRadius: '10px',
+	        backgroundColor: 'rgba(140, 140, 140, 0.95)',
+	        display: 'table'
 	      }
 	    };
 	    return React.createElement(
@@ -38170,17 +38152,17 @@
 	        ),
 	        React.createElement(
 	          'button',
-	          { className: 'splash-button', onClick: this.openModal, value: 'LOG IN' },
+	          { className: 'splash-button', onClick: this.openModal.bind(this, 'LOG IN'), value: 'LOG IN' },
 	          'LOG IN'
 	        ),
 	        React.createElement(
 	          'button',
-	          { className: 'splash-button', onClick: this.openModal, value: 'SIGN UP' },
+	          { className: 'splash-button', onClick: this.openModal.bind(this, 'SIGN UP'), value: 'SIGN UP' },
 	          'SIGN UP'
 	        ),
 	        React.createElement(
 	          'button',
-	          { className: 'splash-button', onClick: this.openModal, value: 'GUEST DEMO' },
+	          { className: 'splash-button', onClick: this.openModal.bind(this, 'GUEST DEMO'), value: 'GUEST DEMO' },
 	          'GUEST DEMO'
 	        ),
 	        React.createElement(
@@ -38189,7 +38171,8 @@
 	            style: style,
 	            isOpen: this.state.modalOpen,
 	            onRequestClose: this.closeModal },
-	          React.createElement(LogInForm, null)
+	          React.createElement(LogInForm, { buttonText: this.state.buttonText,
+	            guestStatus: this.state.guestStatus })
 	        )
 	      )
 	    );
@@ -56333,6 +56316,7 @@
 	var NoteActions = __webpack_require__(299);
 	var NotebookActions = __webpack_require__(305);
 	var hashHistory = __webpack_require__(168).hashHistory;
+	var SessionActions = __webpack_require__(267);
 	
 	var NavBar = React.createClass({
 	  displayName: 'NavBar',
@@ -56352,20 +56336,25 @@
 	    var url = '/notes/' + note.id;
 	    hashHistory.push(url);
 	  },
+	  logOut: function logOut(e) {
+	    e.preventDefault();
+	    SessionActions.logOut();
+	  },
 	
 	  render: function render() {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'nav-bar' },
 	      React.createElement(
 	        'button',
 	        { className: 'new-note-button', onClick: this.newNote },
 	        '+'
 	      ),
+	      React.createElement('button', { className: 'new-notebook-button', onClick: this.newNotebookForm }),
 	      React.createElement(
 	        'button',
-	        { className: '', onClick: this.newNotebookForm },
-	        'NB'
+	        { className: 'logout-button', onClick: this.logOut },
+	        'X'
 	      )
 	    );
 	  }

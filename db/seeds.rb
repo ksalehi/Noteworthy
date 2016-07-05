@@ -72,12 +72,12 @@ To look into:
 
 Latino USA podcast", author_id: 2, notebook_id: 2)
 
-Notebook.create(title: 'Notebook1', description: 'Desc1', author_id: 1)
-Notebook.create(title: 'Notebook2', description: 'Desc2', author_id: 2)
-Notebook.create(title: 'Notebook3', author_id: 2)
-Notebook.create(title: 'Notebook4', author_id: 2)
-Notebook.create(title: 'Notebook5', author_id: 2)
-Notebook.create(title: 'Notebook6', author_id: 2)
+Notebook.create(title: 'Work', description: 'Things related to work', author_id: 1)
+Notebook.create(title: 'Personal', description: 'Personal stuff', author_id: 2)
+Notebook.create(title: 'Favorite quotes', author_id: 2)
+Notebook.create(title: 'Work', author_id: 2)
+Notebook.create(title: 'School', author_id: 2)
+Notebook.create(title: 'Lab Notes', author_id: 2)
 
 User.create(username: "kia", password: "kiakia")
 User.create(username: "guest", password: "password")
