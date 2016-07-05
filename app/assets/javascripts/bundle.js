@@ -30115,7 +30115,7 @@
 	        break;
 	      case 'GUEST DEMO':
 	        var demoData = {
-	          username: "guest",
+	          username: "guest_user",
 	          password: "password"
 	        };
 	        SessionActions.logIn(demoData);

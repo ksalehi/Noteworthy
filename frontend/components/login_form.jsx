@@ -56,7 +56,7 @@ const LoginForm = React.createClass({
         break;
       case 'GUEST DEMO':
         const demoData = {
-          username: "guest",
+          username: "guest_user",
           password: "password"
         };
         SessionActions.logIn(demoData);
