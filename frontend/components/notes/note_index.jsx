@@ -21,7 +21,6 @@ const NoteIndex = React.createClass({
     this.noteListener.remove();
   },
   _onChange() {
-    console.log('hitting on change');
     this.setState({
       notes: NoteStore.all()
     });

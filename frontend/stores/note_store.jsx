@@ -5,6 +5,7 @@ const NoteStore = new Store(AppDispatcher);
 const hashHistory = require('react-router').hashHistory;
 
 let _notes = {};
+let _notesByNotebook = {};
 let _latestNote;
 
 const dateSorter = function(note1, note2) {
@@ -18,6 +19,13 @@ NoteStore.all = function() {
   let sortedNotes = unsortedNotes.sort(dateSorter);
   _latestNote = sortedNotes[0];
   return sortedNotes;
+};
+
+NoteStore.allByNotebook = function(){
+  // not sure if this is right, come back when people are quieter
+  return Object.keys(_notesByNotebook).map( noteKey => {
+    return _notesByNotebook[noteKey];
+  });
 };
 
 NoteStore.getLatestNote = function() {
@@ -34,6 +42,12 @@ function resetNotes(notes) {
     let note = notes[i];
     _notes[note.id] = note;
   }
+}
+
+function resetNotesByNotebook(notebook) {
+  notebook.notes.forEach( note => {
+    _notesByNotebook[note.id] = note;
+  });
 }
 
 function resetSingleNote(note) {
@@ -53,12 +67,16 @@ NoteStore.__onDispatch = function(payload) {
     case NoteConstants.NOTES_RECEIVED:
       resetNotes(payload.notes);
       break;
+    case NoteConstants.NOTES_BY_NOTEBOOK_RECEIVED:
+      resetNotesByNotebook(payload.notes);
+      break;
     case NoteConstants.NOTE_RECEIVED:
       resetSingleNote(payload.note);
       break;
     case NoteConstants.NOTE_REMOVED:
       removeNote(payload.note);
       break;
+
     }
   NoteStore.__emitChange();
 };

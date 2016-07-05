@@ -25,7 +25,7 @@ const NavBar = React.createClass({
       <div>
         <button className="new-note-button" onClick={this.newNote}>+</button>
         <button className="" onClick={this.newNotebookForm}>NB</button>
-    </div>
+      </div>
     );
   }
 

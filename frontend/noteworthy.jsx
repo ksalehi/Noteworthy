@@ -58,7 +58,7 @@ const routes = (
     </Route>
     <Route path="notebooks" component={NotebookIndex} onEnter={_ensureLoggedIn}>
       <Route path="new" component={NewNotebookForm} />
-      <Route path=":notebookId" component={NotebookDetail} />
+      <Route path=":notebookId" component={NotebookDetail}/>
     </Route>
   </Route>
 );

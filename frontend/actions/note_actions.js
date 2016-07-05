@@ -10,6 +10,13 @@ const NoteActions = {
       ErrorActions.setErrors
     );
   },
+  fetchNotesByNotebook(notebookId) {
+    NoteApiUtil.fetchNotesByNotebook(
+      notebookId,
+      NoteActions.receiveNotesByNotebook,
+      ErrorActions.setErrors
+    );
+  },
   getNote(noteId){
     NoteApiUtil.getNote(
       noteId,
@@ -48,6 +55,12 @@ const NoteActions = {
   receiveNotes(notes){
     AppDispatcher.dispatch({
       actionType: NoteConstants.NOTES_RECEIVED,
+      notes: notes
+    });
+  },
+  receiveNotesByNotebook(notes) {
+    AppDispatcher.dispatch({
+      actionType: NoteConstants.NOTES_BY_NOTEBOOK_RECEIVED,
       notes: notes
     });
   },

@@ -37279,6 +37279,7 @@
 	var hashHistory = __webpack_require__(168).hashHistory;
 	
 	var _notes = {};
+	var _notesByNotebook = {};
 	var _latestNote = void 0;
 	
 	var dateSorter = function dateSorter(note1, note2) {
@@ -37292,6 +37293,13 @@
 	  var sortedNotes = unsortedNotes.sort(dateSorter);
 	  _latestNote = sortedNotes[0];
 	  return sortedNotes;
+	};
+	
+	NoteStore.allByNotebook = function () {
+	  // not sure if this is right, come back when people are quieter
+	  return Object.keys(_notesByNotebook).map(function (noteKey) {
+	    return _notesByNotebook[noteKey];
+	  });
 	};
 	
 	NoteStore.getLatestNote = function () {
@@ -37308,6 +37316,12 @@
 	    var note = notes[i];
 	    _notes[note.id] = note;
 	  }
+	}
+	
+	function resetNotesByNotebook(notebook) {
+	  notebook.notes.forEach(function (note) {
+	    _notesByNotebook[note.id] = note;
+	  });
 	}
 	
 	function resetSingleNote(note) {
@@ -37327,12 +37341,16 @@
 	    case NoteConstants.NOTES_RECEIVED:
 	      resetNotes(payload.notes);
 	      break;
+	    case NoteConstants.NOTES_BY_NOTEBOOK_RECEIVED:
+	      resetNotesByNotebook(payload.notes);
+	      break;
 	    case NoteConstants.NOTE_RECEIVED:
 	      resetSingleNote(payload.note);
 	      break;
 	    case NoteConstants.NOTE_REMOVED:
 	      removeNote(payload.note);
 	      break;
+	
 	  }
 	  NoteStore.__emitChange();
 	};
@@ -37348,7 +37366,8 @@
 	var NoteConstants = {
 	  NOTES_RECEIVED: "NOTES_RECEIVED",
 	  NOTE_RECEIVED: "NOTE_RECEIVED",
-	  NOTE_REMOVED: "NOTE_REMOVED"
+	  NOTE_REMOVED: "NOTE_REMOVED",
+	  NOTES_BY_NOTEBOOK_RECEIVED: "NOTES_BY_NOTEBOOK_RECEIVED"
 	};
 	
 	module.exports = NoteConstants;
@@ -37383,7 +37402,6 @@
 	    this.noteListener.remove();
 	  },
 	  _onChange: function _onChange() {
-	    console.log('hitting on change');
 	    this.setState({
 	      notes: NoteStore.all()
 	    });
@@ -37448,6 +37466,9 @@
 	  fetchNotes: function fetchNotes() {
 	    NoteApiUtil.fetchNotes(NoteActions.receiveNotes, ErrorActions.setErrors);
 	  },
+	  fetchNotesByNotebook: function fetchNotesByNotebook(notebookId) {
+	    NoteApiUtil.fetchNotesByNotebook(notebookId, NoteActions.receiveNotesByNotebook, ErrorActions.setErrors);
+	  },
 	  getNote: function getNote(noteId) {
 	    NoteApiUtil.getNote(noteId, NoteActions.receiveNote, ErrorActions.setErrors);
 	  },
@@ -37466,6 +37487,12 @@
 	  receiveNotes: function receiveNotes(notes) {
 	    AppDispatcher.dispatch({
 	      actionType: NoteConstants.NOTES_RECEIVED,
+	      notes: notes
+	    });
+	  },
+	  receiveNotesByNotebook: function receiveNotesByNotebook(notes) {
+	    AppDispatcher.dispatch({
+	      actionType: NoteConstants.NOTES_BY_NOTEBOOK_RECEIVED,
 	      notes: notes
 	    });
 	  },
@@ -37499,6 +37526,16 @@
 	      success: successCB,
 	      error: function error(response) {
 	        errorCB("notes_index", response.responseJSON);
+	      }
+	    });
+	  },
+	  fetchNotesByNotebook: function fetchNotesByNotebook(notebookId, successCB, errorCB) {
+	    $.ajax({
+	      method: 'GET',
+	      url: 'api/notebooks/' + notebookId,
+	      success: successCB,
+	      error: function error(response) {
+	        errorCB("notebook_detail", response.responseJSON);
 	      }
 	    });
 	  },
@@ -37646,6 +37683,23 @@
 	    return React.createElement(
 	      'div',
 	      null,
+	      React.createElement(
+	        'ul',
+	        { className: 'notes-list' },
+	        React.createElement(
+	          'h2',
+	          { className: 'notes-list-header' },
+	          'Notes'
+	        ),
+	        notebooks.map(function (notebook) {
+	          return React.createElement(NotebookIndexItem, {
+	            key: notebook.id,
+	            notebook: notebook,
+	            selected: path === '/notebooks/' + notebook.id ? true : false,
+	            updatedAt: notebook.updated_at
+	          });
+	        })
+	      ),
 	      this.props.children
 	    );
 	  }
@@ -37934,6 +37988,9 @@
 	        var latestNote = NoteStore.getLatestNote();
 	        hashHistory.push('/notes/' + latestNote.id);
 	      });
+	    }
+	    if (newProps.location.pathname === '/notebooks/1') {
+	      debugger;
 	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
@@ -56418,12 +56475,44 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var NoteIndex = __webpack_require__(298);
+	var NoteStore = __webpack_require__(296);
+	var NoteActions = __webpack_require__(299);
+	var NoteForm = __webpack_require__(308);
 	
 	var NotebookDetail = React.createClass({
 	  displayName: 'NotebookDetail',
+	  getInitialState: function getInitialState() {
+	    return {
+	      notes: []
+	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    NoteActions.fetchNotesByNotebook(this.props.params.notebookId);
+	    this.listener = NoteStore.addListener(this._onChange);
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.listener.remove();
+	  },
+	  _onChange: function _onChange() {
+	    this.setState({
+	      notes: NoteStore.allByNotebook(this.props.params.notebookId)
+	    });
+	  },
 	  render: function render() {
-	    return React.createElement('div', null);
+	    var notes = this.state.notes;
+	
+	    console.log('rendering notebook detail');
+	    return React.createElement(
+	      'div',
+	      null,
+	      notes.map(function (note) {
+	        return React.createElement(
+	          'li',
+	          { key: note.id },
+	          React.createElement(NoteForm, { note: note })
+	        );
+	      })
+	    );
 	  }
 	});
 	

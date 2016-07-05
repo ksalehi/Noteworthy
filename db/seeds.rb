@@ -74,7 +74,10 @@ Latino USA podcast", author_id: 2, notebook_id: 2)
 
 Notebook.create(title: 'Notebook1', description: 'Desc1', author_id: 1)
 Notebook.create(title: 'Notebook2', description: 'Desc2', author_id: 2)
-Notebook.create(title: 'Notebook3', author_id: 1)
+Notebook.create(title: 'Notebook3', author_id: 2)
+Notebook.create(title: 'Notebook4', author_id: 2)
+Notebook.create(title: 'Notebook5', author_id: 2)
+Notebook.create(title: 'Notebook6', author_id: 2)
 
 User.create(username: "kia", password: "kiakia")
 User.create(username: "guest", password: "password")

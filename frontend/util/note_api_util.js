@@ -9,6 +9,16 @@ const NoteApiUtil = {
       }
     });
   },
+  fetchNotesByNotebook(notebookId, successCB, errorCB) {
+    $.ajax({
+      method: 'GET',
+      url: `api/notebooks/${notebookId}`,
+      success: successCB,
+      error(response) {
+        errorCB("notebook_detail", response.responseJSON);
+      }
+    });
+  },
   getNote(id, successCB, errorCB) {
     $.ajax({
       method: 'GET',

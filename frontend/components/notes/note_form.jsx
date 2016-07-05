@@ -45,6 +45,9 @@ const NoteForm = React.createClass({
         hashHistory.push(`/notes/${latestNote.id}`);
       });
     }
+    if (newProps.location.pathname === '/notebooks/1') {
+      debugger;
+    }
   },
   componentWillUnmount() {
     this.errorListener.remove();
