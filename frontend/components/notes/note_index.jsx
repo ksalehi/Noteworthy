@@ -5,6 +5,7 @@ const NoteActions = require('../../actions/note_actions');
 const NoteIndexItem = require('./note_index_item');
 const SessionActions = require('../../actions/session_actions');
 const SessionStore = require('../../stores/session_store');
+const NavBar = require('../nav_bar');
 
 const NoteIndex = React.createClass({
   getInitialState() {
@@ -20,22 +21,15 @@ const NoteIndex = React.createClass({
     this.noteListener.remove();
   },
   _onChange() {
+    console.log('hitting on change');
     this.setState({
       notes: NoteStore.all()
     });
-  },
-  noteCB(note) {
-    console.log('in callback');
-    const url = `/notes/${note.id}`;
-    hashHistory.push(url);
-  },
-  newNote(e){
-    e.preventDefault();
-    const noteData = {
-      title: "Title Your Note",
-      body: ""
-    };
-    NoteActions.createNote(noteData, this.noteCB);
+
+    if (this.props.location.pathname === '/notes') {
+      const latestNote = NoteStore.getLatestNote();
+      hashHistory.push(`/notes/${latestNote.id}`);
+    }
   },
   logOut(e){
     e.preventDefault();
@@ -43,11 +37,10 @@ const NoteIndex = React.createClass({
   },
   render(){
     const notes = this.state.notes;
-    const that = this;
     const path = this.props.location.pathname;
     return (
       <div>
-        <button className="new-note-button" onClick={this.newNote}>+</button>
+        <NavBar />
         <button className="logout-button" onClick={this.logOut}>LOGOUT</button>
         <ul className="notes-list">
           <h2 className="notes-list-header">Notes</h2>

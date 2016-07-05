@@ -17,11 +17,12 @@ const NotebookActions = {
       ErrorActions.setErrors
     );
   },
-  createNotebook(notebook){
+  createNotebook(notebook, callback){
     NotebookApiUtil.createNotebook(
       notebook,
       NotebookActions.receiveNotebook,
-      ErrorActions.setErrors
+      ErrorActions.setErrors,
+      callback
     );
   },
   editNotebook(notebook){

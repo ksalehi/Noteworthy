@@ -7,28 +7,23 @@ const NoteStore = require('../../stores/note_store');
 
 const NoteForm = React.createClass({
   getInitialState() {
-    const noteId = this.props.params.noteId;
-    const note = NoteStore.find(noteId);
     return {
-      noteId: note.id,
-      title: note.title,
-      body: note.body,
+      noteId: null,
+      title: "",
+      body: "",
       errors: []
     };
   },
   componentDidMount() {
-    console.log('component mounting');
-    ReactDOM.findDOMNode(this.refs.titleInput).focus();
     ErrorStore.clearErrors();
     this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
   componentWillReceiveProps(newProps){
     console.log('receiving props');
-    const note = NoteStore.find(newProps.params.noteId);
-    if (note.title === '') {
-      console.log('hitting focus line');
-      ReactDOM.findDOMNode(this.refs.titleInput).focus(); // focus on title if empty
+    if (this.state.title === '') {
+      setTimeout(() => {ReactDOM.findDOMNode(this.refs.titleInput).focus();}, 0); // focus on title if empty
     }
+    const note = NoteStore.find(newProps.params.noteId);
     if (note) {
       this.setState({
         noteId: note.id,
@@ -37,7 +32,18 @@ const NoteForm = React.createClass({
         errors: []
       });
     } else {
-      console.log('note doesn\'t exist');
+      this.setState({
+        noteId: null,
+        title: "",
+        body: "",
+        errors: []
+      });
+    }
+    if (newProps.location.pathname === '/notes') {
+      setTimeout(()=>{
+        const latestNote = NoteStore.getLatestNote();
+        hashHistory.push(`/notes/${latestNote.id}`);
+      });
     }
   },
   componentWillUnmount() {
@@ -85,7 +91,6 @@ const NoteForm = React.createClass({
     }
   },
   autoSave() {
-    console.log('hit autosave');
     const noteData = {
       title: this.state.title,
       body: this.state.body
@@ -109,7 +114,7 @@ const NoteForm = React.createClass({
                    ref="titleInput"
                    value={this.state.title}
                    onChange={this.changeTitle}
-                   placeholder="what?"
+                   placeholder="Title Your Note"
                    className="title-input"/>
             <textarea value={this.state.body}
                       onChange={this.changeBody}

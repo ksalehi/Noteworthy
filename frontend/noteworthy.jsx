@@ -21,9 +21,10 @@ const SplashPage = require('./components/splash_page');
 const SessionStore = require('./stores/session_store');
 const SessionActions = require('./actions/session_actions');
 const Modal = require('react-modal');
+const NewNotebookForm = require('./components/notebooks/new_notebook_form');
+const NotebookIndexItem = require('./components/notebooks/notebook_index_item');
+const NotebookDetail = require('./components/notebooks/notebook_detail');
 
-window.na = NoteActions;
-window.ns = NoteStore;
 window.hh = hashHistory;
 
 const App = React.createClass({
@@ -52,9 +53,13 @@ const routes = (
   <Route path="/" component={App}>
     <IndexRoute component={SplashPage} onEnter={_requireAnonymous}/>
     <Route path="notes" component={NoteIndex} onEnter={_ensureLoggedIn}>
+      <IndexRoute component={NoteForm}/>
       <Route path=":noteId" component={NoteForm} />
     </Route>
-    <Route path="notebooks" component={NotebookIndex} onEnter={_ensureLoggedIn}/>
+    <Route path="notebooks" component={NotebookIndex} onEnter={_ensureLoggedIn}>
+      <Route path="new" component={NewNotebookForm} />
+      <Route path=":notebookId" component={NotebookDetail} />
+    </Route>
   </Route>
 );
 

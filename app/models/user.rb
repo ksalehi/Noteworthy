@@ -24,6 +24,11 @@ class User < ActiveRecord::Base
   foreign_key: :author_id,
   class_name: "Note"
 
+  has_many :notebooks,
+  primary_key: :id,
+  foreign_key: :author_id,
+  class_name: "Notebook"
+
   def self.find_by_credentials(username, password)
     user = User.find_by_username(username)
     return nil unless user

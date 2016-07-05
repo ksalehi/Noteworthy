@@ -2,13 +2,27 @@ const Store = require('flux/utils').Store;
 const AppDispatcher = require('../dispatcher/dispatcher');
 const NoteConstants = require('../constants/note_constants');
 const NoteStore = new Store(AppDispatcher);
+const hashHistory = require('react-router').hashHistory;
 
 let _notes = {};
+let _latestNote;
+
+const dateSorter = function(note1, note2) {
+  return (new Date(note2.updated_at) - new Date(note1.updated_at));
+};
 
 NoteStore.all = function() {
-  return Object.keys(_notes).map( noteKey => {
+  let unsortedNotes = Object.keys(_notes).map( noteKey => {
     return _notes[noteKey];
   });
+  let sortedNotes = unsortedNotes.sort(dateSorter);
+  _latestNote = sortedNotes[0];
+  return sortedNotes;
+};
+
+NoteStore.getLatestNote = function() {
+  NoteStore.all();
+  return _latestNote;
 };
 
 NoteStore.find = function(id) {
@@ -28,6 +42,10 @@ function resetSingleNote(note) {
 
 function removeNote(note) {
   delete _notes[note.id];
+  setTimeout(()=>{
+    const latestNote = NoteStore.getLatestNote();
+    hashHistory.push(`/notes/${latestNote.id}`);
+  }, 0);
 }
 
 NoteStore.__onDispatch = function(payload) {

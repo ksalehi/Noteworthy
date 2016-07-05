@@ -14,7 +14,6 @@ SessionStore._login = function(currentUser) {
 SessionStore._logout = function() {
   _currentUser = {};
   setTimeout(()=> {hashHistory.push('/');}, 0);
-
 };
 
 SessionStore.currentUser = function() {

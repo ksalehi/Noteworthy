@@ -23,12 +23,17 @@ const NotebookApiUtil = {
       error: errorCB
     });
   },
-  createNotebook(notebookData, successCB, errorCB){
+  createNotebook(notebookData, successCB, errorCB, optionalCB){
     $.ajax({
       method: 'POST',
       url: 'api/notebooks',
       data: { notebook: notebookData },
-      success: successCB,
+      success(data) {
+         successCB(data);
+         if (optionalCB) {
+           optionalCB(data);
+         }
+      },
       error: errorCB
     });
   },

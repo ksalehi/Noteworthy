@@ -1,6 +1,7 @@
 const React = require('react');
 const NotebookStore = require('../../stores/notebook_store');
 const NotebookActions = require('../../actions/notebook_actions');
+const NotebookIndexItem = require('./notebook_index_item');
 
 const NotebookIndex = React.createClass({
   getInitialState() {
@@ -18,15 +19,11 @@ const NotebookIndex = React.createClass({
   },
   render(){
     const notebooks = this.state.notebooks;
+    const path = this.props.location.pathname;
+
     return (
       <div>
-        <ul>
-          {
-            notebooks.map( notebook => {
-              return (<li key={notebook.id}>{notebook.title}</li>);
-            })
-          }
-        </ul>
+        {this.props.children}
       </div>
     );
   }

@@ -19,4 +19,9 @@ class Note < ActiveRecord::Base
   foreign_key: :author_id,
   class_name: 'User'
 
+  belongs_to :notebook,
+  primary_key: :id,
+  foreign_key: :notebook_id,
+  class_name: 'Notebook'
+
 end
