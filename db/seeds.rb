@@ -27,7 +27,7 @@ Note.create(title: "To-do list",
                    5. Have note in focus look selected somehow
                    6. Use CLEAR_ERRORS",
             author_id: 2,
-            notebook_id: Notebook.find_by(title: 'Work'))
+            notebook_id: 3)
 
 Note.create(title: "Ruby Questions",
             body: "[38] pry(main)> require 'awesome_print'
@@ -42,7 +42,7 @@ Note.create(title: "Ruby Questions",
                   Run git reset one_of_your_files.rb. Run git status and compare.
                   Once you have a sense of what it means to be 'staged' and 'unstaged', commit your change.",
             author_id: 2,
-            notebook_id: Notebook.find_by(title: 'Work'))
+            notebook_id: 3)
 Note.create(title: "Mouse watering schedule",
             body: "Monday: Kia
                   Tuesday: Bryan Rego
@@ -52,7 +52,7 @@ Note.create(title: "Mouse watering schedule",
                   Saturday: Hyeyoung
                   Sunday: Melissa",
             author_id: 2,
-            notebook_id: Notebook.find_by(title: 'Lab Notes'))
+            notebook_id: 2)
 
 Note.create(title: "Spring Semester Courses",
             body: "Modern Art Since 1945
@@ -60,14 +60,14 @@ Note.create(title: "Spring Semester Courses",
                   Poli Sci 100
                   Vladimir Nabokov",
             author_id: 2,
-            notebook_id: Notebook.find_by(title: 'School'))
+            notebook_id: 4)
 
 Note.create(title: "Movies to see",
             body: "Zero dark thirty
                    The Hurt Locker
                    District 9",
             author_id: 2,
-            notebook_id: Notebook.find_by(title: 'Personal'))
+            notebook_id: 1)
 
 Note.create(title: "Groceries",
             body: "Bread
@@ -78,7 +78,7 @@ Note.create(title: "Groceries",
                   Tortilla chips
                   Cookies",
             author_id: 2,
-            notebook_id: Notebook.find_by(title: 'Personal'))
+            notebook_id: 1)
 Note.create(title: "Good cat names",
             body: "Swiffer
                   Banjo
@@ -87,7 +87,7 @@ Note.create(title: "Good cat names",
                   Peaches
                   Basil",
             author_id: 2,
-            notebook_id: Notebook.find_by(title: 'Personal'))
+            notebook_id: 1)
 Note.create(title: "Songs I know on guitar",
             body: "Skinny Love
                   Wagon Wheel
@@ -112,7 +112,7 @@ Note.create(title: "Songs I know on guitar",
                   Piazza, New York Catcher
                   All I Want Is You",
             author_id: 2,
-            notebook_id: Notebook.find_by(title: 'Personal'))
+            notebook_id: 1)
 Note.create(title: "To read",
             body: "Articles:
 
@@ -135,7 +135,7 @@ Note.create(title: "To read",
 
                   Latino USA podcast",
             author_id: 2,
-            notebook_id: Notebook.find_by(title: 'Personal'))
+            notebook_id: 1)
 
 User.create(username: "kia",
             password: "kiakia")

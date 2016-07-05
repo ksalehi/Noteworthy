@@ -37838,16 +37838,6 @@
 	        errors: []
 	      });
 	    }
-	    // if (newProps.location.pathname === '/notes') {
-	    //   setTimeout(()=>{
-	    //     const latestNote = NoteStore.getLatestNote();
-	    //     hashHistory.push(`/notes/${latestNote.id}`);
-	    //   });
-	    // }
-	
-	    // if (newProps.location.pathname === `/notebooks`) {
-	    //   debugger;
-	    // }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.errorListener.remove();
