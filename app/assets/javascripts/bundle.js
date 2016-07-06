@@ -37857,20 +37857,12 @@
 	    }
 	  },
 	  changeTitle: function changeTitle(e) {
-	    var _this2 = this;
-	
 	    this.setState({ title: e.target.value });
-	    setTimeout(function () {
-	      _this2.autoSave();
-	    }, 0);
+	    // setTimeout(()=>{this.autoSave();}, 0);
 	  },
 	  changeBody: function changeBody(e) {
-	    var _this3 = this;
-	
 	    this.setState({ body: e.target.value });
-	    setTimeout(function () {
-	      _this3.autoSave();
-	    }, 0);
+	    // setTimeout(()=>{this.autoSave();}, 0);
 	  },
 	  handleErrors: function handleErrors() {
 	    this.setState({ errors: ErrorStore.formErrors("note_form") });
@@ -37908,6 +37900,7 @@
 	    }
 	  },
 	  autoSave: function autoSave() {
+	    console.log('hitting autosave');
 	    var noteData = {
 	      title: this.state.title,
 	      body: this.state.body
@@ -37915,6 +37908,7 @@
 	    var note = NoteStore.find(this.state.noteId);
 	    noteData['id'] = note.id;
 	    NoteActions.editNote(noteData);
+	    console.log('autosaved');
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -37936,11 +37930,13 @@
 	            value: this.state.title,
 	            onChange: this.changeTitle,
 	            placeholder: 'Title Your Note',
-	            className: 'title-input' }),
+	            className: 'title-input',
+	            onBlur: this.autoSave }),
 	          React.createElement('textarea', { value: this.state.body,
 	            onChange: this.changeBody,
 	            placeholder: 'Drag files here or just start typing...',
-	            className: 'body-input' })
+	            className: 'body-input',
+	            onBlur: this.autoSave })
 	        )
 	      )
 	    );

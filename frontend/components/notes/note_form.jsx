@@ -57,11 +57,11 @@ const NoteForm = React.createClass({
   },
   changeTitle(e) {
     this.setState({title: e.target.value});
-    setTimeout(()=>{this.autoSave();}, 0);
+    // setTimeout(()=>{this.autoSave();}, 0);
   },
   changeBody(e) {
     this.setState({body: e.target.value});
-    setTimeout(()=>{this.autoSave();}, 0);
+    // setTimeout(()=>{this.autoSave();}, 0);
   },
   handleErrors(){
     this.setState({errors: ErrorStore.formErrors("note_form")});
@@ -116,11 +116,13 @@ const NoteForm = React.createClass({
                    value={this.state.title}
                    onChange={this.changeTitle}
                    placeholder="Title Your Note"
-                   className="title-input"/>
+                   className="title-input"
+                   onBlur={this.autoSave}/>
             <textarea value={this.state.body}
                       onChange={this.changeBody}
                       placeholder="Drag files here or just start typing..."
-                      className="body-input"></textarea>
+                      className="body-input"
+                      onBlur={this.autoSave}></textarea>
           </form>
         </div>
       </div>
