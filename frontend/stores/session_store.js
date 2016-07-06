@@ -8,12 +8,10 @@ let _currentUser = {};
 
 SessionStore._login = function(currentUser) {
   _currentUser = currentUser;
-  hashHistory.push('notes');
 };
 
 SessionStore._logout = function() {
   _currentUser = {};
-  setTimeout(()=> {hashHistory.push('/');}, 0);
 };
 
 SessionStore.currentUser = function() {

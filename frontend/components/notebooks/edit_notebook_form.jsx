@@ -2,10 +2,10 @@ const React = require('react');
 const NotebookActions = require('../../actions/notebook_actions');
 const hashHistory = require('react-router').hashHistory;
 
-const NewNotebookForm = React.createClass({
+const EditNotebookForm = React.createClass({
   getInitialState(){
     return ({
-      title: ""
+      title: this.props.title
     });
   },
   changeTitle(e){
@@ -17,8 +17,8 @@ const NewNotebookForm = React.createClass({
     console.log('hit handleSubmit');
     e.preventDefault();
     const notebookData = { title: this.state.title };
-    this.props.closeModal();
-    NotebookActions.createNotebook(notebookData);
+    NotebookActions.editNotebook(notebookData);
+    // close modal
   },
   render() {
     return (
@@ -29,7 +29,7 @@ const NewNotebookForm = React.createClass({
                  onChange={this.changeTitle}
                  placeholder="Title Your Notebook"
                  className="notebook-title-input"/>
-          <input type="submit" className="create-notebook-button" value='Create Notebook'/>
+               <input type="submit" className="create-notebook-button" value='Update Notebook'/>
         </form>
       </div>
     );
@@ -37,4 +37,4 @@ const NewNotebookForm = React.createClass({
 
 });
 
-module.exports = NewNotebookForm;
+module.exports = EditNotebookForm;

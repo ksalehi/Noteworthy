@@ -7,6 +7,7 @@ const timeSince = require('../notes/time_since');
 const NotebookIndexItem = React.createClass({
   redirectToNoteIndex(){
     hashHistory.push('/notebooks/' + this.props.notebook.id);
+    console.log('hit redirect');
   },
   deleteNotebook(e){
     e.stopPropagation();

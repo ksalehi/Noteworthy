@@ -85,7 +85,6 @@
 	
 	function _requireAnonymous() {
 	  if (SessionStore.isUserLoggedIn()) {
-	    debugger;
 	    hashHistory.push('notes');
 	  }
 	}
@@ -30064,17 +30063,26 @@
 	      modalOpen: false,
 	      errors: [],
 	      username: "",
-	      password: ""
+	      password: "",
+	      loggedIn: false
 	    };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
 	    ErrorStore.clearErrors();
+	    this.sessionListener = SessionStore.addListener(this._handleRedirect);
 	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
-	    // this.sessionListener.remove();
+	    this.sessionListener.remove();
 	    this.errorListener.remove();
+	  },
+	  _handleRedirect: function _handleRedirect() {
+	    if (SessionStore.isUserLoggedIn()) {
+	      if (!this.state.loggedIn) {
+	        hashHistory.push('notes');
+	      }
+	    }
 	  },
 	  handleErrors: function handleErrors() {
 	    this.setState({ errors: ErrorStore.formErrors("login") });
@@ -30627,14 +30635,10 @@
 	
 	SessionStore._login = function (currentUser) {
 	  _currentUser = currentUser;
-	  hashHistory.push('notes');
 	};
 	
 	SessionStore._logout = function () {
 	  _currentUser = {};
-	  setTimeout(function () {
-	    hashHistory.push('/');
-	  }, 0);
 	};
 	
 	SessionStore.currentUser = function () {
@@ -37281,44 +37285,73 @@
 	var SessionStore = __webpack_require__(276);
 	var NotebookStore = __webpack_require__(303);
 	var currentUser = window.currentUser;
+	var NotebookActions = __webpack_require__(305);
+	var Modal = __webpack_require__(310);
+	var NoteConstants = __webpack_require__(297);
+	var EditNotebookForm = __webpack_require__(467);
 	
 	var NoteIndex = React.createClass({
 	  displayName: 'NoteIndex',
 	  getInitialState: function getInitialState() {
-	    return { notes: [] };
+	    return {
+	      notes: [],
+	      notebooks: [],
+	      defaultNotebook: null
+	    };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    if (SessionStore.isUserLoggedIn()) {
-	      NoteActions.fetchNotes(this.props.params.notebookId);
+	      NoteActions.fetchNotes(this.props.params.notebookId); //TODO: notebookId not always defined
 	      this.noteListener = NoteStore.addListener(this._onChange);
+	      this.notebookListener = NotebookStore.addListener(this._onChange);
 	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.noteListener.remove();
+	    this.notebookListener.remove();
 	  },
 	  _onChange: function _onChange() {
 	    this.setState({
-	      notes: NoteStore.all()
+	      notes: NoteStore.all(),
+	      notebooks: NotebookStore.all(),
+	      defaultNotebook: NotebookStore.defaultNotebook()
 	    });
 	
 	    var latestNote = NoteStore.getLatestNote();
-	    if (this.props.location.pathname === '/notes') {
-	      hashHistory.push('/notes/' + latestNote.id);
-	    } else if (this.props.location.pathname === '/notebooks/' + this.props.params.notebookId) {
-	      hashHistory.push('/notebooks/' + this.props.params.notebookId + '/' + latestNote.id);
+	    if (latestNote) {
+	      // won't exist if notebook was just created
+	      if (this.props.location.pathname === '/notes') {
+	        hashHistory.push('/notes/' + latestNote.id);
+	      } else if (this.props.location.pathname === '/notebooks/' + this.props.params.notebookId) {
+	        hashHistory.push('/notebooks/' + this.props.params.notebookId + '/' + latestNote.id);
+	      }
 	    }
+	  },
+	  editNotebook: function editNotebook(e) {
+	    e.preventDefault();
+	    if (this.props.location.pathname.match('/notes/[^ ]*')) {
+	      this.currentNotebook = this.state.defaultNotebook; // TODO: replace with default notebook
+	    } else {
+	      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
+	    }
+	    this.openModal();
+	  },
+	
+	  closeModal: function closeModal() {
+	    this.setState({ modalOpen: false });
+	  },
+	  openModal: function openModal() {
+	    this.setState({ modalOpen: true });
 	  },
 	  render: function render() {
 	    var _this = this;
 	
-	    console.log('rendering note index');
 	    var notes = this.state.notes;
 	    var path = this.props.location.pathname;
-	    var notebookTitle = void 0;
 	    if (path === '/notebooks/' + this.props.params.notebookId) {
-	      notebookTitle = NotebookStore.find(this.props.params.notebookId);
+	      this.notebookTitle = NotebookStore.find(this.props.params.notebookId).title;
 	    } else {
-	      notebookTitle = currentUser.username + '\'s Notebook';
+	      this.notebookTitle = 'user\'s Notebook';
 	    }
 	    return React.createElement(
 	      'div',
@@ -37329,7 +37362,12 @@
 	        React.createElement(
 	          'h2',
 	          { className: 'notes-list-header' },
-	          notebookTitle
+	          this.notebookTitle,
+	          React.createElement(
+	            'div',
+	            null,
+	            React.createElement('button', { className: 'new-notebook-button', onClick: this.editNotebook })
+	          )
 	        ),
 	        notes.map(function (note) {
 	          return React.createElement(NoteIndexItem, {
@@ -37342,7 +37380,16 @@
 	          });
 	        })
 	      ),
-	      this.props.children
+	      this.props.children,
+	      React.createElement(
+	        Modal,
+	        {
+	          style: NoteConstants.MODAL_STYLE,
+	          isOpen: this.state.modalOpen,
+	          onRequestClose: this.closeModal },
+	        React.createElement(EditNotebookForm, { title: this.notebookTitle,
+	          closeModal: this.closeModal })
+	      )
 	    );
 	  }
 	});
@@ -37629,11 +37676,10 @@
 	            style: style,
 	            isOpen: this.state.modalOpen,
 	            onRequestClose: this.closeModal },
-	          React.createElement(NewNotebookForm, null)
+	          React.createElement(NewNotebookForm, { closeModal: this.closeModal })
 	        )
 	      );
 	    } else {
-	      debugger;
 	      return React.createElement(
 	        'div',
 	        null,
@@ -37658,21 +37704,35 @@
 	var hashHistory = __webpack_require__(168).hashHistory;
 	
 	var _notebooks = {};
+	var _defaultNotebook = void 0;
 	
-	var dateSorter = function dateSorter(note1, note2) {
-	  return new Date(note2.updated_at) - new Date(note1.updated_at);
+	var dateSorter = function dateSorter(notebook1, notebook2) {
+	  return new Date(notebook2.updated_at) - new Date(notebook1.updated_at);
 	};
 	
 	NotebookStore.all = function () {
 	  var unsortedNotebooks = Object.keys(_notebooks).map(function (notebookKey) {
 	    return _notebooks[notebookKey];
 	  });
+	  _defaultNotebook = unsortedNotebooks[0];
 	  var sortedNotebooks = unsortedNotebooks.sort(dateSorter);
 	  return sortedNotebooks;
 	};
 	
+	NotebookStore.find = function (id) {
+	  return _notebooks[id];
+	};
+	
+	NotebookStore.defaultNotebook = function () {
+	  return _defaultNotebook;
+	};
+	
 	function resetNotebooks(notebooks) {
-	  _notebooks = notebooks;
+	  _notebooks = {};
+	  for (var i = 0; i < notebooks.length; i++) {
+	    var notebook = notebooks[i];
+	    _notebooks[notebook.id] = notebook;
+	  }
 	}
 	
 	function resetSingleNotebook(notebook) {
@@ -37778,13 +37838,9 @@
 	      method: 'GET',
 	      url: 'api/notebooks',
 	      success: function success(data) {
-	        console.log('success');
-	        console.log(data);
 	        successCB(data);
 	      },
 	      error: function error(data) {
-	        console.log('error');
-	        console.log(data);
 	        errorCB(data);
 	      }
 	    });
@@ -37869,8 +37925,13 @@
 	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
 	    var _this = this;
 	
-	    console.log('receiving props');
-	    if (this.state.title === '') {
+	    var title = void 0;
+	    if (newProps.params) {
+	      if (newProps.params.noteId) {
+	        title = NoteStore.find(newProps.params.noteId).title;
+	      }
+	    }
+	    if (title === '') {
 	      setTimeout(function () {
 	        ReactDOM.findDOMNode(_this.refs.titleInput).focus();
 	      }, 0); // focus on title if empty
@@ -56211,9 +56272,28 @@
 	var NotebookActions = __webpack_require__(305);
 	var hashHistory = __webpack_require__(168).hashHistory;
 	var SessionActions = __webpack_require__(267);
+	var SessionStore = __webpack_require__(276);
 	
 	var NavBar = React.createClass({
 	  displayName: 'NavBar',
+	  getInitialState: function getInitialState() {
+	    return {
+	      loggedIn: true
+	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.sessionListener = SessionStore.addListener(this._handleRedirect);
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.sessionListener.remove();
+	  },
+	  _handleRedirect: function _handleRedirect() {
+	    if (!SessionStore.isUserLoggedIn()) {
+	      if (this.state.loggedIn) {
+	        hashHistory.push('/');
+	      }
+	    }
+	  },
 	  notebookIndex: function notebookIndex(e) {
 	    e.preventDefault();
 	    hashHistory.push('/notebooks');
@@ -56283,8 +56363,8 @@
 	    console.log('hit handleSubmit');
 	    e.preventDefault();
 	    var notebookData = { title: this.state.title };
+	    this.props.closeModal();
 	    NotebookActions.createNotebook(notebookData);
-	    hashHistory.push('/notebooks');
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -56322,6 +56402,7 @@
 	  displayName: 'NotebookIndexItem',
 	  redirectToNoteIndex: function redirectToNoteIndex() {
 	    hashHistory.push('/notebooks/' + this.props.notebook.id);
+	    console.log('hit redirect');
 	  },
 	  deleteNotebook: function deleteNotebook(e) {
 	    e.stopPropagation();
@@ -56426,6 +56507,55 @@
 	});
 	
 	module.exports = NoteIndexByNotebook;
+
+/***/ },
+/* 467 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var NotebookActions = __webpack_require__(305);
+	var hashHistory = __webpack_require__(168).hashHistory;
+	
+	var EditNotebookForm = React.createClass({
+	  displayName: 'EditNotebookForm',
+	  getInitialState: function getInitialState() {
+	    return {
+	      title: this.props.title
+	    };
+	  },
+	  changeTitle: function changeTitle(e) {
+	    this.setState({
+	      title: e.target.value
+	    });
+	  },
+	  handleSubmit: function handleSubmit(e) {
+	    console.log('hit handleSubmit');
+	    e.preventDefault();
+	    var notebookData = { title: this.state.title };
+	    NotebookActions.editNotebook(notebookData);
+	    // close modal
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'form',
+	        { className: 'new-notebook-form', onSubmit: this.handleSubmit },
+	        React.createElement('input', { type: 'text',
+	          value: this.state.title,
+	          onChange: this.changeTitle,
+	          placeholder: 'Title Your Notebook',
+	          className: 'notebook-title-input' }),
+	        React.createElement('input', { type: 'submit', className: 'create-notebook-button', value: 'Update Notebook' })
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = EditNotebookForm;
 
 /***/ }
 /******/ ]);

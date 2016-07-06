@@ -63,13 +63,12 @@ const NotebookIndex = React.createClass({
             style={style}
             isOpen={this.state.modalOpen}
             onRequestClose={this.closeModal}>
-              <NewNotebookForm />
+              <NewNotebookForm closeModal={this.closeModal} />
           </Modal>
 
         </div>
       );
     } else {
-      debugger;
       return (
         <div>
           {this.props.children}

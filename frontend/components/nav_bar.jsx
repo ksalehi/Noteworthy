@@ -3,8 +3,27 @@ const NoteActions = require('../actions/note_actions');
 const NotebookActions = require('../actions/notebook_actions');
 const hashHistory = require('react-router').hashHistory;
 const SessionActions = require('../actions/session_actions');
+const SessionStore = require('../stores/session_store');
 
 const NavBar = React.createClass({
+  getInitialState() {
+    return {
+      loggedIn: true
+    };
+  },
+  componentDidMount(){
+    this.sessionListener = SessionStore.addListener(this._handleRedirect);
+  },
+  componentWillUnmount(){
+    this.sessionListener.remove();
+  },
+  _handleRedirect(){
+    if (!SessionStore.isUserLoggedIn()) {
+      if (this.state.loggedIn) {
+        hashHistory.push('/');
+      }
+    }
+  },
   notebookIndex(e){
     e.preventDefault();
     hashHistory.push('/notebooks');

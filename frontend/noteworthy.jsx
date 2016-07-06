@@ -38,7 +38,6 @@ const App = React.createClass({
 
 function _requireAnonymous() {
   if (SessionStore.isUserLoggedIn()) {
-    debugger;
     hashHistory.push('notes');
   }
 }

@@ -4,13 +4,9 @@ const NotebookApiUtil = {
       method: 'GET',
       url: 'api/notebooks',
       success(data) {
-        console.log('success');
-        console.log(data);
         successCB(data);
       },
       error(data) {
-        console.log('error');
-        console.log(data);
         errorCB(data);
       }
     });

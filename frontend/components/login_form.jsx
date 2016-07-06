@@ -10,16 +10,25 @@ const LoginForm = React.createClass({
       modalOpen: false,
       errors: [],
       username: "",
-      password: ""
+      password: "",
+      loggedIn: false
     });
   },
   componentDidMount: function() {
     ErrorStore.clearErrors();
+    this.sessionListener = SessionStore.addListener(this._handleRedirect);
     this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
   componentWillUnmount: function() {
-    // this.sessionListener.remove();
+    this.sessionListener.remove();
     this.errorListener.remove();
+  },
+  _handleRedirect(){
+    if (SessionStore.isUserLoggedIn()) {
+      if (!this.state.loggedIn) {
+        hashHistory.push('notes');
+      }
+    }
   },
   handleErrors(){
     this.setState({errors: ErrorStore.formErrors("login")});

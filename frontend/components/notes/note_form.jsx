@@ -21,8 +21,13 @@ const NoteForm = React.createClass({
     this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
   componentWillReceiveProps(newProps){
-    console.log('receiving props');
-    if (this.state.title === '') {
+    let title;
+    if (newProps.params) {
+      if (newProps.params.noteId) {
+        title = NoteStore.find(newProps.params.noteId).title;
+      }
+    }
+    if (title === '') {
       setTimeout(() => {ReactDOM.findDOMNode(this.refs.titleInput).focus();}, 0); // focus on title if empty
     }
     const note = NoteStore.find(newProps.params.noteId);
