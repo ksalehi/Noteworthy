@@ -33,9 +33,9 @@ const NotebookActions = {
     );
   },
   deleteNotebook(notebookId){
-    NotebookApiUtil.getNotebook(
+    NotebookApiUtil.deleteNotebook(
       notebookId,
-      NotebookActions.receiveNotebook,
+      NotebookActions.removeNotebook,
       ErrorActions.setErrors
     );
   },

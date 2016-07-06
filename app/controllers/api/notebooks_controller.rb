@@ -10,8 +10,8 @@ class Api::NotebooksController < ApplicationController
   end
 
   def create
-    @notebook = Note.new(notebook_params)
-    @notebook.author_id = current_user.id;
+    @notebook = Notebook.new(notebook_params)
+    @notebook.author_id = current_user.id
 
     if @notebook.save
       render :show

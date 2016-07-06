@@ -1,23 +1,35 @@
-var React = require('react');
-var PropTypes = React.PropTypes;
+const React = require('react');
+const NotebookActions = require('../../actions/notebook_actions');
+const hashHistory = require('react-router').hashHistory;
 
-var NewNotebookForm = React.createClass({
+const NewNotebookForm = React.createClass({
   getInitialState(){
     return ({
-      title: "",
-      description: ""
+      title: ""
     });
+  },
+  changeTitle(e){
+    this.setState({
+      title: e.target.value
+    });
+  },
+  handleSubmit(e){
+    console.log('hit handleSubmit');
+    e.preventDefault();
+    const notebookData = { title: this.state.title };
+    NotebookActions.createNotebook(notebookData);
+    hashHistory.push('/notebooks');
   },
   render() {
     return (
       <div>
-        <form onSubmit={this.handleSubmit} value='Create Notebook'>
+        <form className="new-notebook-form" onSubmit={this.handleSubmit}>
           <input type="text"
-                 ref="titleInput"
                  value={this.state.title}
                  onChange={this.changeTitle}
-                 placeholder="Title Your Note"
-                 className="title-input"/>
+                 placeholder="Title Your Notebook"
+                 className="notebook-title-input"/>
+               <input type="submit" className="create-notebook-button" value='Create Notebook'/>
         </form>
       </div>
     );

@@ -5,7 +5,7 @@ const hashHistory = require('react-router').hashHistory;
 const SessionActions = require('../actions/session_actions');
 
 const NavBar = React.createClass({
-  newNotebookForm(e){
+  notebookIndex(e){
     e.preventDefault();
     hashHistory.push('/notebooks');
   },
@@ -29,7 +29,7 @@ const NavBar = React.createClass({
     return (
       <div className="nav-bar">
         <button className="new-note-button" onClick={this.newNote}>+</button>
-        <button className="new-notebook-button" onClick={this.newNotebookForm}></button>
+        <button className="notebooks-button" onClick={this.notebookIndex}></button>
         <button className="logout-button" onClick={this.logOut}>X</button>
     </div>
     );

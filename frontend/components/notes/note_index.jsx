@@ -4,7 +4,8 @@ const NoteStore = require('../../stores/note_store');
 const NoteActions = require('../../actions/note_actions');
 const NoteIndexItem = require('./note_index_item');
 const SessionStore = require('../../stores/session_store');
-const NavBar = require('../nav_bar');
+const NotebookStore = require('../../stores/notebook_store');
+const currentUser = window.currentUser;
 
 const NoteIndex = React.createClass({
   getInitialState() {
@@ -35,11 +36,16 @@ const NoteIndex = React.createClass({
     console.log('rendering note index');
     const notes = this.state.notes;
     const path = this.props.location.pathname;
+    let notebookTitle;
+    if (path === `/notebooks/${this.props.params.notebookId}`) {
+      notebookTitle = NotebookStore.find(this.props.params.notebookId);
+    } else {
+      notebookTitle = `${currentUser.username}'s Notebook`;
+    }
     return (
       <div>
-        <NavBar />
         <ul className="notes-list">
-          <h2 className="notes-list-header">Notes</h2>
+          <h2 className="notes-list-header">{notebookTitle}</h2>
           {
             notes.map( note => {
               return (<NoteIndexItem

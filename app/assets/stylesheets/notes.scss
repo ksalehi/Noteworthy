@@ -18,6 +18,7 @@
   color: white;
   text-align: center;
   border: 1px solid black;
+  position: relative;
 }
 
 .notes-list-item {
@@ -73,7 +74,7 @@
   background: white;
 }
 
-.new-notebook-button {
+.notebooks-button {
   background: url('notebook2.png') no-repeat;
   background-size: 80%;
   background-position: center;
@@ -88,7 +89,7 @@
 }
 
 .new-note-button:hover,
-.new-notebook-button:hover,
+.notebooks-button:hover,
 .logout-button:hover {
   background-color: #2CA36E;
 }
@@ -134,4 +135,42 @@
 
 .selected:hover {
   background-color: white;
+}
+
+.new-notebook-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  height: 40px;
+  width: 40px;
+  background: url('notebook.png') no-repeat;
+  background-size: 100%;
+}
+
+.notebook-title-input {
+  margin: 15px auto;
+  padding: 10px;
+  font-family: Scope One, serif;
+  font-size: 30px;
+  display: block;
+  border-radius: 5px;
+  text-align: center;
+  color: #00B029;
+}
+
+.create-notebook-button {
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.create-notebook-button:hover {
+  background: #00B029;
+}
+
+.new-notebook-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 10%;
 }

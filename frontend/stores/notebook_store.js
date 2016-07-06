@@ -2,14 +2,20 @@ const Store = require('flux/utils').Store;
 const AppDispatcher = require('../dispatcher/dispatcher');
 const NotebookConstants = require('../constants/notebook_constants');
 const NotebookStore = new Store(AppDispatcher);
+const hashHistory = require('react-router').hashHistory;
 
 let _notebooks = {};
 
+const dateSorter = function(note1, note2) {
+  return (new Date(note2.updated_at) - new Date(note1.updated_at));
+};
+
 NotebookStore.all = function() {
-  // return Object.assign({}, _notebooks);
-  return Object.keys(_notebooks).map( notebookKey => {
+  let unsortedNotebooks = Object.keys(_notebooks).map( notebookKey => {
     return _notebooks[notebookKey];
   });
+  let sortedNotebooks = unsortedNotebooks.sort(dateSorter);
+  return sortedNotebooks;
 };
 
 function resetNotebooks(notebooks) {
@@ -22,6 +28,9 @@ function resetSingleNotebook(notebook) {
 
 function removeNotebook(notebook) {
   delete _notebooks[notebook.id];
+  setTimeout(()=>{
+    hashHistory.push(`/notebooks`);
+  }, 0);
 }
 
 NotebookStore.__onDispatch = function(payload) {

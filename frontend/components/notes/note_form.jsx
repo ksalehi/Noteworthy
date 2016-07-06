@@ -57,11 +57,9 @@ const NoteForm = React.createClass({
   },
   changeTitle(e) {
     this.setState({title: e.target.value});
-    // setTimeout(()=>{this.autoSave();}, 0);
   },
   changeBody(e) {
     this.setState({body: e.target.value});
-    // setTimeout(()=>{this.autoSave();}, 0);
   },
   handleErrors(){
     this.setState({errors: ErrorStore.formErrors("note_form")});

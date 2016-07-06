@@ -9,6 +9,7 @@ const NotebookIndexItem = React.createClass({
     hashHistory.push('/notebooks/' + this.props.notebook.id);
   },
   deleteNotebook(e){
+    e.stopPropagation();
     e.preventDefault();
     // alert('Are you sure you want to delete this notebook?');
     if (this.props.notebook.id) {

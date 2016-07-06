@@ -99,8 +99,8 @@ after editing
   - [ ] Notebook CRUD
   - [ ] adding notes requires a notebook
   - [ ] moving notes to a different notebook
-  - [ ] viewing notes by notebook
-- Style new views
+  - [X] viewing notes by notebook
+- [X] Style new views
 
 ### Phase 6: Tags (1 day, due W2 Th 6pm)
 

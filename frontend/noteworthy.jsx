@@ -7,31 +7,29 @@ const Router = reactRouter.Router;
 const Route = reactRouter.Route;
 const IndexRoute = reactRouter.IndexRoute;
 const hashHistory = reactRouter.hashHistory;
-// const LoginForm = require('./components/login_form');
-// const SignUpForm = require('./components/sign_up_form');
-// const ErrorStore = require('./stores/error_store');
-// const NoteStore = require('./stores/note_store');
 const NoteIndex = require('./components/notes/note_index');
-// const NoteActions = require('./actions/note_actions');
 const NotebookIndex = require('./components/notebooks/notebook_index');
-// const NoteIndexItem = require('./components/notes/note_index_item');
-// const NoteDetail = require('./components/notes/note_detail');
 const NoteForm = require('./components/notes/note_form');
 const SplashPage = require('./components/splash_page');
 const SessionStore = require('./stores/session_store');
 const SessionActions = require('./actions/session_actions');
 const Modal = require('react-modal');
-// const NewNotebookForm = require('./components/notebooks/new_notebook_form');
-// const NotebookIndexItem = require('./components/notebooks/notebook_index_item');
-// const NotebookDetail = require('./components/notebooks/notebook_detail');
+const NavBar = require('./components/nav_bar');
 const NoteIndexByNotebook = require('./components/notes/note_index_by_notebook');
 
 window.hh = hashHistory;
 
 const App = React.createClass({
   render(){
+    let navbar;
+    if (this.props.location.pathname === '/') {
+      navbar = <div></div>;
+    } else {
+      navbar = <NavBar />;
+    }
     return (
       <div>
+        {navbar}
         {this.props.children}
       </div>
     );
