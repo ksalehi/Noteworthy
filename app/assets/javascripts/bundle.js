@@ -37289,19 +37289,21 @@
 	var Modal = __webpack_require__(310);
 	var NoteConstants = __webpack_require__(297);
 	var EditNotebookForm = __webpack_require__(467);
+	var NotesSearchBox = __webpack_require__(468);
 	
 	var NoteIndex = React.createClass({
 	  displayName: 'NoteIndex',
 	  getInitialState: function getInitialState() {
 	    return {
 	      notes: [],
-	      notebooks: [],
-	      defaultNotebook: null
+	      notebooks: []
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    if (SessionStore.isUserLoggedIn()) {
+	      console.log(this.props.params.notebookId);
 	      NoteActions.fetchNotes(this.props.params.notebookId); //TODO: notebookId not always defined
+	      NotebookActions.fetchNotebooks();
 	      this.noteListener = NoteStore.addListener(this._onChange);
 	      this.notebookListener = NotebookStore.addListener(this._onChange);
 	    }
@@ -37313,9 +37315,14 @@
 	  _onChange: function _onChange() {
 	    this.setState({
 	      notes: NoteStore.all(),
-	      notebooks: NotebookStore.all(),
-	      defaultNotebook: NotebookStore.defaultNotebook()
+	      notebooks: NotebookStore.all()
 	    });
+	
+	    if (this.props.location.pathname.match('/notes/[^ ]*')) {
+	      this.currentNotebook = NotebookStore.defaultNotebook();
+	    } else {
+	      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
+	    }
 	
 	    var latestNote = NoteStore.getLatestNote();
 	    if (latestNote) {
@@ -37329,11 +37336,6 @@
 	  },
 	  editNotebook: function editNotebook(e) {
 	    e.preventDefault();
-	    if (this.props.location.pathname.match('/notes/[^ ]*')) {
-	      this.currentNotebook = this.state.defaultNotebook; // TODO: replace with default notebook
-	    } else {
-	      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
-	    }
 	    this.openModal();
 	  },
 	
@@ -37348,11 +37350,6 @@
 	
 	    var notes = this.state.notes;
 	    var path = this.props.location.pathname;
-	    if (path === '/notebooks/' + this.props.params.notebookId) {
-	      this.notebookTitle = NotebookStore.find(this.props.params.notebookId).title;
-	    } else {
-	      this.notebookTitle = 'user\'s Notebook';
-	    }
 	    return React.createElement(
 	      'div',
 	      null,
@@ -37362,21 +37359,22 @@
 	        React.createElement(
 	          'h2',
 	          { className: 'notes-list-header' },
-	          this.notebookTitle,
+	          this.currentNotebook ? this.currentNotebook.title : '',
 	          React.createElement(
 	            'div',
 	            null,
 	            React.createElement('button', { className: 'new-notebook-button', onClick: this.editNotebook })
-	          )
+	          ),
+	          React.createElement(NotesSearchBox, null)
 	        ),
 	        notes.map(function (note) {
 	          return React.createElement(NoteIndexItem, {
 	            key: note.id,
 	            note: note,
-	            selected: path === '/notes/' + note.id ? true : false,
+	            selected: path === ('/notes/' + note.id || '/notebooks/' + _this.currentNotebook.id) ? true : false,
 	            updatedAt: note.updated_at,
 	            pathname: _this.props.location.pathname,
-	            notebookId: _this.props.params.notebookId
+	            notebookId: _this.currentNotebook.id
 	          });
 	        })
 	      ),
@@ -37387,7 +37385,7 @@
 	          style: NoteConstants.MODAL_STYLE,
 	          isOpen: this.state.modalOpen,
 	          onRequestClose: this.closeModal },
-	        React.createElement(EditNotebookForm, { title: this.notebookTitle,
+	        React.createElement(EditNotebookForm, { notebook: this.currentNotebook,
 	          closeModal: this.closeModal })
 	      )
 	    );
@@ -37409,7 +37407,9 @@
 	
 	var NoteActions = {
 	  fetchNotes: function fetchNotes(notebookId) {
-	    NoteApiUtil.fetchNotes(NoteActions.receiveNotes, ErrorActions.setErrors, notebookId);
+	    var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	
+	    NoteApiUtil.fetchNotes(NoteActions.receiveNotes, ErrorActions.setErrors, notebookId, data);
 	  },
 	  getNote: function getNote(noteId) {
 	    NoteApiUtil.getNote(noteId, NoteActions.receiveNote, ErrorActions.setErrors);
@@ -37462,23 +37462,15 @@
 	
 	var NoteApiUtil = {
 	  fetchNotes: function fetchNotes(successCB, errorCB, notebookId) {
+	    var data = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+	
 	    $.ajax({
 	      method: 'GET',
 	      url: 'api/notes',
-	      data: { notebookId: notebookId },
+	      data: data,
 	      success: successCB,
 	      error: function error(response) {
 	        errorCB("notes_index", response.responseJSON);
-	      }
-	    });
-	  },
-	  fetchNotesByNotebook: function fetchNotesByNotebook(notebookId, successCB, errorCB) {
-	    $.ajax({
-	      method: 'GET',
-	      url: 'api/notebooks/' + notebookId,
-	      success: successCB,
-	      error: function error(response) {
-	        errorCB("notebook_detail", response.responseJSON);
 	      }
 	    });
 	  },
@@ -37610,6 +37602,7 @@
 	var Modal = __webpack_require__(310);
 	var NoteConstants = __webpack_require__(297);
 	var NewNotebookForm = __webpack_require__(463);
+	var NotebooksSearchBox = __webpack_require__(469);
 	
 	var NotebookIndex = React.createClass({
 	  displayName: 'NotebookIndex',
@@ -37659,7 +37652,8 @@
 	              'div',
 	              null,
 	              React.createElement('button', { className: 'new-notebook-button', onClick: this.newNotebook })
-	            )
+	            ),
+	            React.createElement(NotebooksSearchBox, null)
 	          ),
 	          notebooks.map(function (notebook) {
 	            return React.createElement(NotebookIndexItem, {
@@ -37790,7 +37784,9 @@
 	
 	var NotebookActions = {
 	  fetchNotebooks: function fetchNotebooks() {
-	    NotebookApiUtil.fetchNotebooks(NotebookActions.receiveNotebooks, ErrorActions.setErrors);
+	    var data = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+	    NotebookApiUtil.fetchNotebooks(NotebookActions.receiveNotebooks, ErrorActions.setErrors, data);
 	  },
 	  getNotebook: function getNotebook(notebookId) {
 	    NotebookApiUtil.getNotebook(notebookId, NotebookActions.receiveNotebook, ErrorActions.setErrors);
@@ -37834,9 +37830,12 @@
 	
 	var NotebookApiUtil = {
 	  fetchNotebooks: function fetchNotebooks(successCB, errorCB) {
+	    var notebookData = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	
 	    $.ajax({
 	      method: 'GET',
 	      url: 'api/notebooks',
+	      data: notebookData,
 	      success: function success(data) {
 	        successCB(data);
 	      },
@@ -56307,7 +56306,12 @@
 	    NoteActions.createNote(noteData, this.noteCB);
 	  },
 	  noteCB: function noteCB(note) {
-	    var url = '/notes/' + note.id;
+	    var url = void 0;
+	    // if (this.props.params.location.match('/notes/[^ ]*')) {
+	    url = '/notes/' + note.id;
+	    // } else {
+	    //   url = `/notebooks/${this.props.params.notebookId}/${note.id}`;
+	    // }
 	    hashHistory.push(url);
 	  },
 	  logOut: function logOut(e) {
@@ -56522,7 +56526,7 @@
 	  displayName: 'EditNotebookForm',
 	  getInitialState: function getInitialState() {
 	    return {
-	      title: this.props.title
+	      title: this.props.notebook.title
 	    };
 	  },
 	  changeTitle: function changeTitle(e) {
@@ -56533,9 +56537,12 @@
 	  handleSubmit: function handleSubmit(e) {
 	    console.log('hit handleSubmit');
 	    e.preventDefault();
-	    var notebookData = { title: this.state.title };
+	    var notebookData = {
+	      id: this.props.notebook.id,
+	      title: this.state.title
+	    };
+	    this.props.closeModal();
 	    NotebookActions.editNotebook(notebookData);
-	    // close modal
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -56556,6 +56563,74 @@
 	});
 	
 	module.exports = EditNotebookForm;
+
+/***/ },
+/* 468 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var NoteActions = __webpack_require__(299);
+	
+	var NotesSearchBox = React.createClass({
+	  displayName: 'NotesSearchBox',
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      searchText: ""
+	    };
+	  },
+	  _onInput: function _onInput(e) {
+	    this.setState({ searchText: e.target.value });
+	    NoteActions.fetchNotes(1, { query: e.target.value });
+	  },
+	
+	  render: function render() {
+	    return React.createElement('input', { type: 'text',
+	      className: 'search-box',
+	      onInput: this._onInput,
+	      value: this.state.searchText,
+	      placeholder: 'Search Notes' });
+	  }
+	
+	});
+	
+	module.exports = NotesSearchBox;
+
+/***/ },
+/* 469 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var NotebookActions = __webpack_require__(305);
+	
+	var NotebooksSearchBox = React.createClass({
+	  displayName: 'NotebooksSearchBox',
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      searchText: ""
+	    };
+	  },
+	  _onInput: function _onInput(e) {
+	    this.setState({ searchText: e.target.value });
+	    NotebookActions.fetchNotebooks({ query: e.target.value });
+	  },
+	
+	  render: function render() {
+	    return React.createElement('input', { type: 'text',
+	      className: 'search-box',
+	      onInput: this._onInput,
+	      value: this.state.searchText,
+	      placeholder: 'Search Notebooks' });
+	  }
+	
+	});
+	
+	module.exports = NotebooksSearchBox;
 
 /***/ }
 /******/ ]);

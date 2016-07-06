@@ -1,22 +1,12 @@
 const NoteApiUtil = {
-  fetchNotes(successCB, errorCB, notebookId) {
+  fetchNotes(successCB, errorCB, notebookId, data={}) {
     $.ajax({
       method: 'GET',
       url: 'api/notes',
-      data: { notebookId: notebookId },
+      data: data,
       success: successCB,
       error(response) {
         errorCB("notes_index", response.responseJSON);
-      }
-    });
-  },
-  fetchNotesByNotebook(notebookId, successCB, errorCB) {
-    $.ajax({
-      method: 'GET',
-      url: `api/notebooks/${notebookId}`,
-      success: successCB,
-      error(response) {
-        errorCB("notebook_detail", response.responseJSON);
       }
     });
   },

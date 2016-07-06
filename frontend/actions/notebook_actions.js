@@ -4,10 +4,11 @@ const ErrorActions = require('./error_actions');
 const NotebookApiUtil = require('../util/notebook_api_util');
 
 const NotebookActions = {
-  fetchNotebooks(){
+  fetchNotebooks(data={}){
     NotebookApiUtil.fetchNotebooks(
       NotebookActions.receiveNotebooks,
-      ErrorActions.setErrors
+      ErrorActions.setErrors,
+      data
     );
   },
   getNotebook(notebookId){

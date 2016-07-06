@@ -37,7 +37,12 @@ const NavBar = React.createClass({
     NoteActions.createNote(noteData, this.noteCB);
   },
   noteCB(note) {
-    const url = `/notes/${note.id}`;
+    let url;
+    // if (this.props.params.location.match('/notes/[^ ]*')) {
+      url = `/notes/${note.id}`;
+    // } else {
+    //   url = `/notebooks/${this.props.params.notebookId}/${note.id}`;
+    // }
     hashHistory.push(url);
   },
   logOut(e){

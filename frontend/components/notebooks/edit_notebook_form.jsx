@@ -5,7 +5,7 @@ const hashHistory = require('react-router').hashHistory;
 const EditNotebookForm = React.createClass({
   getInitialState(){
     return ({
-      title: this.props.title
+      title: this.props.notebook.title
     });
   },
   changeTitle(e){
@@ -16,9 +16,12 @@ const EditNotebookForm = React.createClass({
   handleSubmit(e){
     console.log('hit handleSubmit');
     e.preventDefault();
-    const notebookData = { title: this.state.title };
+    const notebookData = {
+      id: this.props.notebook.id,
+      title: this.state.title
+    };
+    this.props.closeModal();
     NotebookActions.editNotebook(notebookData);
-    // close modal
   },
   render() {
     return (

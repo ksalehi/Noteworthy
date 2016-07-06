@@ -2,7 +2,15 @@ class Api::NotesController < ApplicationController
 
   def index
     @notes = current_user.notes
-    if params[:notebookId]
+
+    if params[:query] && !params[:query].empty?
+      @notes = @notes.where(
+        [
+          'title LIKE :query OR body LIKE :query',
+          {query: "%#{params[:query]}%"}
+        ]
+      )
+    elsif params[:notebookId]
       @notes = current_notebook.notes
     end
     render :index

@@ -10,18 +10,20 @@ const NotebookActions = require('../../actions/notebook_actions');
 const Modal = require('react-modal');
 const NoteConstants = require('../../constants/note_constants');
 const EditNotebookForm = require('../notebooks/edit_notebook_form');
+const NotesSearchBox = require('./notes_search_box');
 
 const NoteIndex = React.createClass({
   getInitialState() {
     return {
       notes: [],
       notebooks: [],
-      defaultNotebook: null
      };
   },
   componentDidMount() {
     if (SessionStore.isUserLoggedIn()) {
+      console.log(this.props.params.notebookId);
       NoteActions.fetchNotes(this.props.params.notebookId); //TODO: notebookId not always defined
+      NotebookActions.fetchNotebooks();
       this.noteListener = NoteStore.addListener(this._onChange);
       this.notebookListener = NotebookStore.addListener(this._onChange);
     }
@@ -34,8 +36,13 @@ const NoteIndex = React.createClass({
     this.setState({
       notes: NoteStore.all(),
       notebooks: NotebookStore.all(),
-      defaultNotebook: NotebookStore.defaultNotebook()
     });
+
+    if (this.props.location.pathname.match('/notes/[^ ]*')) {
+      this.currentNotebook = NotebookStore.defaultNotebook();
+    } else {
+      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
+    }
 
     const latestNote = NoteStore.getLatestNote();
     if (latestNote) { // won't exist if notebook was just created
@@ -48,11 +55,6 @@ const NoteIndex = React.createClass({
   },
   editNotebook(e) {
     e.preventDefault();
-    if (this.props.location.pathname.match('/notes/[^ ]*')) {
-      this.currentNotebook = this.state.defaultNotebook; // TODO: replace with default notebook
-    } else {
-      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
-    }
     this.openModal();
   },
   closeModal: function(){
@@ -64,28 +66,24 @@ const NoteIndex = React.createClass({
   render(){
     const notes = this.state.notes;
     const path = this.props.location.pathname;
-    if (path === `/notebooks/${this.props.params.notebookId}`) {
-      this.notebookTitle = NotebookStore.find(this.props.params.notebookId).title;
-    } else {
-      this.notebookTitle = `user's Notebook`;
-    }
     return (
       <div>
         <ul className="notes-list">
-          <h2 className="notes-list-header">{this.notebookTitle}
+          <h2 className="notes-list-header">{this.currentNotebook ? this.currentNotebook.title : ''}
             <div>
               <button className="new-notebook-button" onClick={this.editNotebook}></button>
             </div>
+            <NotesSearchBox />
           </h2>
             {
               notes.map( note => {
                 return (<NoteIndexItem
                   key={note.id}
                   note={note}
-                  selected={ path === `/notes/${note.id}` ? true : false }
+                  selected={ path === (`/notes/${note.id}` || `/notebooks/${this.currentNotebook.id}`) ? true : false }
                   updatedAt={note.updated_at}
-                  pathname={ this.props.location.pathname }
-                  notebookId={ this.props.params.notebookId }
+                  pathname={this.props.location.pathname}
+                  notebookId={this.currentNotebook.id}
                   />);
                 })
               }
@@ -96,7 +94,7 @@ const NoteIndex = React.createClass({
           style={NoteConstants.MODAL_STYLE}
           isOpen={this.state.modalOpen}
           onRequestClose={this.closeModal}>
-            <EditNotebookForm title={this.notebookTitle}
+            <EditNotebookForm notebook={this.currentNotebook}
                               closeModal={this.closeModal} />
         </Modal>
       </div>

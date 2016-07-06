@@ -5,6 +5,7 @@ const NotebookIndexItem = require('./notebook_index_item');
 const Modal = require('react-modal');
 const NoteConstants = require('../../constants/note_constants');
 const NewNotebookForm = require('./new_notebook_form');
+const NotebooksSearchBox = require('./notebooks_search_box');
 
 const NotebookIndex = React.createClass({
   getInitialState() {
@@ -46,6 +47,7 @@ const NotebookIndex = React.createClass({
                 <div>
                   <button className="new-notebook-button" onClick={this.newNotebook}></button>
                 </div>
+                <NotebooksSearchBox />
               </h2>
             {
               notebooks.map( notebook => {

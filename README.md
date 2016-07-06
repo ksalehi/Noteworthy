@@ -96,9 +96,8 @@ after editing
 
 - [X] create `Notebook` model
 - build out API, Flux loop, and components for:
-  - [ ] Notebook CRUD
-  - [ ] adding notes requires a notebook
-  - [ ] moving notes to a different notebook
+  - [X] Notebook CRUD
+  - [X] adding notes requires a notebook
   - [X] viewing notes by notebook
 - [X] Style new views
 
@@ -136,6 +135,8 @@ after editing
 - [ ] Set reminders on notes
 - [ ] Changelogs for notes
 - [ ] Multiple sessions
+- [ ] moving notes to a different notebook
+
 
 [phase-one]: docs/phases/phase1.md
 [phase-two]: docs/phases/phase2.md

@@ -1,8 +1,9 @@
 const NotebookApiUtil = {
-  fetchNotebooks(successCB, errorCB) {
+  fetchNotebooks(successCB, errorCB, notebookData={}) {
     $.ajax({
       method: 'GET',
       url: 'api/notebooks',
+      data: notebookData,
       success(data) {
         successCB(data);
       },

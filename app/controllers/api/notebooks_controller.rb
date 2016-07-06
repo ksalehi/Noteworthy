@@ -1,6 +1,14 @@
 class Api::NotebooksController < ApplicationController
   def index
     @notebooks = current_user.notebooks
+    if params[:query] && !params[:query].empty?
+      @notebooks = @notebooks.where(
+        [
+          'title LIKE :query',
+          {query: "%#{params[:query]}%"}
+        ]
+      )
+    end
     render :index
   end
 
