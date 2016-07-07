@@ -9,10 +9,16 @@ const NotebookIndexItem = React.createClass({
     hashHistory.push('/notebooks/' + this.props.notebook.id);
     console.log('hit redirect');
   },
+  closeModal: function(){
+    this.setState({ modalOpen: false });
+  },
+  openModal: function(){
+    this.setState({ modalOpen: true });
+  },
   deleteNotebook(e){
     e.stopPropagation();
     e.preventDefault();
-    // alert('Are you sure you want to delete this notebook?');
+    this.openModal();
     if (this.props.notebook.id) {
       NotebookActions.deleteNotebook(this.props.notebook.id);
     }

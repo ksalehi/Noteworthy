@@ -15,7 +15,7 @@ const SessionStore = require('./stores/session_store');
 const SessionActions = require('./actions/session_actions');
 const Modal = require('react-modal');
 const NavBar = require('./components/nav_bar');
-const NoteIndexByNotebook = require('./components/notes/note_index_by_notebook');
+import DrawerSimpleExample from './components/notebooks/notebook_drawer';// const NotebookDrawer = require('./components/notebooks/notebook_drawer');
 
 window.hh = hashHistory;
 
