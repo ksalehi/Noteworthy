@@ -57,7 +57,7 @@
 
 .nav-bar {
   display: flex;
-  width: 4%;
+  width: 50px;
   flex-direction: column;
 }
 
@@ -230,4 +230,10 @@ new-notebook-button:hover {
 
 button {
   background-color: transparent;
+}
+
+.tag-input {
+  margin-left: 15px;
+  padding: 5px;
+  width: 20%;
 }

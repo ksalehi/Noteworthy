@@ -5,6 +5,7 @@ const hashHistory = require('react-router').hashHistory;
 const NoteActions = require('../../actions/note_actions');
 const NoteStore = require('../../stores/note_store');
 const ReactQuill = require('react-quill');
+const TagActions = require('../../actions/tag_actions');
 
 const NoteForm = React.createClass({
   getInitialState() {
@@ -12,7 +13,8 @@ const NoteForm = React.createClass({
       noteId: null,
       title: "",
       body: "",
-      tags: "",
+      tags: [],
+      newTag: "",
       errors: [],
       saved: 'saved'
     };
@@ -103,14 +105,29 @@ const NoteForm = React.createClass({
     NoteActions.editNote(noteData);
     this.setState({saved: 'saved'});
   },
+  updateTagField(e){
+    this.setState({newTag: this.state.newTag+e.key});
+  },
+  createTag(e){
+    e.preventDefault();
+    if (e.key === "Enter" || e.key === "Tab") {
+
+      this.autoSave();
+      const TagData = {
+        tag: this.state.newTag,
+        noteId: this.state.noteId
+      };
+      TagActions.createTag(TagData);
+      this.setState({newTag: ""});
+    } else {
+      this.updateTagField(e);
+    }
+  },
   render(){
     return (
       <div className="note-form">
         <ul>{this.renderErrors()}</ul>
         <div>
-          <span onClick={this.changeTag}>
-            {this.state.tags}
-          </span>
           <form className="new-note-form">
             <input type="text"
                    ref="titleInput"
@@ -119,14 +136,21 @@ const NoteForm = React.createClass({
                    placeholder="Title Your Note"
                    className="title-input"
                    onBlur={this.autoSave}/>
-                 <ReactQuill
+                 <div> { this.state.tags.map((tag)=>{
+                 return (<li>{tag.tag}</li>);
+               })}
+             </div>
+            <input type="text"
+                   className="tag-input"
+                   onKeyPress={this.createTag}
+                   placeholder="New tag..."
+                   value={this.state.newTag}/>
+            <ReactQuill
                    theme="snow"
                    value={this.state.body}
                    onChange={this.changeBody}
                    placeholder="Drag files here or just start typing..."
-                   className="body-input"
-                   onBlur={this.autoSave}
-              />
+                   className="body-input"/>
           </form>
         </div>
       </div>

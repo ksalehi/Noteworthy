@@ -42,8 +42,13 @@ const NavBar = React.createClass({
       url = `/notes/${note.id}`;
     } else {
       const matched = this.props.path.match(/\/notebooks\/(\d+)\/\d+/);
-      const notebookId = matched[1];
-      url = `/notebooks/${notebookId}/${note.id}`;
+      if (matched) {
+        const notebookId = matched[1];
+        url = `/notebooks/${notebookId}/${note.id}`;
+      } else { // we're trying to make a new note from /notebooks
+        // give new note button negative affordance
+        // or would be nice if we could navigate to default notebook...
+      }
     }
     if (url) {
       hashHistory.push(url);

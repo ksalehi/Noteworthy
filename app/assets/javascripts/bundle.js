@@ -51340,6 +51340,7 @@
 	var NoteActions = __webpack_require__(480);
 	var NoteStore = __webpack_require__(457);
 	var ReactQuill = __webpack_require__(520);
+	var TagActions = __webpack_require__(535);
 	
 	var NoteForm = React.createClass({
 	  displayName: 'NoteForm',
@@ -51348,7 +51349,8 @@
 	      noteId: null,
 	      title: "",
 	      body: "",
-	      tags: "",
+	      tags: [],
+	      newTag: "",
 	      errors: [],
 	      saved: 'saved'
 	    };
@@ -51445,6 +51447,24 @@
 	    NoteActions.editNote(noteData);
 	    this.setState({ saved: 'saved' });
 	  },
+	  updateTagField: function updateTagField(e) {
+	    this.setState({ newTag: this.state.newTag + e.key });
+	  },
+	  createTag: function createTag(e) {
+	    e.preventDefault();
+	    if (e.key === "Enter" || e.key === "Tab") {
+	
+	      this.autoSave();
+	      var TagData = {
+	        tag: this.state.newTag,
+	        noteId: this.state.noteId
+	      };
+	      TagActions.createTag(TagData);
+	      this.setState({ newTag: "" });
+	    } else {
+	      this.updateTagField(e);
+	    }
+	  },
 	  render: function render() {
 	    return React.createElement(
 	      'div',
@@ -51458,11 +51478,6 @@
 	        'div',
 	        null,
 	        React.createElement(
-	          'span',
-	          { onClick: this.changeTag },
-	          this.state.tags
-	        ),
-	        React.createElement(
 	          'form',
 	          { className: 'new-note-form' },
 	          React.createElement('input', { type: 'text',
@@ -51472,14 +51487,29 @@
 	            placeholder: 'Title Your Note',
 	            className: 'title-input',
 	            onBlur: this.autoSave }),
+	          React.createElement(
+	            'div',
+	            null,
+	            ' ',
+	            this.state.tags.map(function (tag) {
+	              return React.createElement(
+	                'li',
+	                null,
+	                tag.tag
+	              );
+	            })
+	          ),
+	          React.createElement('input', { type: 'text',
+	            className: 'tag-input',
+	            onKeyPress: this.createTag,
+	            placeholder: 'New tag...',
+	            value: this.state.newTag }),
 	          React.createElement(ReactQuill, {
 	            theme: 'snow',
 	            value: this.state.body,
 	            onChange: this.changeBody,
 	            placeholder: 'Drag files here or just start typing...',
-	            className: 'body-input',
-	            onBlur: this.autoSave
-	          })
+	            className: 'body-input' })
 	        )
 	      )
 	    );
@@ -63372,8 +63402,13 @@
 	      url = '/notes/' + note.id;
 	    } else {
 	      var matched = this.props.path.match(/\/notebooks\/(\d+)\/\d+/);
-	      var notebookId = matched[1];
-	      url = '/notebooks/' + notebookId + '/' + note.id;
+	      if (matched) {
+	        var notebookId = matched[1];
+	        url = '/notebooks/' + notebookId + '/' + note.id;
+	      } else {// we're trying to make a new note from /notebooks
+	        // give new note button negative affordance
+	        // or would be nice if we could navigate to default notebook...
+	      }
 	    }
 	    if (url) {
 	      hashHistory.push(url);
@@ -63405,6 +63440,46 @@
 	});
 	
 	module.exports = NavBar;
+
+/***/ },
+/* 535 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var AppDispatcher = __webpack_require__(476);
+	var NoteConstants = __webpack_require__(479);
+	var ErrorActions = __webpack_require__(481);
+	var TagApiUtil = __webpack_require__(536);
+	var NoteActions = __webpack_require__(480);
+	
+	var TagActions = {
+	  createTag: function createTag(tagData) {
+	    TagApiUtil.createTag(tagData, NoteActions.receiveNote, ErrorActions.setErrors);
+	  }
+	};
+	
+	module.exports = TagActions;
+
+/***/ },
+/* 536 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var TagApiUtil = {
+	  createTag: function createTag(TagData, successCB, errorCB) {
+	    $.ajax({
+	      method: 'POST',
+	      url: 'api/tags',
+	      data: { tag: TagData },
+	      success: successCB,
+	      error: errorCB
+	    });
+	  }
+	};
+	
+	module.exports = TagApiUtil;
 
 /***/ }
 /******/ ]);
