@@ -30,10 +30,11 @@ NotebookStore.defaultNotebook = function() {
 
 function resetNotebooks(notebooks) {
   _notebooks = {};
-    for (let i = 0; i < notebooks.length; i++) {
-      let notebook = notebooks[i];
-      _notebooks[notebook.id] = notebook;
-    }
+  for (let i = 0; i < notebooks.length; i++) {
+    let notebook = notebooks[i];
+    _notebooks[notebook.id] = notebook;
+  }
+  NotebookStore.all();
 }
 
 function resetSingleNotebook(notebook) {

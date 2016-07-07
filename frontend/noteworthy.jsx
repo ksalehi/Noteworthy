@@ -28,9 +28,11 @@ const App = React.createClass({
       navbar = <NavBar />;
     }
     return (
-      <div>
+      <div className="flex-parent">
         {navbar}
-        {this.props.children}
+        <div className="note-index-flex">
+          {this.props.children}
+        </div>
       </div>
     );
   }

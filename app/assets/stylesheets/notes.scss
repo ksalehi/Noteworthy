@@ -3,9 +3,8 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .notes-list {
-  float: left;
   background-color: white;
-  width: 30%;
+  width: 45%;
   padding: 15px;
   margin: 0 10px;
 }
@@ -50,19 +49,19 @@
   border-top: 0;
 }
 
-.note-detail, .new-note-form {
+.new-note-form {
   padding: 15px;
-  float: left;
-  width: 59%;
+  width: 100%;
   background-color: white;
 }
 
 .nav-bar {
-  float: left;
+  display: flex;
   width: 4%;
+  flex-direction: column;
 }
 
-.new-note-button, .logout-button {
+.logout-button {
   border: 1px solid gray;
   float: left;
   border-radius: 50%;
@@ -71,7 +70,6 @@
   font-size: 20px;
   text-align: center;
   margin: 5px auto;
-  background: white;
 }
 
 .notebooks-button {
@@ -114,15 +112,14 @@
 }
 
 .delete-button {
-  background: url('trashcan.png') no-repeat 2px;
+  background: url("trashcan.png") no-repeat 2px;
   background-size: 100%;
-  height: 25px;
-  width: 25px;
+  height: 25%;
+  width: 7%;
   position: absolute;
   top: 40%;
   left: 85%;
   border-radius: 5px;
-  margin: 5px;
 }
 
 .delete-button:hover {
@@ -141,9 +138,14 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  height: 40px;
-  width: 40px;
-  background: url('notebook.png') no-repeat;
+  height: 20%;
+  width: 10%;
+  background: url('info.png') no-repeat;
+  background-size: 100%;
+}
+
+new-notebook-button:hover {
+  background: url('info_white.png') no-repeat;
   background-size: 100%;
 }
 
@@ -182,4 +184,50 @@
   text-align: left;
   padding: 5px;
   border-radius: 5px;
+  width: 75%;
+}
+
+.flex-parent {
+  display: flex;
+}
+
+.note-form {
+  width: 100%;
+}
+
+.note-index-flex {
+  width: 92%;
+}
+
+.note-index-parent {
+  display: flex;
+}
+
+.fa-info-circle {
+  color: #00B029;
+  position: absolute;
+  top: 10%;
+  left: 85%;
+}
+
+.fa-plus {
+  color: #00B029;
+  position: absolute;
+  top: 10px;
+  left: 11px;
+}
+
+.new-note-button {
+  border: 1px solid gray;
+  position: relative;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  font-size: 25px;
+  text-align: center;
+  margin: 5px auto;
+}
+
+button {
+  background-color: transparent;
 }

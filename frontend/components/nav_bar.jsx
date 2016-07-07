@@ -38,12 +38,14 @@ const NavBar = React.createClass({
   },
   noteCB(note) {
     let url;
-    // if (this.props.params.location.match('/notes/[^ ]*')) {
+    if (this.props.params && this.props.params.location.match('/notes/[^ ]*')) {
       url = `/notes/${note.id}`;
-    // } else {
-    //   url = `/notebooks/${this.props.params.notebookId}/${note.id}`;
-    // }
-    hashHistory.push(url);
+    } else if (this.props.params && this.props.params.notebookId) {
+      url = `/notebooks/${this.props.params.notebookId}/${note.id}`;
+    }
+    if (url) {
+      hashHistory.push(url);
+    }
   },
   logOut(e){
     e.preventDefault();
@@ -52,7 +54,9 @@ const NavBar = React.createClass({
   render: function() {
     return (
       <div className="nav-bar">
-        <button className="new-note-button" onClick={this.newNote}>+</button>
+        <button className="new-note-button" onClick={this.newNote}>
+          <i className="fa fa-plus" aria-hidden="true"></i>
+        </button>
         <button className="notebooks-button" onClick={this.notebookIndex}></button>
         <button className="logout-button" onClick={this.logOut}>X</button>
     </div>

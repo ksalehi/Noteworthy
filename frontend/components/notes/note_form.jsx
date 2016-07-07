@@ -46,8 +46,8 @@ const NoteForm = React.createClass({
     this.noteListener.remove();
   },
   _onChange(){
-    if (this.props.location.pathname === '/notes') {
-      const latestNote = NoteStore.getLatestNote();
+    const latestNote = NoteStore.getLatestNote();
+    if (this.props.location.pathname === '/notes' && latestNote) {
       hashHistory.push(`/notes/${latestNote.id}`);
     }
     const note = NoteStore.find(this.props.params.noteId);
@@ -110,7 +110,7 @@ const NoteForm = React.createClass({
   },
   render(){
     return (
-      <div>
+      <div className="note-form">
         <ul>{this.renderErrors()}</ul>
         <div>
           <form className="new-note-form" onSubmit={this.handleSubmit}>

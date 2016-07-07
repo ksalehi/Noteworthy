@@ -76,9 +76,13 @@
 	    }
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'flex-parent' },
 	      navbar,
-	      this.props.children
+	      React.createElement(
+	        'div',
+	        { className: 'note-index-flex' },
+	        this.props.children
+	      )
 	    );
 	  }
 	});
@@ -37296,33 +37300,28 @@
 	  getInitialState: function getInitialState() {
 	    return {
 	      notes: [],
-	      notebooks: []
+	      notebooks: [],
+	      currentNotebook: null
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    if (SessionStore.isUserLoggedIn()) {
-	      console.log(this.props.params.notebookId);
-	      NoteActions.fetchNotes(this.props.params.notebookId); //TODO: notebookId not always defined
+	      if (this.props.location && this.props.location.pathname.match('/notes/[^ ]*')) {
+	        NoteActions.fetchNotes();
+	      } else {
+	        NoteActions.fetchNotes(this.props.params.notebookId);
+	      }
 	      NotebookActions.fetchNotebooks();
-	      this.noteListener = NoteStore.addListener(this._onChange);
-	      this.notebookListener = NotebookStore.addListener(this._onChange);
+	      this.noteListener = NoteStore.addListener(this._onNoteChange);
+	      this.notebookListener = NotebookStore.addListener(this._onNotebookChange);
 	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.noteListener.remove();
 	    this.notebookListener.remove();
 	  },
-	  _onChange: function _onChange() {
-	    this.setState({
-	      notes: NoteStore.all(),
-	      notebooks: NotebookStore.all()
-	    });
-	
-	    if (this.props.location.pathname.match('/notes/[^ ]*')) {
-	      this.currentNotebook = NotebookStore.defaultNotebook();
-	    } else {
-	      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
-	    }
+	  _onNoteChange: function _onNoteChange() {
+	    this.setState({ notes: NoteStore.all() });
 	
 	    var latestNote = NoteStore.getLatestNote();
 	    if (latestNote) {
@@ -37333,6 +37332,19 @@
 	        hashHistory.push('/notebooks/' + this.props.params.notebookId + '/' + latestNote.id);
 	      }
 	    }
+	  },
+	  _onNotebookChange: function _onNotebookChange() {
+	
+	    if (this.props.location.pathname.match('/notes/[^ ]*')) {
+	      this.currentNotebook = NotebookStore.defaultNotebook();
+	    } else {
+	      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
+	    }
+	
+	    this.setState({
+	      notebooks: NotebookStore.all(),
+	      currentNotebook: this.currentNotebook
+	    });
 	  },
 	  editNotebook: function editNotebook(e) {
 	    e.preventDefault();
@@ -37350,42 +37362,61 @@
 	
 	    var notes = this.state.notes;
 	    var path = this.props.location.pathname;
+	    var currentNotebookId = -1;
+	    if (this.currentNotebook) {
+	      currentNotebookId = this.currentNotebook.id;
+	    }
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'note-index-parent' },
 	      React.createElement(
 	        'ul',
 	        { className: 'notes-list' },
 	        React.createElement(
 	          'h2',
 	          { className: 'notes-list-header' },
-	          this.currentNotebook ? this.currentNotebook.title : '',
+	          this.state.currentNotebook ? this.state.currentNotebook.title : '',
 	          React.createElement(
 	            'div',
 	            null,
-	            React.createElement('button', { className: 'new-notebook-button', onClick: this.editNotebook })
+	            React.createElement(
+	              'button',
+	              { onClick: this.editNotebook },
+	              React.createElement('i', { className: 'fa fa-info-circle', 'aria-hidden': 'true' })
+	            )
 	          ),
 	          React.createElement(NotesSearchBox, null)
 	        ),
 	        notes.map(function (note) {
+	          var selected = false;
+	          if (path === '/notes/' + note.id) {
+	            selected = true;
+	          } else if (_this.state.currentNotebook && path === '/notebooks/' + _this.state.currentNotebook.id + '/' + note.id) {
+	            selected = true;
+	          }
+	
 	          return React.createElement(NoteIndexItem, {
 	            key: note.id,
 	            note: note,
-	            selected: path === ('/notes/' + note.id || '/notebooks/' + _this.currentNotebook.id) ? true : false,
 	            updatedAt: note.updated_at,
 	            pathname: _this.props.location.pathname,
-	            notebookId: _this.currentNotebook.id
+	            selected: selected,
+	            notebookId: currentNotebookId
 	          });
 	        })
 	      ),
-	      this.props.children,
+	      React.createElement(
+	        'div',
+	        { className: 'note-form' },
+	        this.props.children
+	      ),
 	      React.createElement(
 	        Modal,
 	        {
 	          style: NoteConstants.MODAL_STYLE,
 	          isOpen: this.state.modalOpen,
 	          onRequestClose: this.closeModal },
-	        React.createElement(EditNotebookForm, { notebook: this.currentNotebook,
+	        React.createElement(EditNotebookForm, { notebook: this.state.currentNotebook,
 	          closeModal: this.closeModal })
 	      )
 	    );
@@ -37545,7 +37576,7 @@
 	  showDetail: function showDetail() {
 	    if (this.props.pathname.match('/notes/[^ ]*')) {
 	      hashHistory.push('/notes/' + this.props.note.id);
-	    } else {
+	    } else if (this.props.notebookId !== -1) {
 	      hashHistory.push('/notebooks/' + this.props.notebookId + '/' + this.props.note.id);
 	    }
 	  },
@@ -37727,6 +37758,7 @@
 	    var notebook = notebooks[i];
 	    _notebooks[notebook.id] = notebook;
 	  }
+	  NotebookStore.all();
 	}
 	
 	function resetSingleNotebook(notebook) {
@@ -37951,8 +37983,8 @@
 	    this.noteListener.remove();
 	  },
 	  _onChange: function _onChange() {
-	    if (this.props.location.pathname === '/notes') {
-	      var latestNote = NoteStore.getLatestNote();
+	    var latestNote = NoteStore.getLatestNote();
+	    if (this.props.location.pathname === '/notes' && latestNote) {
 	      hashHistory.push('/notes/' + latestNote.id);
 	    }
 	    var note = NoteStore.find(this.props.params.noteId);
@@ -38018,7 +38050,7 @@
 	  render: function render() {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'note-form' },
 	      React.createElement(
 	        'ul',
 	        null,
@@ -56307,12 +56339,14 @@
 	  },
 	  noteCB: function noteCB(note) {
 	    var url = void 0;
-	    // if (this.props.params.location.match('/notes/[^ ]*')) {
-	    url = '/notes/' + note.id;
-	    // } else {
-	    //   url = `/notebooks/${this.props.params.notebookId}/${note.id}`;
-	    // }
-	    hashHistory.push(url);
+	    if (this.props.params && this.props.params.location.match('/notes/[^ ]*')) {
+	      url = '/notes/' + note.id;
+	    } else if (this.props.params && this.props.params.notebookId) {
+	      url = '/notebooks/' + this.props.params.notebookId + '/' + note.id;
+	    }
+	    if (url) {
+	      hashHistory.push(url);
+	    }
 	  },
 	  logOut: function logOut(e) {
 	    e.preventDefault();
@@ -56326,7 +56360,7 @@
 	      React.createElement(
 	        'button',
 	        { className: 'new-note-button', onClick: this.newNote },
-	        '+'
+	        React.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' })
 	      ),
 	      React.createElement('button', { className: 'notebooks-button', onClick: this.notebookIndex }),
 	      React.createElement(
