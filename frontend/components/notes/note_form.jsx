@@ -4,6 +4,7 @@ const ErrorStore = require('../../stores/error_store');
 const hashHistory = require('react-router').hashHistory;
 const NoteActions = require('../../actions/note_actions');
 const NoteStore = require('../../stores/note_store');
+const ReactQuill = require('react-quill');
 
 const NoteForm = React.createClass({
   getInitialState() {
@@ -11,22 +12,27 @@ const NoteForm = React.createClass({
       noteId: null,
       title: "",
       body: "",
-      errors: []
+      tags: "",
+      errors: [],
+      saved: 'saved'
     };
   },
   componentDidMount() {
+    this.autoSaver = setInterval(this.autoSave, 10000);
     ErrorStore.clearErrors();
     this._onChange();
     this.noteListener = NoteStore.addListener(this._onChange);
     this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
   componentWillReceiveProps(newProps){
-    let title;
-    if (newProps.params) {
-      if (newProps.params.noteId) {
-        title = NoteStore.find(newProps.params.noteId).title;
-      }
+    if (this.state.noteId) {
+      this.autoSave();
     }
+    let title;
+    if (newProps.params && newProps.params.noteId) {
+      title = NoteStore.find(newProps.params.noteId).title;
+    }
+
     if (title === '') {
       setTimeout(() => {ReactDOM.findDOMNode(this.refs.titleInput).focus();}, 0); // focus on title if empty
     }
@@ -37,11 +43,14 @@ const NoteForm = React.createClass({
         noteId: note.id,
         title: note.title,
         body: note.body,
+        tags: note.tags,
         errors: []
       });
     }
   },
   componentWillUnmount() {
+    clearInterval(this.autoSaver);
+    this.autoSave();
     this.errorListener.remove();
     this.noteListener.remove();
   },
@@ -56,15 +65,22 @@ const NoteForm = React.createClass({
         noteId: note.id,
         title: note.title,
         body: note.body,
+        tags: note.tags,
         errors: []
       });
     }
   },
   changeTitle(e) {
-    this.setState({title: e.target.value});
+    this.setState({
+      title: e.target.value,
+      saved: 'unsaved'
+    });
   },
   changeBody(e) {
-    this.setState({body: e.target.value});
+    this.setState({
+      body: e,
+      saved: 'unsaved'
+    });
   },
   handleErrors(){
     this.setState({errors: ErrorStore.formErrors("note_form")});
@@ -77,28 +93,6 @@ const NoteForm = React.createClass({
     });
     return errors;
   },
-  handleSubmit(e){
-    e.preventDefault();
-    const noteData = {
-      title: this.state.title,
-      body: this.state.body
-    };
-    const note = NoteStore.find(this.state.noteId);
-    if (note) {
-      noteData['id'] = this.state.noteId;
-      NoteActions.editNote(noteData);
-    } else {
-      NoteActions.createNote(noteData);
-    }
-  },
-  deleteNote(e){
-    // currently not being used but might be added
-    e.preventDefault();
-    // modal ('Are you sure you want to delete this note?');
-    if (this.state.noteId) {
-      NoteActions.deleteNote(this.state.noteId);
-    }
-  },
   autoSave() {
     const noteData = {
       title: this.state.title,
@@ -107,13 +101,17 @@ const NoteForm = React.createClass({
     const note = NoteStore.find(this.state.noteId);
     noteData['id'] = note.id;
     NoteActions.editNote(noteData);
+    this.setState({saved: 'saved'});
   },
   render(){
     return (
       <div className="note-form">
         <ul>{this.renderErrors()}</ul>
         <div>
-          <form className="new-note-form" onSubmit={this.handleSubmit}>
+          <span onClick={this.changeTag}>
+            {this.state.tags}
+          </span>
+          <form className="new-note-form">
             <input type="text"
                    ref="titleInput"
                    value={this.state.title}
@@ -121,11 +119,14 @@ const NoteForm = React.createClass({
                    placeholder="Title Your Note"
                    className="title-input"
                    onBlur={this.autoSave}/>
-            <textarea value={this.state.body}
-                      onChange={this.changeBody}
-                      placeholder="Drag files here or just start typing..."
-                      className="body-input"
-                      onBlur={this.autoSave}></textarea>
+                 <ReactQuill
+                   theme="snow"
+                   value={this.state.body}
+                   onChange={this.changeBody}
+                   placeholder="Drag files here or just start typing..."
+                   className="body-input"
+                   onBlur={this.autoSave}
+              />
           </form>
         </div>
       </div>

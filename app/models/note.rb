@@ -3,7 +3,7 @@
 # Table name: notes
 #
 #  id          :integer          not null, primary key
-#  title       :string           not null
+#  title       :string
 #  body        :text
 #  author_id   :integer          not null
 #  notebook_id :integer          not null
@@ -23,5 +23,8 @@ class Note < ActiveRecord::Base
   primary_key: :id,
   foreign_key: :notebook_id,
   class_name: 'Notebook'
+
+  has_many :taggings
+  has_many :tags, through: :taggings, source: :tag
 
 end

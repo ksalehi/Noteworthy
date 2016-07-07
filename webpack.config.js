@@ -8,7 +8,10 @@ module.exports = {
     filename: "bundle.js"
   },
   resolve: {
-    extensions: ["", ".js", ".jsx"]
+    extensions: ["", ".js", ".jsx"],
+    alias: {
+      'react': path.join(__dirname, 'node_modules', 'react')
+    }
   },
   module: {
     loaders: [
@@ -24,7 +27,8 @@ module.exports = {
         test: /\.node$/,
         loader: "node-loader"
       }
-    ]
+    ],
+     noParse: /node_modules\/quill\/dist/
   },
   devtool: 'source-maps'
 };

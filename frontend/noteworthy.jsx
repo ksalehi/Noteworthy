@@ -25,7 +25,7 @@ const App = React.createClass({
     if (this.props.location.pathname === '/') {
       navbar = <div></div>;
     } else {
-      navbar = <NavBar />;
+      navbar = <NavBar path={this.props.location.pathname} />;
     }
     return (
       <div className="flex-parent">

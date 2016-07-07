@@ -38,10 +38,12 @@ const NavBar = React.createClass({
   },
   noteCB(note) {
     let url;
-    if (this.props.params && this.props.params.location.match('/notes/[^ ]*')) {
+    if (this.props.path.match('/notes/[^ ]*')) {
       url = `/notes/${note.id}`;
-    } else if (this.props.params && this.props.params.notebookId) {
-      url = `/notebooks/${this.props.params.notebookId}/${note.id}`;
+    } else {
+      const matched = this.props.path.match(/\/notebooks\/(\d+)\/\d+/);
+      const notebookId = matched[1];
+      url = `/notebooks/${notebookId}/${note.id}`;
     }
     if (url) {
       hashHistory.push(url);

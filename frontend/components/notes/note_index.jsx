@@ -113,7 +113,6 @@ const NoteIndex = React.createClass({
           {this.props.children}
         </div>
 
-
         <Modal
           style={NoteConstants.MODAL_STYLE}
           isOpen={this.state.modalOpen}

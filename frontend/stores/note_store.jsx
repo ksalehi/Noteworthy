@@ -20,7 +20,6 @@ NoteStore.all = function() {
   return sortedNotes;
 };
 
-
 NoteStore.getLatestNote = function() {
   NoteStore.all();
   return _latestNote;
