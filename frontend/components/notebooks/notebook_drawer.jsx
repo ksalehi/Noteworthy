@@ -1,43 +1,76 @@
-import React from 'react';
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {deepOrange500} from 'material-ui/styles/colors';
+const React = require('react');
+const NotebookStore = require('../../stores/notebook_store');
+const NotebookActions = require('../../actions/notebook_actions');
+const NotebookIndexItem = require('./notebook_index_item');
+const Modal = require('react-modal');
+const NoteConstants = require('../../constants/note_constants');
+const NewNotebookForm = require('./new_notebook_form');
+const NotebooksSearchBox = require('./notebooks_search_box');
 
-
-const muiTheme = getMuiTheme({
-  palette: {
-    accent1Color: deepOrange500,
+const NotebookDrawer = React.createClass({
+  getInitialState() {
+    return {
+      notebooks: NotebookStore.all(),
+      modalOpen: false
+    };
   },
-});
+  componentDidMount() {
+    NotebookActions.fetchNotebooks();
+    this.notebookListener = NotebookStore.addListener(this._onChange);
+  },
+  componentWillUnmount() {
+    this.notebookListener.remove();
+  },
+  _onChange() {
+    this.setState({ notebooks: NotebookStore.all() });
+  },
+  newNotebook(e) {
+    e.preventDefault();
+    this.openModal();
+  },
+  closeModal: function(){
+    this.setState({ modalOpen: false });
+  },
+  openModal: function(){
+    this.setState({ modalOpen: true });
+  },
+  render: function() {
+    const notebooks = this.state.notebooks;
+    const style = NoteConstants.MODAL_STYLE;
 
-export default class DrawerSimpleExample extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {open: false};
-  }
-
-  handleToggle() {
-    this.setState({open: !this.state.open});
-  }
-
-  render() {
     return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <div>
-          <RaisedButton
-            label="Toggle Drawer"
-            onClick={this.handleToggle}
-          />
-          <Drawer open={this.state.open}>
-            <MenuItem>Menu Item</MenuItem>
-            <MenuItem>Menu Item 2</MenuItem>
-          </Drawer>
-        </div>
-      </MuiThemeProvider>
+      <div className={this.props.showing ? "show-notebooks-menu" : "hide-notebooks-menu"}>
+        <ul className="notebooks-list">
+            <h2 className="notes-list-header">
+              Notebooks
+              <div>
+                <button className="new-notebook-button" onClick={this.newNotebook}></button>
+              </div>
+              <NotebooksSearchBox />
+            </h2>
+          {
+            notebooks.map( notebook => {
+              return (<NotebookIndexItem
+                key={notebook.id}
+                notebook={notebook}
+                updatedAt={notebook.updated_at}
+                toggleShowing={this.props.toggleShowing}
+                />);
+              })
+            }
+        </ul>
+
+        <Modal
+          style={style}
+          isOpen={this.state.modalOpen}
+          onRequestClose={this.closeModal}>
+            <NewNotebookForm closeModal={this.closeModal} />
+        </Modal>
+
+      </div>
     );
   }
-}
+
+});
+
+module.exports = NotebookDrawer;

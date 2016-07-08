@@ -26,7 +26,7 @@ const NavBar = React.createClass({
   },
   notebookIndex(e){
     e.preventDefault();
-    hashHistory.push('/notebooks');
+    this.props.toggleShowing();
   },
   newNote(e){
     e.preventDefault();

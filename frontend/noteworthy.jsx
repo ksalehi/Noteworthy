@@ -15,21 +15,30 @@ const SessionStore = require('./stores/session_store');
 const SessionActions = require('./actions/session_actions');
 const Modal = require('react-modal');
 const NavBar = require('./components/nav_bar');
-import DrawerSimpleExample from './components/notebooks/notebook_drawer';// const NotebookDrawer = require('./components/notebooks/notebook_drawer');
+const NotebookDrawer = require('./components/notebooks/notebook_drawer');
 
 window.hh = hashHistory;
 
 const App = React.createClass({
+  getInitialState: function() {
+    return {
+      showing: false
+    };
+  },
+  toggleShowing(){
+    this.setState({showing: !this.state.showing});
+  },
   render(){
     let navbar;
     if (this.props.location.pathname === '/') {
       navbar = <div></div>;
     } else {
-      navbar = <NavBar path={this.props.location.pathname} />;
+      navbar = <NavBar path={this.props.location.pathname} toggleShowing={this.toggleShowing} />;
     }
     return (
       <div className="flex-parent">
         {navbar}
+        <NotebookDrawer showing={this.state.showing} toggleShowing={this.toggleShowing} />
         <div className="note-index-flex">
           {this.props.children}
         </div>

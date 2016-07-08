@@ -9,6 +9,7 @@ const NotebookIndexItem = React.createClass({
   redirectToNoteIndex(){
     hashHistory.push('/notebooks/' + this.props.notebook.id);
     console.log('hit redirect');
+    this.props.toggleShowing();
   },
   closeModal: function(){
     this.setState({ modalOpen: false });

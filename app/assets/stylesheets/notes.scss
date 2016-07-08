@@ -4,9 +4,19 @@
 
 .notes-list {
   background-color: white;
-  width: 45%;
+    width: 400px;
+    padding: 15px;
+    margin: 0 10px;
+    height: 863px;
+    overflow-y: scroll;
+}
+
+.notebooks-list {
+  background-color: white;
+  width: 100%;
   padding: 15px;
   margin: 0 10px;
+  height: 863px;
 }
 
 .notes-list-header {
@@ -59,6 +69,11 @@
   display: flex;
   width: 50px;
   flex-direction: column;
+  z-index: 30;
+  background: #D9DDDE;
+  border-left: 25px solid white;
+  padding-left: 10px;
+  padding-top: 10px;
 }
 
 .logout-button {
@@ -103,7 +118,7 @@
 }
 
 .body-input {
-  height: 500px;
+  height: 700px;
   display: block;
   padding: 25px 0;
   margin: 5px auto;
@@ -138,8 +153,8 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  height: 45px;
-  width: 50px;
+  height: 35px;
+  width: 40px;
   background: url('info.png') no-repeat;
   background-size: 100%;
 }
@@ -192,7 +207,7 @@ new-notebook-button:hover {
 }
 
 .note-form {
-  width: 100%;
+  width: calc(100% - 430px);
 }
 
 .note-index-flex {
@@ -201,6 +216,7 @@ new-notebook-button:hover {
 
 .note-index-parent {
   display: flex;
+  margin: 15px;
 }
 
 .fa-info-circle {
@@ -236,4 +252,22 @@ button {
   margin-left: 15px;
   padding: 5px;
   width: 20%;
+}
+
+.show-notebooks-menu {
+  position: absolute;
+  z-index: 20;
+  left: 80px;
+  transition: all 0.8s ease;
+  margin: 15px;
+  width: 400px;
+}
+
+.hide-notebooks-menu {
+  position: absolute;
+  left: -500px;
+  transition: all 0.8s ease;
+  z-index: 20;
+  margin: 15px;
+  width: 400px;
 }

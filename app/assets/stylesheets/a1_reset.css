@@ -51,18 +51,12 @@ input[type="submit"] {
 
 body {
   position: relative;
-  margin: 25px auto;
   background: white;
-  padding: 0 25px;
-  max-width: 95%;
-  height: 100%;
   font-family: Helvetica, sans-serif;
 }
 
 #content {
   background: #D9DDDE;
-  width: 95%;
-  height: 95%;
-  margin: 0 auto;
-  padding: 15px;
+  margin: 25px auto;
+  margin-right: 25px;
 }

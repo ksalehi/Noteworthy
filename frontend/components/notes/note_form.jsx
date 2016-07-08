@@ -125,7 +125,7 @@ const NoteForm = React.createClass({
   },
   render(){
     return (
-      <div className="note-form">
+      <div>
         <ul>{this.renderErrors()}</ul>
         <div>
           <form className="new-note-form">
