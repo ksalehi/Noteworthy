@@ -70,7 +70,6 @@ const NotebookDrawer = React.createClass({
       </div>
     );
   }
-
 });
 
 module.exports = NotebookDrawer;

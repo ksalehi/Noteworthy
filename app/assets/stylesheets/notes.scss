@@ -88,8 +88,8 @@
 }
 
 .notebooks-button {
-  background: url('notebook2.png') no-repeat;
-  background-size: 80%;
+  background: url('notebook.png') no-repeat;
+  background-size: 70%;
   background-position: center;
   padding: 5px;
   background-color: white;
@@ -99,10 +99,17 @@
   height: 30px;
   width: 30px;
   margin: 5px auto;
+  transition: none;
 }
 
-.new-note-button:hover,
-.notebooks-button:hover,
+.notebooks-button:hover {
+  background: url('notebook_white.png') no-repeat;
+  background-color: #00B029;
+  background-size: 70%;
+  background-position: center;
+  transition: none;
+}
+
 .logout-button:hover {
   background-color: #2CA36E;
 }
@@ -121,7 +128,7 @@
   height: 700px;
   display: block;
   padding: 25px 0;
-  margin: 5px auto;
+  margin: 0 auto;
   width: 96%;
   border-top: 1px solid darkgray;
 }
@@ -153,15 +160,16 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  height: 35px;
+  height: 40px;
   width: 40px;
-  background: url('info.png') no-repeat;
-  background-size: 100%;
+  background: url('new_notebook.png') no-repeat;
+  background-size: 85%;
 }
 
-new-notebook-button:hover {
-  background: url('info_white.png') no-repeat;
-  background-size: 100%;
+.new-notebook-button:hover {
+  background: url('new_notebook_white.png') no-repeat;
+  background-size: 90%;
+  transition: none;
 }
 
 .notebook-title-input {
@@ -217,6 +225,7 @@ new-notebook-button:hover {
 .note-index-parent {
   display: flex;
   margin: 15px;
+  margin-left: 0;
 }
 
 .fa-info-circle {
@@ -242,6 +251,12 @@ new-notebook-button:hover {
   font-size: 25px;
   text-align: center;
   margin: 5px auto;
+  background: url('plus.png') no-repeat;
+  background-size: 100%;
+}
+
+.new-note-button:hover {
+  background: url('plus_white.png');
 }
 
 button {
@@ -249,7 +264,7 @@ button {
 }
 
 .tag-input {
-  margin-left: 15px;
+  margin: 15px;
   padding: 5px;
   width: 20%;
 }
@@ -257,7 +272,7 @@ button {
 .show-notebooks-menu {
   position: absolute;
   z-index: 20;
-  left: 80px;
+  left: 75px;
   transition: all 0.8s ease;
   margin: 15px;
   width: 400px;
@@ -270,4 +285,17 @@ button {
   z-index: 20;
   margin: 15px;
   width: 400px;
+}
+
+.existing-tags {
+  padding: 0 10px;
+}
+
+.existing-tag {
+  background: #00B029;
+  display: inline-block;
+  padding: 5px 8px;
+  border-radius: 5px;
+  margin: 5px;
+  float: right;
 }

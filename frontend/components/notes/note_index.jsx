@@ -25,11 +25,23 @@ const NoteIndex = React.createClass({
       if (this.props.location && this.props.location.pathname.match('/notes/[^ ]*')) {
         NoteActions.fetchNotes();
       } else {
-        NoteActions.fetchNotes(this.props.params.notebookId);
+        const notebookData = {notebookId: this.props.params.notebookId};
+        NoteActions.fetchNotes(notebookData);
       }
       NotebookActions.fetchNotebooks();
       this.noteListener = NoteStore.addListener(this._onNoteChange);
       this.notebookListener = NotebookStore.addListener(this._onNotebookChange);
+    }
+  },
+  componentWillReceiveProps(nextProps){
+    if (SessionStore.isUserLoggedIn()) {
+      if (nextProps.location && nextProps.location.pathname.match('/notes/[^ ]*')) {
+        NoteActions.fetchNotes();
+      } else {
+        const notebookData = {notebookId: nextProps.params.notebookId};
+        NoteActions.fetchNotes(notebookData);
+      }
+      NotebookActions.fetchNotebooks();
     }
   },
   componentWillUnmount() {
@@ -37,9 +49,9 @@ const NoteIndex = React.createClass({
     this.notebookListener.remove();
   },
   _onNoteChange() {
-    this.setState({ notes: NoteStore.all() });
+    this.setState({ notes: NoteStore.all(this.props.params.notebookId) });
 
-    const latestNote = NoteStore.getLatestNote();
+    const latestNote = NoteStore.getLatestNote(this.props.params.notebookId);
     if (latestNote) { // won't exist if notebook was just created
       if (this.props.location.pathname === '/notes') {
         hashHistory.push(`/notes/${latestNote.id}`);
@@ -51,8 +63,10 @@ const NoteIndex = React.createClass({
   _onNotebookChange() {
 
     if (this.props.location.pathname.match('/notes/[^ ]*')) {
+      // debugger;
       this.currentNotebook = NotebookStore.defaultNotebook();
     } else {
+      // debugger;
       this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
     }
 

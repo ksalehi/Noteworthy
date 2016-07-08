@@ -100,17 +100,16 @@ const NoteForm = React.createClass({
       title: this.state.title,
       body: this.state.body
     };
-    const note = NoteStore.find(this.state.noteId);
-    noteData['id'] = note.id;
+    noteData['id'] = this.state.noteId;
     NoteActions.editNote(noteData);
     this.setState({saved: 'saved'});
   },
   updateTagField(e){
-    this.setState({newTag: this.state.newTag+e.key});
+    this.setState({newTag: e.target.value});
   },
   createTag(e){
     e.preventDefault();
-    if (e.key === "Enter" || e.key === "Tab") {
+
 
       this.autoSave();
       const TagData = {
@@ -119,16 +118,14 @@ const NoteForm = React.createClass({
       };
       TagActions.createTag(TagData);
       this.setState({newTag: ""});
-    } else {
-      this.updateTagField(e);
-    }
+
   },
   render(){
     return (
       <div>
         <ul>{this.renderErrors()}</ul>
         <div>
-          <form className="new-note-form">
+          <form className="new-note-form" onSubmit={this.createTag}>
             <input type="text"
                    ref="titleInput"
                    value={this.state.title}
@@ -136,15 +133,20 @@ const NoteForm = React.createClass({
                    placeholder="Title Your Note"
                    className="title-input"
                    onBlur={this.autoSave}/>
-                 <div> { this.state.tags.map((tag)=>{
-                 return (<li>{tag.tag}</li>);
+            <div className="existing-tags"> {
+               this.state.tags.map( (tag) => {
+                 return (<li key={tag.id} className="existing-tag">{tag.tag}</li>);
                })}
-             </div>
-            <input type="text"
-                   className="tag-input"
-                   onKeyPress={this.createTag}
-                   placeholder="New tag..."
-                   value={this.state.newTag}/>
+           </div>
+           <div className="tag-icon-and-text">
+              <i className="fa fa-tag" aria-hidden="true"></i>
+              <input type="text"
+                     className="tag-input"
+                     onChange={this.updateTagField}
+                     placeholder="New tag..."
+                     value={this.state.newTag}/>
+                   <button type="hidden" />
+            </div>
             <ReactQuill
                    theme="snow"
                    value={this.state.body}

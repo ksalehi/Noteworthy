@@ -229,7 +229,6 @@
 	      )
 	    );
 	  }
-	
 	});
 	
 	module.exports = NotebookDrawer;
@@ -26368,11 +26367,23 @@
 	      if (this.props.location && this.props.location.pathname.match('/notes/[^ ]*')) {
 	        NoteActions.fetchNotes();
 	      } else {
-	        NoteActions.fetchNotes(this.props.params.notebookId);
+	        var notebookData = { notebookId: this.props.params.notebookId };
+	        NoteActions.fetchNotes(notebookData);
 	      }
 	      NotebookActions.fetchNotebooks();
 	      this.noteListener = NoteStore.addListener(this._onNoteChange);
 	      this.notebookListener = NotebookStore.addListener(this._onNotebookChange);
+	    }
+	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (SessionStore.isUserLoggedIn()) {
+	      if (nextProps.location && nextProps.location.pathname.match('/notes/[^ ]*')) {
+	        NoteActions.fetchNotes();
+	      } else {
+	        var notebookData = { notebookId: nextProps.params.notebookId };
+	        NoteActions.fetchNotes(notebookData);
+	      }
+	      NotebookActions.fetchNotebooks();
 	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
@@ -26380,9 +26391,9 @@
 	    this.notebookListener.remove();
 	  },
 	  _onNoteChange: function _onNoteChange() {
-	    this.setState({ notes: NoteStore.all() });
+	    this.setState({ notes: NoteStore.all(this.props.params.notebookId) });
 	
-	    var latestNote = NoteStore.getLatestNote();
+	    var latestNote = NoteStore.getLatestNote(this.props.params.notebookId);
 	    if (latestNote) {
 	      // won't exist if notebook was just created
 	      if (this.props.location.pathname === '/notes') {
@@ -26395,8 +26406,10 @@
 	  _onNotebookChange: function _onNotebookChange() {
 	
 	    if (this.props.location.pathname.match('/notes/[^ ]*')) {
+	      // debugger;
 	      this.currentNotebook = NotebookStore.defaultNotebook();
 	    } else {
+	      // debugger;
 	      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
 	    }
 	
@@ -26503,17 +26516,19 @@
 	  return new Date(note2.updated_at) - new Date(note1.updated_at);
 	};
 	
-	NoteStore.all = function () {
+	NoteStore.all = function (notebookId) {
 	  var unsortedNotes = Object.keys(_notes).map(function (noteKey) {
 	    return _notes[noteKey];
+	  }).filter(function (note) {
+	    return note.notebook_id === parseInt(notebookId);
 	  });
 	  var sortedNotes = unsortedNotes.sort(dateSorter);
 	  _latestNote = sortedNotes[0];
 	  return sortedNotes;
 	};
 	
-	NoteStore.getLatestNote = function () {
-	  NoteStore.all();
+	NoteStore.getLatestNote = function (notebookId) {
+	  NoteStore.all(notebookId);
 	  return _latestNote;
 	};
 	
@@ -26527,6 +26542,7 @@
 	    var note = notes[i];
 	    _notes[note.id] = note;
 	  }
+	  NoteStore.all();
 	}
 	
 	function resetSingleNote(note) {
@@ -33336,7 +33352,7 @@
 	      right: 0,
 	      bottom: 0,
 	      backgroundColor: 'rgba(255, 255, 255, 0.5)',
-	      zIndex: 10
+	      zIndex: 100
 	    },
 	    content: {
 	      position: 'relative',
@@ -33367,10 +33383,10 @@
 	var NoteApiUtil = __webpack_require__(483);
 	
 	var NoteActions = {
-	  fetchNotes: function fetchNotes(notebookId) {
-	    var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	  fetchNotes: function fetchNotes() {
+	    var data = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
-	    NoteApiUtil.fetchNotes(NoteActions.receiveNotes, ErrorActions.setErrors, notebookId, data);
+	    NoteApiUtil.fetchNotes(NoteActions.receiveNotes, ErrorActions.setErrors, data);
 	  },
 	  getNote: function getNote(noteId) {
 	    NoteApiUtil.getNote(noteId, NoteActions.receiveNote, ErrorActions.setErrors);
@@ -33461,8 +33477,8 @@
 	'use strict';
 	
 	var NoteApiUtil = {
-	  fetchNotes: function fetchNotes(successCB, errorCB, notebookId) {
-	    var data = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+	  fetchNotes: function fetchNotes(successCB, errorCB) {
+	    var data = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 	
 	    $.ajax({
 	      method: 'GET',
@@ -35984,7 +36000,6 @@
 	  displayName: 'NotebookIndexItem',
 	  redirectToNoteIndex: function redirectToNoteIndex() {
 	    hashHistory.push('/notebooks/' + this.props.notebook.id);
-	    console.log('hit redirect');
 	    this.props.toggleShowing();
 	  },
 	
@@ -36036,10 +36051,6 @@
 	});
 	
 	module.exports = NotebookIndexItem;
-	
-	// if (this.props.notebook.id) {
-	//   NotebookActions.deleteNotebook(this.props.notebook.id);
-	// }
 
 /***/ },
 /* 516 */
@@ -36239,28 +36250,23 @@
 	      title: this.state.title,
 	      body: this.state.body
 	    };
-	    var note = NoteStore.find(this.state.noteId);
-	    noteData['id'] = note.id;
+	    noteData['id'] = this.state.noteId;
 	    NoteActions.editNote(noteData);
 	    this.setState({ saved: 'saved' });
 	  },
 	  updateTagField: function updateTagField(e) {
-	    this.setState({ newTag: this.state.newTag + e.key });
+	    this.setState({ newTag: e.target.value });
 	  },
 	  createTag: function createTag(e) {
 	    e.preventDefault();
-	    if (e.key === "Enter" || e.key === "Tab") {
 	
-	      this.autoSave();
-	      var TagData = {
-	        tag: this.state.newTag,
-	        noteId: this.state.noteId
-	      };
-	      TagActions.createTag(TagData);
-	      this.setState({ newTag: "" });
-	    } else {
-	      this.updateTagField(e);
-	    }
+	    this.autoSave();
+	    var TagData = {
+	      tag: this.state.newTag,
+	      noteId: this.state.noteId
+	    };
+	    TagActions.createTag(TagData);
+	    this.setState({ newTag: "" });
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -36276,7 +36282,7 @@
 	        null,
 	        React.createElement(
 	          'form',
-	          { className: 'new-note-form' },
+	          { className: 'new-note-form', onSubmit: this.createTag },
 	          React.createElement('input', { type: 'text',
 	            ref: 'titleInput',
 	            value: this.state.title,
@@ -36286,21 +36292,27 @@
 	            onBlur: this.autoSave }),
 	          React.createElement(
 	            'div',
-	            null,
+	            { className: 'existing-tags' },
 	            ' ',
 	            this.state.tags.map(function (tag) {
 	              return React.createElement(
 	                'li',
-	                null,
+	                { key: tag.id, className: 'existing-tag' },
 	                tag.tag
 	              );
 	            })
 	          ),
-	          React.createElement('input', { type: 'text',
-	            className: 'tag-input',
-	            onKeyPress: this.createTag,
-	            placeholder: 'New tag...',
-	            value: this.state.newTag }),
+	          React.createElement(
+	            'div',
+	            { className: 'tag-icon-and-text' },
+	            React.createElement('i', { className: 'fa fa-tag', 'aria-hidden': 'true' }),
+	            React.createElement('input', { type: 'text',
+	              className: 'tag-input',
+	              onChange: this.updateTagField,
+	              placeholder: 'New tag...',
+	              value: this.state.newTag }),
+	            React.createElement('button', { type: 'hidden' })
+	          ),
 	          React.createElement(ReactQuill, {
 	            theme: 'snow',
 	            value: this.state.body,
@@ -48187,9 +48199,14 @@
 	  },
 	  newNote: function newNote(e) {
 	    e.preventDefault();
+	
+	    var matched = this.props.path.match(/\/notebooks\/(\d+)/);
+	    debugger;
+	    var notebookId = matched[1];
 	    var noteData = {
 	      title: "",
-	      body: ""
+	      body: "",
+	      notebook_id: notebookId
 	    };
 	    NoteActions.createNote(noteData, this.noteCB);
 	  },

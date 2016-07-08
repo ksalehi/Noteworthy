@@ -2,7 +2,6 @@ class Api::NotesController < ApplicationController
 
   def index
     @notes = current_user.notes
-    debugger
     if params[:query] && !params[:query].empty?
       @notes = @notes.where(
         [
@@ -11,7 +10,6 @@ class Api::NotesController < ApplicationController
         ]
       )
     elsif params[:notebookId]
-
       @notes = current_notebook.notes
     end
     render :index
@@ -25,7 +23,6 @@ class Api::NotesController < ApplicationController
   def create
     @note = Note.new(note_params)
     @note.author_id = current_user.id;
-    @note.notebook_id = current_notebook.id;
 
     if @note.save
       render :show
@@ -55,6 +52,6 @@ class Api::NotesController < ApplicationController
 
 
   def note_params
-    params.require(:note).permit(:title, :body)
+    params.require(:note).permit(:title, :body, :notebook_id)
   end
 end

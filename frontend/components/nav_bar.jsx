@@ -30,9 +30,14 @@ const NavBar = React.createClass({
   },
   newNote(e){
     e.preventDefault();
+
+    const matched = this.props.path.match(/\/notebooks\/(\d+)/);
+    debugger;
+    const notebookId = matched[1];
     const noteData = {
       title: "",
-      body: ""
+      body: "",
+      notebook_id: notebookId
     };
     NoteActions.createNote(noteData, this.noteCB);
   },

@@ -11,17 +11,17 @@ const dateSorter = function(note1, note2) {
   return (new Date(note2.updated_at) - new Date(note1.updated_at));
 };
 
-NoteStore.all = function() {
+NoteStore.all = function(notebookId) {
   let unsortedNotes = Object.keys(_notes).map( noteKey => {
     return _notes[noteKey];
-  });
+  }).filter(note => note.notebook_id === parseInt(notebookId));
   let sortedNotes = unsortedNotes.sort(dateSorter);
   _latestNote = sortedNotes[0];
   return sortedNotes;
 };
 
-NoteStore.getLatestNote = function() {
-  NoteStore.all();
+NoteStore.getLatestNote = function(notebookId) {
+  NoteStore.all(notebookId);
   return _latestNote;
 };
 
@@ -35,6 +35,7 @@ function resetNotes(notes) {
     let note = notes[i];
     _notes[note.id] = note;
   }
+  NoteStore.all();
 }
 
 function resetSingleNote(note) {

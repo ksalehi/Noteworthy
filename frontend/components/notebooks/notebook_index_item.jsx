@@ -8,7 +8,6 @@ const Modal = require('react-modal');
 const NotebookIndexItem = React.createClass({
   redirectToNoteIndex(){
     hashHistory.push('/notebooks/' + this.props.notebook.id);
-    console.log('hit redirect');
     this.props.toggleShowing();
   },
   closeModal: function(){
@@ -56,7 +55,3 @@ const NotebookIndexItem = React.createClass({
 });
 
 module.exports = NotebookIndexItem;
-
-// if (this.props.notebook.id) {
-//   NotebookActions.deleteNotebook(this.props.notebook.id);
-// }
