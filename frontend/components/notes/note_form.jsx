@@ -25,7 +25,10 @@ const NoteForm = React.createClass({
   },
   componentWillReceiveProps(newProps){
     if (this.state.noteId) {
-      this.autoSave();
+      if (NoteStore.noteIds().includes(this.state.noteId)) {
+        // only save if the note wasn't just deleted
+        this.autoSave();
+      }
     }
     let title;
     if (newProps.params && newProps.params.noteId) {
@@ -49,7 +52,10 @@ const NoteForm = React.createClass({
   componentWillUnmount() {
     console.log('note form unmounting & autosaving');
     clearInterval(this.autoSaver);
-    this.autoSave();
+    if (NoteStore.noteIds().includes(this.state.noteId)) {
+      // only save if the note wasn't just deleted
+      this.autoSave();
+    }
     this.noteListener.remove();
   },
   _onChange(){

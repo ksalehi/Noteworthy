@@ -39,12 +39,13 @@ const NoteActions = {
       ErrorActions.setErrors
     );
   },
-  deleteNote(noteId){
+  deleteNote(noteId, deleteCB){
     console.log('hite delete-note action');
     NoteApiUtil.deleteNote(
       noteId,
       NoteActions.removeNote,
-      ErrorActions.setErrors
+      ErrorActions.setErrors,
+      deleteCB
     );
   },
   receiveNotes(notes){

@@ -26233,6 +26233,12 @@
 	  return sortedNotes;
 	};
 	
+	NoteStore.noteIds = function () {
+	  return Object.keys(_notes).map(function (noteKey) {
+	    return parseInt(noteKey);
+	  });
+	};
+	
 	NoteStore.getLatestNote = function (notebookId) {
 	  NoteStore.all(notebookId);
 	  return _latestNote;
@@ -33104,9 +33110,9 @@
 	  editNote: function editNote(note) {
 	    NoteApiUtil.updateNote(note, NoteActions.receiveNote, ErrorActions.setErrors);
 	  },
-	  deleteNote: function deleteNote(noteId) {
+	  deleteNote: function deleteNote(noteId, deleteCB) {
 	    console.log('hite delete-note action');
-	    NoteApiUtil.deleteNote(noteId, NoteActions.removeNote, ErrorActions.setErrors);
+	    NoteApiUtil.deleteNote(noteId, NoteActions.removeNote, ErrorActions.setErrors, deleteCB);
 	  },
 	  receiveNotes: function receiveNotes(notes) {
 	    AppDispatcher.dispatch({
@@ -33235,12 +33241,15 @@
 	      }
 	    });
 	  },
-	  deleteNote: function deleteNote(id, successCB, errorCB) {
+	  deleteNote: function deleteNote(id, successCB, errorCB, deleteCB) {
 	    console.log('making ajax delete request');
 	    $.ajax({
 	      method: 'DELETE',
 	      url: 'api/notes/' + id,
-	      success: successCB,
+	      success: function success(response) {
+	        successCB(response);
+	        deleteCB(id);
+	      },
 	      error: function error(response) {
 	        errorCB("delete_note", response.responseJSON);
 	      }
@@ -33276,8 +33285,8 @@
 	    // alert('Are you sure you want to delete this note?');
 	    if (this.props.note.id) {
 	      console.log('clicked delete');
-	      NoteActions.deleteNote(this.props.note.id);
-	      this.props.deleteCB(this.props.note.id);
+	      // this.props.deleteCB(this.props.note.id);
+	      NoteActions.deleteNote(this.props.note.id, this.props.deleteCB);
 	    }
 	  },
 	  render: function render() {
@@ -35740,7 +35749,10 @@
 	    var _this = this;
 	
 	    if (this.state.noteId) {
-	      this.autoSave();
+	      if (NoteStore.noteIds().includes(this.state.noteId)) {
+	        // only save if the note wasn't just deleted
+	        this.autoSave();
+	      }
 	    }
 	    var title = void 0;
 	    if (newProps.params && newProps.params.noteId) {
@@ -35766,7 +35778,10 @@
 	  componentWillUnmount: function componentWillUnmount() {
 	    console.log('note form unmounting & autosaving');
 	    clearInterval(this.autoSaver);
-	    this.autoSave();
+	    if (NoteStore.noteIds().includes(this.state.noteId)) {
+	      // only save if the note wasn't just deleted
+	      this.autoSave();
+	    }
 	    this.noteListener.remove();
 	  },
 	  _onChange: function _onChange() {

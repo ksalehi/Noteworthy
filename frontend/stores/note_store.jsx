@@ -23,6 +23,12 @@ NoteStore.all = function(notebookId) {
   return sortedNotes;
 };
 
+NoteStore.noteIds = function() {
+  return Object.keys(_notes).map( noteKey => {
+    return parseInt(noteKey);
+  });
+};
+
 NoteStore.getLatestNote = function(notebookId) {
   NoteStore.all(notebookId);
   return _latestNote;

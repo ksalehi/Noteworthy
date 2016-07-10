@@ -50,12 +50,15 @@ const NoteApiUtil = {
       }
     });
   },
-  deleteNote(id, successCB, errorCB){
+  deleteNote(id, successCB, errorCB, deleteCB){
     console.log('making ajax delete request');
     $.ajax({
       method: 'DELETE',
       url: `api/notes/${id}`,
-      success: successCB,
+      success(response) {
+         successCB(response);
+         deleteCB(id);
+      },
       error(response) {
         errorCB("delete_note", response.responseJSON);
       }
