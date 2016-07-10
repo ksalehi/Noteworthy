@@ -4,17 +4,22 @@ const NotebookActions = require('../actions/notebook_actions');
 const hashHistory = require('react-router').hashHistory;
 const SessionActions = require('../actions/session_actions');
 const SessionStore = require('../stores/session_store');
+const NotebookStore = require('../stores/notebook_store');
 
 const NavBar = React.createClass({
   getInitialState() {
     return {
-      loggedIn: true
+      loggedIn: true,
+      defaultNotebook: null
     };
   },
   componentDidMount(){
+    this.notebookListener = NotebookStore.addListener(this._updateNotebooks);
     this.sessionListener = SessionStore.addListener(this._handleRedirect);
+    NotebookActions.fetchNotebooks();
   },
   componentWillUnmount(){
+    this.notebookListener.remove();
     this.sessionListener.remove();
   },
   _handleRedirect(){
@@ -24,16 +29,22 @@ const NavBar = React.createClass({
       }
     }
   },
+  _updateNotebooks() {
+    this.setState({ defaultNotebook: NotebookStore.defaultNotebook() });
+  },
   notebookIndex(e){
     e.preventDefault();
     this.props.toggleShowing();
   },
   newNote(e){
     e.preventDefault();
-
-    const matched = this.props.path.match(/\/notebooks\/(\d+)/);
-    debugger;
-    const notebookId = matched[1];
+    let notebookId;
+    if (this.props.path.match('/notes/[^ ]*')) {
+      notebookId = this.state.defaultNotebook.id;
+    } else {
+      const matched = this.props.path.match(/\/notebooks\/(\d+)/);
+      notebookId = matched[1];
+    }
     const noteData = {
       title: "",
       body: "",
@@ -50,9 +61,8 @@ const NavBar = React.createClass({
       if (matched) {
         const notebookId = matched[1];
         url = `/notebooks/${notebookId}/${note.id}`;
-      } else { // we're trying to make a new note from /notebooks
-        // give new note button negative affordance
-        // or would be nice if we could navigate to default notebook...
+      } else {
+        url = `/notebooks/${this.state.defaultNotebook.id}/${note.id}`;
       }
     }
     if (url) {

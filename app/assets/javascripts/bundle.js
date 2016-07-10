@@ -26231,10 +26231,6 @@
 	
 	function removeNote(note) {
 	  delete _notes[note.id];
-	  setTimeout(function () {
-	    var latestNote = NoteStore.getLatestNote();
-	    hashHistory.push('/notes/' + latestNote.id);
-	  }, 0);
 	}
 	
 	NoteStore.__onDispatch = function (payload) {
@@ -47752,18 +47748,23 @@
 	var hashHistory = __webpack_require__(168).hashHistory;
 	var SessionActions = __webpack_require__(306);
 	var SessionStore = __webpack_require__(260);
+	var NotebookStore = __webpack_require__(262);
 	
 	var NavBar = React.createClass({
 	  displayName: 'NavBar',
 	  getInitialState: function getInitialState() {
 	    return {
-	      loggedIn: true
+	      loggedIn: true,
+	      defaultNotebook: null
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
+	    this.notebookListener = NotebookStore.addListener(this._updateNotebooks);
 	    this.sessionListener = SessionStore.addListener(this._handleRedirect);
+	    NotebookActions.fetchNotebooks();
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
+	    this.notebookListener.remove();
 	    this.sessionListener.remove();
 	  },
 	  _handleRedirect: function _handleRedirect() {
@@ -47773,16 +47774,22 @@
 	      }
 	    }
 	  },
+	  _updateNotebooks: function _updateNotebooks() {
+	    this.setState({ defaultNotebook: NotebookStore.defaultNotebook() });
+	  },
 	  notebookIndex: function notebookIndex(e) {
 	    e.preventDefault();
 	    this.props.toggleShowing();
 	  },
 	  newNote: function newNote(e) {
 	    e.preventDefault();
-	
-	    var matched = this.props.path.match(/\/notebooks\/(\d+)/);
-	    debugger;
-	    var notebookId = matched[1];
+	    var notebookId = void 0;
+	    if (this.props.path.match('/notes/[^ ]*')) {
+	      notebookId = this.state.defaultNotebook.id;
+	    } else {
+	      var matched = this.props.path.match(/\/notebooks\/(\d+)/);
+	      notebookId = matched[1];
+	    }
 	    var noteData = {
 	      title: "",
 	      body: "",
@@ -47799,9 +47806,8 @@
 	      if (matched) {
 	        var notebookId = matched[1];
 	        url = '/notebooks/' + notebookId + '/' + note.id;
-	      } else {// we're trying to make a new note from /notebooks
-	        // give new note button negative affordance
-	        // or would be nice if we could navigate to default notebook...
+	      } else {
+	        url = '/notebooks/' + this.state.defaultNotebook.id + '/' + note.id;
 	      }
 	    }
 	    if (url) {

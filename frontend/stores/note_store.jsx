@@ -47,10 +47,6 @@ function resetSingleNote(note) {
 
 function removeNote(note) {
   delete _notes[note.id];
-  setTimeout(()=>{
-    const latestNote = NoteStore.getLatestNote();
-    hashHistory.push(`/notes/${latestNote.id}`);
-  }, 0);
 }
 
 NoteStore.__onDispatch = function(payload) {
