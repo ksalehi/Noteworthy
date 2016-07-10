@@ -35750,7 +35750,7 @@
 	
 	    if (this.state.noteId) {
 	      if (NoteStore.noteIds().includes(this.state.noteId)) {
-	        // only save if the note wasn't just deleted
+	        // TODO: this doesn't keep from autosaving deleted ntoe
 	        this.autoSave();
 	      }
 	    }
@@ -35781,6 +35781,8 @@
 	    if (NoteStore.noteIds().includes(this.state.noteId)) {
 	      // only save if the note wasn't just deleted
 	      this.autoSave();
+	
+	      console.log('hit autosave from component will unmount');
 	    }
 	    this.noteListener.remove();
 	  },
@@ -35826,6 +35828,7 @@
 	  createTag: function createTag(e) {
 	    e.preventDefault();
 	
+	    console.log('hit autosave from createTag');
 	    this.autoSave();
 	    var TagData = {
 	      tag: this.state.newTag,

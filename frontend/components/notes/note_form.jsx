@@ -26,7 +26,7 @@ const NoteForm = React.createClass({
   componentWillReceiveProps(newProps){
     if (this.state.noteId) {
       if (NoteStore.noteIds().includes(this.state.noteId)) {
-        // only save if the note wasn't just deleted
+        // TODO: this doesn't keep from autosaving deleted ntoe
         this.autoSave();
       }
     }
@@ -55,6 +55,8 @@ const NoteForm = React.createClass({
     if (NoteStore.noteIds().includes(this.state.noteId)) {
       // only save if the note wasn't just deleted
       this.autoSave();
+
+      console.log('hit autosave from component will unmount');
     }
     this.noteListener.remove();
   },
@@ -100,7 +102,7 @@ const NoteForm = React.createClass({
   createTag(e){
     e.preventDefault();
 
-
+      console.log('hit autosave from createTag');
       this.autoSave();
       const TagData = {
         tag: this.state.newTag,
