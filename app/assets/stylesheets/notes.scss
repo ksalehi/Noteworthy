@@ -270,12 +270,6 @@
   color: white;
 }
 
-.fa-tag {
-  font-size: 20px;
-  color: #03b651;
-  margin-left: 15px;
-}
-
 .new-note-button {
   border: 1px solid gray;
   position: relative;
@@ -307,11 +301,20 @@ button {
   background-color: transparent;
 }
 
+.fa-tag {
+  font-size: 20px;
+  color: #03b651;
+  margin-left: 15px;
+}
+
 .tag-input {
   margin: 15px;
   margin-left: 5px;
   padding: 5px;
-  width: 20%;
+}
+
+.tag-icon-and-text {
+  display: inline-block;
 }
 
 .show-notebooks-menu {
