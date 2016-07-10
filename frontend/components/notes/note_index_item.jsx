@@ -16,7 +16,9 @@ const NoteIndexItem = React.createClass({
     e.preventDefault();
     // alert('Are you sure you want to delete this note?');
     if (this.props.note.id) {
+      console.log('clicked delete');
       NoteActions.deleteNote(this.props.note.id);
+      this.props.deleteCB(this.props.note.id);
     }
   },
   render(){

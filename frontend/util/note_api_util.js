@@ -51,6 +51,7 @@ const NoteApiUtil = {
     });
   },
   deleteNote(id, successCB, errorCB){
+    console.log('making ajax delete request');
     $.ajax({
       method: 'DELETE',
       url: `api/notes/${id}`,

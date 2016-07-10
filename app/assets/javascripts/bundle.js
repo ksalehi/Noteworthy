@@ -26106,8 +26106,33 @@
 	  openModal: function openModal() {
 	    this.setState({ modalOpen: true });
 	  },
-	  render: function render() {
+	  deleteCB: function deleteCB(noteId) {
 	    var _this = this;
+	
+	    console.log('hit delete cb');
+	    var noteIds = Object.keys(this.state.notes).map(function (noteIndex) {
+	      return _this.state.notes[noteIndex].id;
+	    });
+	    var nextNoteIdx = noteIds.indexOf(noteId) + 1;
+	    var nextNoteIdx2 = noteIds.indexOf(noteId) - 1;
+	    var nextNoteId = nextNoteIdx2 < 0 ? noteIds[nextNoteIdx] : noteIds[nextNoteIdx2];
+	
+	    if (nextNoteId) {
+	      if (this.props.location.pathname.match('/notes/[^ ]*')) {
+	        hashHistory.push('/notes/' + nextNoteId);
+	      } else {
+	        hashHistory.push('/notebooks/' + this.props.params.notebookId + '/' + nextNoteId);
+	      }
+	    }
+	
+	    if (this.props.location.pathname.match('/notes/[^ ]*')) {
+	      this.currentNotebook = NotebookStore.defaultNotebook();
+	    } else {
+	      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
+	    }
+	  },
+	  render: function render() {
+	    var _this2 = this;
 	
 	    var notes = this.state.notes;
 	    var path = this.props.location.pathname;
@@ -26140,7 +26165,7 @@
 	          var selected = false;
 	          if (path === '/notes/' + note.id) {
 	            selected = true;
-	          } else if (_this.state.currentNotebook && path === '/notebooks/' + _this.state.currentNotebook.id + '/' + note.id) {
+	          } else if (_this2.state.currentNotebook && path === '/notebooks/' + _this2.state.currentNotebook.id + '/' + note.id) {
 	            selected = true;
 	          }
 	
@@ -26148,9 +26173,10 @@
 	            key: note.id,
 	            note: note,
 	            updatedAt: note.updated_at,
-	            pathname: _this.props.location.pathname,
+	            pathname: _this2.props.location.pathname,
 	            selected: selected,
-	            notebookId: currentNotebookId
+	            notebookId: currentNotebookId,
+	            deleteCB: _this2.deleteCB
 	          });
 	        })
 	      ),
@@ -26231,6 +26257,7 @@
 	
 	function removeNote(note) {
 	  delete _notes[note.id];
+	  console.log('note removed from store');
 	}
 	
 	NoteStore.__onDispatch = function (payload) {
@@ -26242,6 +26269,7 @@
 	      resetSingleNote(payload.note);
 	      break;
 	    case NoteConstants.NOTE_REMOVED:
+	      console.log('note store hit');
 	      removeNote(payload.note);
 	      break;
 	  }
@@ -33077,6 +33105,7 @@
 	    NoteApiUtil.updateNote(note, NoteActions.receiveNote, ErrorActions.setErrors);
 	  },
 	  deleteNote: function deleteNote(noteId) {
+	    console.log('hite delete-note action');
 	    NoteApiUtil.deleteNote(noteId, NoteActions.removeNote, ErrorActions.setErrors);
 	  },
 	  receiveNotes: function receiveNotes(notes) {
@@ -33207,6 +33236,7 @@
 	    });
 	  },
 	  deleteNote: function deleteNote(id, successCB, errorCB) {
+	    console.log('making ajax delete request');
 	    $.ajax({
 	      method: 'DELETE',
 	      url: 'api/notes/' + id,
@@ -33245,7 +33275,9 @@
 	    e.preventDefault();
 	    // alert('Are you sure you want to delete this note?');
 	    if (this.props.note.id) {
+	      console.log('clicked delete');
 	      NoteActions.deleteNote(this.props.note.id);
+	      this.props.deleteCB(this.props.note.id);
 	    }
 	  },
 	  render: function render() {
@@ -35696,16 +35728,13 @@
 	      body: "",
 	      tags: [],
 	      newTag: "",
-	      errors: [],
 	      saved: 'saved'
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.autoSaver = setInterval(this.autoSave, 10000);
-	    ErrorStore.clearErrors();
 	    this._onChange();
 	    this.noteListener = NoteStore.addListener(this._onChange);
-	    this.errorListener = ErrorStore.addListener(this.handleErrors);
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
 	    var _this = this;
@@ -35730,15 +35759,14 @@
 	        noteId: note.id,
 	        title: note.title,
 	        body: note.body,
-	        tags: note.tags,
-	        errors: []
+	        tags: note.tags
 	      });
 	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
+	    console.log('note form unmounting & autosaving');
 	    clearInterval(this.autoSaver);
 	    this.autoSave();
-	    this.errorListener.remove();
 	    this.noteListener.remove();
 	  },
 	  _onChange: function _onChange() {
@@ -35752,8 +35780,7 @@
 	        noteId: note.id,
 	        title: note.title,
 	        body: note.body,
-	        tags: note.tags,
-	        errors: []
+	        tags: note.tags
 	      });
 	    }
 	  },
@@ -35768,19 +35795,6 @@
 	      body: e,
 	      saved: 'unsaved'
 	    });
-	  },
-	  handleErrors: function handleErrors() {
-	    this.setState({ errors: ErrorStore.formErrors("note_form") });
-	  },
-	  renderErrors: function renderErrors() {
-	    var errors = this.state.errors.map(function (error, idx) {
-	      return React.createElement(
-	        'li',
-	        { className: 'errors-list', key: idx },
-	        error
-	      );
-	    });
-	    return errors;
 	  },
 	  autoSave: function autoSave() {
 	    var noteData = {
@@ -35806,14 +35820,10 @@
 	    this.setState({ newTag: "" });
 	  },
 	  render: function render() {
+	    console.log('rendering note form');
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(
-	        'ul',
-	        null,
-	        this.renderErrors()
-	      ),
 	      React.createElement(
 	        'div',
 	        null,

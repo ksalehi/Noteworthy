@@ -85,6 +85,29 @@ const NoteIndex = React.createClass({
   openModal: function(){
     this.setState({ modalOpen: true });
   },
+  deleteCB(noteId){
+    console.log('hit delete cb');
+    const noteIds = Object.keys(this.state.notes).map(noteIndex => {
+      return this.state.notes[noteIndex].id;
+    });
+    const nextNoteIdx = noteIds.indexOf(noteId) + 1;
+    const nextNoteIdx2 = noteIds.indexOf(noteId) -1;
+    const nextNoteId = (nextNoteIdx2 < 0) ? noteIds[nextNoteIdx] : noteIds[nextNoteIdx2];
+
+    if (nextNoteId) {
+      if (this.props.location.pathname.match('/notes/[^ ]*')) {
+        hashHistory.push('/notes/' + nextNoteId);
+      } else {
+        hashHistory.push('/notebooks/' + this.props.params.notebookId + '/' + nextNoteId);
+      }
+    }
+
+    if (this.props.location.pathname.match('/notes/[^ ]*')) {
+      this.currentNotebook = NotebookStore.defaultNotebook();
+    } else {
+      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
+    }
+  },
   render(){
     const notes = this.state.notes;
     const path = this.props.location.pathname;
@@ -119,6 +142,7 @@ const NoteIndex = React.createClass({
                   pathname={this.props.location.pathname}
                   selected={ selected }
                   notebookId={currentNotebookId}
+                  deleteCB={this.deleteCB}
                   />);
                 })
               }

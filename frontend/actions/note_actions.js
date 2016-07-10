@@ -40,6 +40,7 @@ const NoteActions = {
     );
   },
   deleteNote(noteId){
+    console.log('hite delete-note action');
     NoteApiUtil.deleteNote(
       noteId,
       NoteActions.removeNote,

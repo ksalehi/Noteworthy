@@ -15,16 +15,13 @@ const NoteForm = React.createClass({
       body: "",
       tags: [],
       newTag: "",
-      errors: [],
       saved: 'saved'
     };
   },
   componentDidMount() {
     this.autoSaver = setInterval(this.autoSave, 10000);
-    ErrorStore.clearErrors();
     this._onChange();
     this.noteListener = NoteStore.addListener(this._onChange);
-    this.errorListener = ErrorStore.addListener(this.handleErrors);
   },
   componentWillReceiveProps(newProps){
     if (this.state.noteId) {
@@ -46,14 +43,13 @@ const NoteForm = React.createClass({
         title: note.title,
         body: note.body,
         tags: note.tags,
-        errors: []
       });
     }
   },
   componentWillUnmount() {
+    console.log('note form unmounting & autosaving');
     clearInterval(this.autoSaver);
     this.autoSave();
-    this.errorListener.remove();
     this.noteListener.remove();
   },
   _onChange(){
@@ -68,7 +64,6 @@ const NoteForm = React.createClass({
         title: note.title,
         body: note.body,
         tags: note.tags,
-        errors: []
       });
     }
   },
@@ -83,17 +78,6 @@ const NoteForm = React.createClass({
       body: e,
       saved: 'unsaved'
     });
-  },
-  handleErrors(){
-    this.setState({errors: ErrorStore.formErrors("note_form")});
-  },
-  renderErrors(){
-    const errors = this.state.errors.map((error, idx) => {
-      return (
-        <li className="errors-list" key={idx}>{error}</li>
-      );
-    });
-    return errors;
   },
   autoSave() {
     const noteData = {
@@ -121,9 +105,9 @@ const NoteForm = React.createClass({
 
   },
   render(){
+    console.log('rendering note form');
     return (
       <div>
-        <ul>{this.renderErrors()}</ul>
         <div>
           <form className="new-note-form" onSubmit={this.createTag}>
             <input type="text"
