@@ -50,13 +50,10 @@ const NoteForm = React.createClass({
     }
   },
   componentWillUnmount() {
-    console.log('note form unmounting & autosaving');
     clearInterval(this.autoSaver);
     if (NoteStore.noteIds().includes(this.state.noteId)) {
       // only save if the note wasn't just deleted
       this.autoSave();
-
-      console.log('hit autosave from component will unmount');
     }
     this.noteListener.remove();
   },
@@ -102,7 +99,6 @@ const NoteForm = React.createClass({
   createTag(e){
     e.preventDefault();
 
-      console.log('hit autosave from createTag');
       this.autoSave();
       const TagData = {
         tag: this.state.newTag,
@@ -113,7 +109,6 @@ const NoteForm = React.createClass({
 
   },
   render(){
-    console.log('rendering note form');
     return (
       <div>
         <div>

@@ -86,7 +86,6 @@ const NoteIndex = React.createClass({
     this.setState({ modalOpen: true });
   },
   deleteCB(noteId){
-    console.log('hit delete cb');
     const noteIds = Object.keys(this.state.notes).map(noteIndex => {
       return this.state.notes[noteIndex].id;
     });

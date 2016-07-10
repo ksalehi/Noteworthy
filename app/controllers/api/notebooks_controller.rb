@@ -20,8 +20,11 @@ class Api::NotebooksController < ApplicationController
   def create
     @notebook = Notebook.new(notebook_params)
     @notebook.author_id = current_user.id
-
     if @notebook.save
+      note = Note.create(title: "Sample Note",
+                  body: "Tips for getting started:\nClick the '+' icon to add a new note\nUse the styling menu to customize your note!",
+                  notebook_id: @notebook.id,
+                  author_id: current_user.id)
       render :show
     else
       render json: @notebook.errors.full_messages, status: 422

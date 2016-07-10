@@ -25,7 +25,6 @@ const NotebookDetail = React.createClass({
   render() {
     let notes = this.state.notes;
 
-    console.log('rendering notebook detail');
     return (
       <div >
         <NoteIndex />

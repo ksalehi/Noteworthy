@@ -14,7 +14,6 @@ const EditNotebookForm = React.createClass({
     });
   },
   handleSubmit(e){
-    console.log('hit handleSubmit');
     e.preventDefault();
     const notebookData = {
       id: this.props.notebook.id,

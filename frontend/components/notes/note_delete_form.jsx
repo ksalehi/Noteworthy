@@ -14,7 +14,6 @@ const DeleteNoteForm = React.createClass({
     });
   },
   handleSubmit(e){
-    console.log('hit handleSubmit');
     e.preventDefault();
     const noteData = {
       id: this.props.note.id,

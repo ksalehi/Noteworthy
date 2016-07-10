@@ -14,7 +14,6 @@ const NewNotebookForm = React.createClass({
     });
   },
   handleSubmit(e){
-    console.log('hit handleSubmit');
     e.preventDefault();
     const notebookData = { title: this.state.title };
     this.props.closeModal();

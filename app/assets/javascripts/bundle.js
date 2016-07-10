@@ -26109,7 +26109,6 @@
 	  deleteCB: function deleteCB(noteId) {
 	    var _this = this;
 	
-	    console.log('hit delete cb');
 	    var noteIds = Object.keys(this.state.notes).map(function (noteIndex) {
 	      return _this.state.notes[noteIndex].id;
 	    });
@@ -26263,7 +26262,6 @@
 	
 	function removeNote(note) {
 	  delete _notes[note.id];
-	  console.log('note removed from store');
 	}
 	
 	NoteStore.__onDispatch = function (payload) {
@@ -26275,7 +26273,6 @@
 	      resetSingleNote(payload.note);
 	      break;
 	    case NoteConstants.NOTE_REMOVED:
-	      console.log('note store hit');
 	      removeNote(payload.note);
 	      break;
 	  }
@@ -33111,7 +33108,6 @@
 	    NoteApiUtil.updateNote(note, NoteActions.receiveNote, ErrorActions.setErrors);
 	  },
 	  deleteNote: function deleteNote(noteId, deleteCB) {
-	    console.log('hite delete-note action');
 	    NoteApiUtil.deleteNote(noteId, NoteActions.removeNote, ErrorActions.setErrors, deleteCB);
 	  },
 	  receiveNotes: function receiveNotes(notes) {
@@ -33242,7 +33238,6 @@
 	    });
 	  },
 	  deleteNote: function deleteNote(id, successCB, errorCB, deleteCB) {
-	    console.log('making ajax delete request');
 	    $.ajax({
 	      method: 'DELETE',
 	      url: 'api/notes/' + id,
@@ -33284,8 +33279,6 @@
 	    e.preventDefault();
 	    // alert('Are you sure you want to delete this note?');
 	    if (this.props.note.id) {
-	      console.log('clicked delete');
-	      // this.props.deleteCB(this.props.note.id);
 	      NoteActions.deleteNote(this.props.note.id, this.props.deleteCB);
 	    }
 	  },
@@ -35629,7 +35622,6 @@
 	    });
 	  },
 	  handleSubmit: function handleSubmit(e) {
-	    console.log('hit handleSubmit');
 	    e.preventDefault();
 	    var notebookData = {
 	      id: this.props.notebook.id,
@@ -35776,13 +35768,10 @@
 	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
-	    console.log('note form unmounting & autosaving');
 	    clearInterval(this.autoSaver);
 	    if (NoteStore.noteIds().includes(this.state.noteId)) {
 	      // only save if the note wasn't just deleted
 	      this.autoSave();
-	
-	      console.log('hit autosave from component will unmount');
 	    }
 	    this.noteListener.remove();
 	  },
@@ -35828,7 +35817,6 @@
 	  createTag: function createTag(e) {
 	    e.preventDefault();
 	
-	    console.log('hit autosave from createTag');
 	    this.autoSave();
 	    var TagData = {
 	      tag: this.state.newTag,
@@ -35838,7 +35826,6 @@
 	    this.setState({ newTag: "" });
 	  },
 	  render: function render() {
-	    console.log('rendering note form');
 	    return React.createElement(
 	      'div',
 	      null,
@@ -48055,7 +48042,6 @@
 	    });
 	  },
 	  handleSubmit: function handleSubmit(e) {
-	    console.log('hit handleSubmit');
 	    e.preventDefault();
 	    var notebookData = { title: this.state.title };
 	    this.props.closeModal();

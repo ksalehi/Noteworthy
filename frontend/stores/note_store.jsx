@@ -53,7 +53,6 @@ function resetSingleNote(note) {
 
 function removeNote(note) {
   delete _notes[note.id];
-  console.log('note removed from store');
 }
 
 NoteStore.__onDispatch = function(payload) {
@@ -65,7 +64,6 @@ NoteStore.__onDispatch = function(payload) {
       resetSingleNote(payload.note);
       break;
     case NoteConstants.NOTE_REMOVED:
-      console.log('note store hit');
       removeNote(payload.note);
       break;
     }
