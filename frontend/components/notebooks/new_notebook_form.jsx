@@ -16,8 +16,12 @@ const NewNotebookForm = React.createClass({
   handleSubmit(e){
     e.preventDefault();
     const notebookData = { title: this.state.title };
+    this.props.toggleShowing(); // close the notebook drawer
     this.props.closeModal();
-    NotebookActions.createNotebook(notebookData);
+    NotebookActions.createNotebook(notebookData, this.notebookCB);
+  },
+  notebookCB(notebookData) {
+    hashHistory.push(`/notebooks/${notebookData.id}`);
   },
   render() {
     return (

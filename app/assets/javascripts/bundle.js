@@ -47896,6 +47896,7 @@
 	  newNotebook: function newNotebook(e) {
 	    e.preventDefault();
 	    this.openModal();
+	    // TODO: autofocus cursor in modal input field
 	  },
 	
 	  closeModal: function closeModal() {
@@ -47942,7 +47943,9 @@
 	          style: style,
 	          isOpen: this.state.modalOpen,
 	          onRequestClose: this.closeModal },
-	        React.createElement(NewNotebookForm, { closeModal: this.closeModal })
+	        React.createElement(NewNotebookForm, {
+	          closeModal: this.closeModal,
+	          toggleShowing: this.props.toggleShowing })
 	      )
 	    );
 	  }
@@ -48044,8 +48047,12 @@
 	  handleSubmit: function handleSubmit(e) {
 	    e.preventDefault();
 	    var notebookData = { title: this.state.title };
+	    this.props.toggleShowing(); // close the notebook drawer
 	    this.props.closeModal();
-	    NotebookActions.createNotebook(notebookData);
+	    NotebookActions.createNotebook(notebookData, this.notebookCB);
+	  },
+	  notebookCB: function notebookCB(notebookData) {
+	    hashHistory.push('/notebooks/' + notebookData.id);
 	  },
 	  render: function render() {
 	    return React.createElement(

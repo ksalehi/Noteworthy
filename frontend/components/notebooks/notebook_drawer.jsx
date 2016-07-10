@@ -27,6 +27,7 @@ const NotebookDrawer = React.createClass({
   newNotebook(e) {
     e.preventDefault();
     this.openModal();
+    // TODO: autofocus cursor in modal input field
   },
   closeModal: function(){
     this.setState({ modalOpen: false });
@@ -64,7 +65,9 @@ const NotebookDrawer = React.createClass({
           style={style}
           isOpen={this.state.modalOpen}
           onRequestClose={this.closeModal}>
-            <NewNotebookForm closeModal={this.closeModal} />
+            <NewNotebookForm
+              closeModal={this.closeModal}
+              toggleShowing={this.props.toggleShowing}/>
         </Modal>
 
       </div>
