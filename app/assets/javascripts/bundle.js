@@ -48029,6 +48029,7 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(38);
 	var NotebookActions = __webpack_require__(264);
 	var hashHistory = __webpack_require__(168).hashHistory;
 	
@@ -48039,10 +48040,23 @@
 	      title: ""
 	    };
 	  },
+	  componentDidMount: function componentDidMount() {
+	    var _this = this;
+	
+	    console.log('component did mount');
+	    if (this.state.title === '') {
+	      setTimeout(function () {
+	        ReactDOM.findDOMNode(_this.refs.titleInput).focus();
+	      }, 0);
+	    }
+	  },
 	  changeTitle: function changeTitle(e) {
 	    this.setState({
 	      title: e.target.value
 	    });
+	    if (this.state.title !== '') {
+	      document.getElementById("create-notebook-button").disabled = false;
+	    }
 	  },
 	  handleSubmit: function handleSubmit(e) {
 	    e.preventDefault();
@@ -48054,7 +48068,21 @@
 	  notebookCB: function notebookCB(notebookData) {
 	    hashHistory.push('/notebooks/' + notebookData.id);
 	  },
+	  toggleDisabled: function toggleDisabled() {
+	    if (this.state.title === '') {
+	      return 'disabled';
+	    } else {
+	      return 'enabled';
+	    }
+	  },
 	  render: function render() {
+	    // let klass;
+	    // if (this.state.title === '') {
+	    //   klass = 'grayed-out';
+	    //   document.getElementById("create-notebook-button").disabled = true;
+	    // } else {
+	    //   klass = '';
+	    // }
 	    return React.createElement(
 	      'div',
 	      null,
@@ -48065,8 +48093,13 @@
 	          value: this.state.title,
 	          onChange: this.changeTitle,
 	          placeholder: 'Title Your Notebook',
+	          ref: 'titleInput',
 	          className: 'notebook-title-input' }),
-	        React.createElement('input', { type: 'submit', className: 'create-notebook-button', value: 'Create Notebook' })
+	        React.createElement('input', { type: 'submit',
+	          id: 'create-notebook-button',
+	          className: 'create-notebook-button',
+	          value: 'Create Notebook',
+	          disabled: true })
 	      )
 	    );
 	  }
