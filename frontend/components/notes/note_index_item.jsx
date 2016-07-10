@@ -10,7 +10,7 @@ const NoteIndexItem = React.createClass({
       hashHistory.push('/notes/' + this.props.note.id);
     } else if (this.props.notebookId !== -1){
       hashHistory.push('/notebooks/' + this.props.notebookId + '/' + this.props.note.id);
-    } 
+    }
   },
   deleteNote(e){
     e.preventDefault();
@@ -40,7 +40,9 @@ const NoteIndexItem = React.createClass({
         {title}
         <br></br>
         <span className="time-since">{timeSince(date)}</span>
-        <button onClick={this.deleteNote} className="delete-button" value="DELETE"></button>
+        <button onClick={this.deleteNote} className="delete-button" value="DELETE">
+          <i className="fa fa-trash" aria-hidden="true"></i>
+        </button>
       </li>
     );
   }

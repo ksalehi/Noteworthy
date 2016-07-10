@@ -33275,7 +33275,11 @@
 	        { className: 'time-since' },
 	        timeSince(date)
 	      ),
-	      React.createElement('button', { onClick: this.deleteNote, className: 'delete-button', value: 'DELETE' })
+	      React.createElement(
+	        'button',
+	        { onClick: this.deleteNote, className: 'delete-button', value: 'DELETE' },
+	        React.createElement('i', { className: 'fa fa-trash', 'aria-hidden': 'true' })
+	      )
 	    );
 	  }
 	});
