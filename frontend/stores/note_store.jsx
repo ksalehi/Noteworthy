@@ -14,7 +14,10 @@ const dateSorter = function(note1, note2) {
 NoteStore.all = function(notebookId) {
   let unsortedNotes = Object.keys(_notes).map( noteKey => {
     return _notes[noteKey];
-  }).filter(note => note.notebook_id === parseInt(notebookId));
+  });
+  if (notebookId) {
+    unsortedNotes = unsortedNotes.filter(note => note.notebook_id === parseInt(notebookId));
+  }
   let sortedNotes = unsortedNotes.sort(dateSorter);
   _latestNote = sortedNotes[0];
   return sortedNotes;

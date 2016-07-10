@@ -26196,9 +26196,12 @@
 	NoteStore.all = function (notebookId) {
 	  var unsortedNotes = Object.keys(_notes).map(function (noteKey) {
 	    return _notes[noteKey];
-	  }).filter(function (note) {
-	    return note.notebook_id === parseInt(notebookId);
 	  });
+	  if (notebookId) {
+	    unsortedNotes = unsortedNotes.filter(function (note) {
+	      return note.notebook_id === parseInt(notebookId);
+	    });
+	  }
 	  var sortedNotes = unsortedNotes.sort(dateSorter);
 	  _latestNote = sortedNotes[0];
 	  return sortedNotes;
