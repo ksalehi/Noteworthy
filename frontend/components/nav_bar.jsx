@@ -69,8 +69,12 @@ const NavBar = React.createClass({
         <button className="new-note-button" onClick={this.newNote}>
           <i className="fa fa-plus" aria-hidden="true"></i>
         </button>
-        <button className="notebooks-button" onClick={this.notebookIndex}></button>
-        <button className="logout-button" onClick={this.logOut}>X</button>
+        <button className="notebooks-button" onClick={this.notebookIndex}>
+          <i className="fa fa-book" aria-hidden="true"></i>
+        </button>
+        <button className="logout-button" onClick={this.logOut}>
+          <i className="fa fa-power-off" aria-hidden="true"></i>
+        </button>
     </div>
     );
   }

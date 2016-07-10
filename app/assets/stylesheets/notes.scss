@@ -47,7 +47,7 @@
 
 .notes-list-item:hover {
   cursor: pointer;
-  background-color: #2CA36E;
+  background-color: #03b651;
 }
 
 .notes-list-item:last-of-type {
@@ -76,48 +76,36 @@
   padding-top: 10px;
 }
 
-.logout-button {
-  border: 1px solid gray;
-  float: left;
-  border-radius: 50%;
-  height: 40px;
-  width: 40px;
-  font-size: 20px;
-  text-align: center;
-  margin: 5px auto;
-}
-
 .notebooks-button {
-  background: url('notebook.png') no-repeat;
-  background-size: 70%;
-  background-position: center;
   padding: 5px;
-  background-color: white;
+  background: white;
   border: 1px solid gray;
   float: left;
   border-radius: 50%;
   height: 30px;
   width: 30px;
   margin: 5px auto;
-  transition: none;
 }
 
 .notebooks-button:hover {
-  background: url('notebook_white.png') no-repeat;
-  background-color: #00B029;
-  background-size: 70%;
-  background-position: center;
-  transition: none;
+  background: #03b651;
 }
 
-.logout-button:hover {
-  background-color: #2CA36E;
+.fa.fa-book {
+  color: #03b651;
+  font-size: 26px;
+  padding-left: 4px;
+}
+
+.fa-book:hover {
+  color: white;
+
 }
 
 .title-input {
   font-family: Scope One, serif;
   font-size: 32px;
-  color: #00B029;
+  color: #03b651;
   display: block;
   padding: 10px 10px;
   margin: 5px auto;
@@ -133,27 +121,42 @@
   border-top: 1px solid darkgray;
 }
 
-.delete-button {
-  background: url("trashcan.png") no-repeat 2px;
-  background-size: 100%;
-  height: 25%;
-  width: 7%;
+// .delete-button {
+//   background: url("trashcan.png") no-repeat 2px;
+//   background-size: 100%;
+//   height: 25%;
+//   width: 7%;
+//   position: absolute;
+//   top: 40%;
+//   left: 85%;
+//   border-radius: 5px;
+// }
+//
+// .delete-button:hover {
+//
+// }
+
+.fa.fa-trash {
+  color: black;
+  font-size: 20px;
   position: absolute;
+  right: 10%;
   top: 40%;
-  left: 85%;
-  border-radius: 5px;
 }
 
-.delete-button:hover {
-
+.fa-trash:hover {
+  color: white;
 }
 
 .selected {
-  box-shadow: 0 0 20px #00B029 inset;
+  box-shadow: 0 0 20px #03b651 inset;
 }
 
 .selected:hover {
   background-color: white;
+  .fa-trash:hover {
+    color: #03b651;
+  }
 }
 
 .new-notebook-button {
@@ -180,7 +183,7 @@
   display: block;
   border-radius: 5px;
   text-align: center;
-  color: #00B029;
+  color: #03b651;
 }
 
 .create-notebook-button {
@@ -189,7 +192,7 @@
 }
 
 .create-notebook-button:hover {
-  background: #00B029;
+  background: #03b651;
 }
 
 .new-notebook-form {
@@ -200,10 +203,38 @@
   margin-top: 10%;
 }
 
+
+.logout-button {
+  border: 1px solid gray;
+  float: left;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  font-size: 20px;
+  text-align: center;
+  margin: 5px auto;
+  background: white;
+}
+
+.logout-button:hover {
+  background-color: #03b651;
+}
+
+.fa.fa-power-off {
+  color: #03b651;
+  font-size: 25px;
+  text-align: center;
+  padding-left: 1px;
+}
+
+.fa-power-off:hover {
+  color: white;
+}
+
 .search-box {
   color: black;
   font-family: Helvetica, sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   text-align: left;
   padding: 5px;
   border-radius: 5px;
@@ -229,17 +260,20 @@
 }
 
 .fa-info-circle {
-  color: #00B029;
+  color: #03b651;
   position: absolute;
-  top: 10%;
-  left: 85%;
+  top: 15px;
+  right: 15px;
 }
 
-.fa-plus {
-  color: #00B029;
-  position: absolute;
-  top: 10px;
-  left: 11px;
+.fa-info-circle:hover {
+  color: white;
+}
+
+.fa-tag {
+  font-size: 20px;
+  color: #03b651;
+  margin-left: 15px;
 }
 
 .new-note-button {
@@ -251,12 +285,22 @@
   font-size: 25px;
   text-align: center;
   margin: 5px auto;
-  background: url('plus.png') no-repeat;
-  background-size: 100%;
+  background: white;
 }
 
 .new-note-button:hover {
-  background: url('plus_white.png');
+  background-color: #03b651;
+}
+
+.fa.fa-plus {
+  color: #03b651;
+  font-size: 26px;
+  padding-left: 2px;
+  padding-top: 3px;
+}
+
+.fa-plus:hover {
+  color: white;
 }
 
 button {
@@ -265,6 +309,7 @@ button {
 
 .tag-input {
   margin: 15px;
+  margin-left: 5px;
   padding: 5px;
   width: 20%;
 }
@@ -292,10 +337,11 @@ button {
 }
 
 .existing-tag {
-  background: #00B029;
+  background: #D9DDDE;
   display: inline-block;
   padding: 5px 8px;
   border-radius: 5px;
   margin: 5px;
   float: right;
+  color: black;
 }
