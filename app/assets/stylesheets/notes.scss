@@ -157,6 +157,10 @@
   background-color: white;
   .fa-trash:hover {
     color: #03b651;
+    font-size: 24px;
+    right: 9.5%;
+    top: 39%;
+    transition: 0.1s;
   }
 }
 
@@ -267,7 +271,6 @@
 }
 
 .fa-info-circle:hover {
-  color: white;
   color: white;
   font-size: 30px;
   right: 12px;
