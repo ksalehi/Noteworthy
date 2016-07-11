@@ -61,12 +61,9 @@ const NoteIndex = React.createClass({
     }
   },
   _onNotebookChange() {
-
     if (this.props.location.pathname.match('/notes/[^ ]*')) {
-      // debugger;
       this.currentNotebook = NotebookStore.defaultNotebook();
     } else {
-      // debugger;
       this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
     }
 

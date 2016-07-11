@@ -26081,12 +26081,9 @@
 	    }
 	  },
 	  _onNotebookChange: function _onNotebookChange() {
-	
 	    if (this.props.location.pathname.match('/notes/[^ ]*')) {
-	      // debugger;
 	      this.currentNotebook = NotebookStore.defaultNotebook();
 	    } else {
-	      // debugger;
 	      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
 	    }
 	
@@ -47905,21 +47902,7 @@
 	    this.setState({ modalOpen: true });
 	  },
 	  deleteCB: function deleteCB(notebookId) {
-	    debugger;
-	    // const notebookIds = Object.keys(this.state.notebooks).map(notebookIndex => {
-	    //   return this.state.notebooks[notebookIndex].id;
-	    // });
-	    // const nextNotebookIdx = notebookIds.indexOf(notebookId) + 1;
-	    // const nextNotebookIdx2 = notebookIds.indexOf(notebookId) -1;
-	    // const nextNotebookId = (nextNotebookIdx2 < 0) ? notebookIds[nextNotebookIdx] : notebookIds[nextNotebookIdx2];
-	    //
-	    // if (nextNotebookId) {
-	    //   hashHistory.push('/notebooks/' + nextNotebookId);
-	    // } else {
-	    //   hashHistory.push('/notes');
-	    // }
 	    hashHistory.push('/notes');
-	    debugger;
 	  },
 	
 	  render: function render() {
@@ -48199,9 +48182,12 @@
 	    var text = 'Are you sure you want to delete the notebook \'' + this.props.notebook.title + '\'?';
 	    return React.createElement(
 	      'div',
-	      null,
-	      text,
-	      React.createElement('br', null),
+	      { className: 'delete-notebook' },
+	      React.createElement(
+	        'span',
+	        { className: 'delete-text' },
+	        text
+	      ),
 	      React.createElement(
 	        'button',
 	        { onClick: this.deleteNote, className: 'delete-note' },

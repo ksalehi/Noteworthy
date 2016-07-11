@@ -36,21 +36,7 @@ const NotebookDrawer = React.createClass({
     this.setState({ modalOpen: true });
   },
   deleteCB(notebookId){
-    debugger;
-    // const notebookIds = Object.keys(this.state.notebooks).map(notebookIndex => {
-    //   return this.state.notebooks[notebookIndex].id;
-    // });
-    // const nextNotebookIdx = notebookIds.indexOf(notebookId) + 1;
-    // const nextNotebookIdx2 = notebookIds.indexOf(notebookId) -1;
-    // const nextNotebookId = (nextNotebookIdx2 < 0) ? notebookIds[nextNotebookIdx] : notebookIds[nextNotebookIdx2];
-    //
-    // if (nextNotebookId) {
-    //   hashHistory.push('/notebooks/' + nextNotebookId);
-    // } else {
-    //   hashHistory.push('/notes');
-    // }
     hashHistory.push('/notes' );
-    debugger;
   },
   render: function() {
     const notebooks = this.state.notebooks;
