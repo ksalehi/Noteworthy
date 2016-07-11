@@ -118,21 +118,6 @@
   border-top: 1px solid darkgray;
 }
 
-// .delete-button {
-//   background: url("trashcan.png") no-repeat 2px;
-//   background-size: 100%;
-//   height: 25%;
-//   width: 7%;
-//   position: absolute;
-//   top: 40%;
-//   left: 85%;
-//   border-radius: 5px;
-// }
-//
-// .delete-button:hover {
-//
-// }
-
 .fa.fa-trash {
   color: black;
   font-size: 20px;
@@ -248,6 +233,11 @@
 }
 
 .flex-parent {
+  display: flex;
+  border-right: 15px solid #D9DDDE;
+}
+
+.splash-flex-parent {
   display: flex;
 }
 

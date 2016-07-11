@@ -41,6 +41,13 @@ const App = React.createClass({
     } else {
       klass = "note-index-flex";
     }
+    let klass2;
+    if (this.props.location.pathname === '/') {
+      klass2 = "splash-flex-parent";
+    } else {
+      klass2 = "flex-parent";
+    }
+
     return (
       <div className="flex-parent">
         {navbar}

@@ -89,6 +89,13 @@
 	    } else {
 	      klass = "note-index-flex";
 	    }
+	    var klass2 = void 0;
+	    if (this.props.location.pathname === '/') {
+	      klass2 = "splash-flex-parent";
+	    } else {
+	      klass2 = "flex-parent";
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'flex-parent' },
