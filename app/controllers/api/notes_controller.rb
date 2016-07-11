@@ -1,7 +1,7 @@
 class Api::NotesController < ApplicationController
 
   def index
-    @notes = current_user.notes
+    @notes = current_notebook.notes
     if params[:query] && !params[:query].empty?
       @notes = @notes.where(
         [
@@ -9,8 +9,6 @@ class Api::NotesController < ApplicationController
           {query: "%#{params[:query]}%"}
         ]
       )
-    elsif params[:notebookId]
-      @notes = current_notebook.notes
     end
     render :index
   end
