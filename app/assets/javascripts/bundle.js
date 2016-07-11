@@ -78,27 +78,22 @@
 	  },
 	  render: function render() {
 	    var navbar = void 0;
+	    var klass = void 0;
+	    var klass2 = void 0;
+	
 	    if (this.props.location.pathname === '/') {
 	      navbar = React.createElement('div', null);
-	    } else {
-	      navbar = React.createElement(NavBar, { path: this.props.location.pathname, toggleShowing: this.toggleShowing });
-	    }
-	    var klass = void 0;
-	    if (this.props.location.pathname === '/') {
 	      klass = "splash-flex";
-	    } else {
-	      klass = "note-index-flex";
-	    }
-	    var klass2 = void 0;
-	    if (this.props.location.pathname === '/') {
 	      klass2 = "splash-flex-parent";
 	    } else {
+	      navbar = React.createElement(NavBar, { path: this.props.location.pathname, toggleShowing: this.toggleShowing });
+	      klass = "note-index-flex";
 	      klass2 = "flex-parent";
 	    }
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'flex-parent' },
+	      { className: klass2 },
 	      navbar,
 	      React.createElement(NotebookDrawer, { showing: this.state.showing, toggleShowing: this.toggleShowing }),
 	      React.createElement(

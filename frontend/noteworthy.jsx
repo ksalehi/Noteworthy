@@ -30,26 +30,21 @@ const App = React.createClass({
   },
   render(){
     let navbar;
+    let klass;
+    let klass2;
+
     if (this.props.location.pathname === '/') {
       navbar = <div></div>;
-    } else {
-      navbar = <NavBar path={this.props.location.pathname} toggleShowing={this.toggleShowing} />;
-    }
-    let klass;
-    if (this.props.location.pathname === '/') {
       klass = "splash-flex";
-    } else {
-      klass = "note-index-flex";
-    }
-    let klass2;
-    if (this.props.location.pathname === '/') {
       klass2 = "splash-flex-parent";
     } else {
+      navbar = <NavBar path={this.props.location.pathname} toggleShowing={this.toggleShowing} />;
+      klass = "note-index-flex";
       klass2 = "flex-parent";
     }
 
     return (
-      <div className="flex-parent">
+      <div className={klass2}>
         {navbar}
         <NotebookDrawer showing={this.state.showing} toggleShowing={this.toggleShowing} />
         <div className={klass}>
