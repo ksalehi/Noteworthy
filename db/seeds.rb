@@ -52,7 +52,7 @@ Friday: Jakob
 Saturday: Hyeyoung
 Sunday: Melissa",
             author_id: 2,
-            notebook_id: 2)
+            notebook_id: 5)
 
 Note.create(title: "Spring Semester Courses",
             body: "Modern Art Since 1945
@@ -136,6 +136,21 @@ To look into:
 Latino USA podcast",
             author_id: 2,
             notebook_id: 1)
+
+Note.create(title: "The Inheritance of Loss",
+            body: "An accident, they said,
+            and there was nobody to blame –
+            it was just fate in the way fate
+            has of providing the destitute with
+            a greater quota of accidents for
+            which nobody can be blamed.
+            \n
+            She had not estimated the imbalance
+            between the finality of good-bye and
+            the briefness of the last moment.
+            ",
+            notebook_id: 2,
+            author_id: 2)
 
 User.create(username: "kia",
             password: "kiakia")

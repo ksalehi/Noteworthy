@@ -157,12 +157,15 @@
   width: 40px;
   background: url('new_notebook.png') no-repeat;
   background-size: 85%;
+  transition: none;
 }
 
 .new-notebook-button:hover {
-  background: url('new_notebook_white.png') no-repeat;
-  background-size: 90%;
+  background: url("new_notebook_white.png") no-repeat;
+  background-size: 100%;
   transition: none;
+  top: 8px;
+  right: 12px;
 }
 
 .notebook-title-input {
