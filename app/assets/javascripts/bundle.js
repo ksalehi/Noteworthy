@@ -83,6 +83,12 @@
 	    } else {
 	      navbar = React.createElement(NavBar, { path: this.props.location.pathname, toggleShowing: this.toggleShowing });
 	    }
+	    var klass = void 0;
+	    if (this.props.location.pathname === '/') {
+	      klass = "splash-flex";
+	    } else {
+	      klass = "note-index-flex";
+	    }
 	    return React.createElement(
 	      'div',
 	      { className: 'flex-parent' },
@@ -90,7 +96,7 @@
 	      React.createElement(NotebookDrawer, { showing: this.state.showing, toggleShowing: this.toggleShowing }),
 	      React.createElement(
 	        'div',
-	        { className: 'note-index-flex' },
+	        { className: klass },
 	        this.props.children
 	      )
 	    );
