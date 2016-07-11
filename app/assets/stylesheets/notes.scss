@@ -16,6 +16,7 @@
   width: 100%;
   padding: 15px;
   height: 883px;
+  overflow-y: scroll;
 }
 
 .notes-list-header {
@@ -194,7 +195,6 @@
   padding: 10px;
   border-radius: 5px;
   background: #03b651;
-  box-shadow: inset 0px 1px 0px #21d848, 0px 5px 0px 0px #1d7324;
 }
 
 .create-notebook-button:hover {
@@ -361,31 +361,28 @@ button {
   background-color: gray;
 }
 
-.delete-note, .cancel-delete {
+.delete-note-button, .cancel-delete-button {
   padding: 10px;
   border-radius: 5px;
   display: inline-block;
   margin: 10px auto;
   text-align: center;
-  box-shadow: inset 0px 1px 0px #2ab7ec, 0px 5px 0px 0px #07526e, 0px 10px 5px #999;
   width: 40%;
 }
 
-.delete-note {
+.delete-note-button {
   background: #f13535;
-  box-shadow: inset 0px 1px 0px #ec2a57, 0px 5px 0px 0px #ae0129;
 }
 
-.cancel-delete {
+.cancel-delete-button {
   background: #03b651;
-  box-shadow: inset 0px 1px 0px #21d848, 0px 5px 0px 0px #1d7324;
 }
 
-.delete-note:hover {
+.delete-note-button:hover {
   background: #d72222;
 }
 
-.cancel-delete:hover {
+.cancel-delete-button:hover {
   background: #1a9935;
 }
 
@@ -398,7 +395,7 @@ button {
   line-height: 1.5;
 }
 
-.delete-notebook {
+.delete-notebook, .delete-note {
   display: flex;
   flex-direction: column;
 }

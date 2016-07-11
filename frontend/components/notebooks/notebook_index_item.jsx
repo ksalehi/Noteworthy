@@ -23,7 +23,7 @@ const NotebookIndexItem = React.createClass({
   openModal: function(){
     this.setState({ modalOpen: true });
   },
-  deleteCB(e){
+  openDeleteModal(e){
     e.stopPropagation();
     e.preventDefault();
     this.openModal();
@@ -50,7 +50,7 @@ const NotebookIndexItem = React.createClass({
           {title}
           <br></br>
           <span className="time-since">{timeSince(date)}</span>
-          <button onClick={this.deleteCB} className="delete-button" value="DELETE">
+          <button onClick={this.openDeleteModal} className="delete-button" value="DELETE">
             <i className="fa fa-trash" aria-hidden="true"></i>
           </button>
         </li>

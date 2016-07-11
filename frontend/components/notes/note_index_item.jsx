@@ -3,8 +3,16 @@ const NoteStore = require('../../stores/note_store');
 const NoteActions = require('../../actions/note_actions');
 const hashHistory = require('react-router').hashHistory;
 const timeSince = require('./time_since');
+const Modal = require('react-modal');
+const NoteConstants = require('../../constants/note_constants');
+const DeleteNoteModal = require('./delete_note_modal');
 
 const NoteIndexItem = React.createClass({
+  getInitialState() {
+    return {
+      modalOpen: false
+    };
+  },
   showDetail(){
     if (this.props.pathname.match('/notes/[^ ]*')) {
       hashHistory.push('/notes/' + this.props.note.id);
@@ -16,8 +24,20 @@ const NoteIndexItem = React.createClass({
     e.preventDefault();
     // alert('Are you sure you want to delete this note?');
     if (this.props.note.id) {
-      NoteActions.deleteNote(this.props.note.id, this.props.deleteCB);
+      this.openModal();
+      // NoteActions.deleteNote(this.props.note.id, this.props.deleteCB);
     }
+  },
+  closeModal: function(){
+    this.setState({ modalOpen: false });
+  },
+  openModal: function(){
+    this.setState({ modalOpen: true });
+  },
+  openDeleteModal(e){
+    e.stopPropagation();
+    e.preventDefault();
+    this.openModal();
   },
   render(){
     let klass;
@@ -36,14 +56,26 @@ const NoteIndexItem = React.createClass({
 
     const date = new Date(this.props.updatedAt);
     return (
-      <li onClick={this.showDetail} className={"notes-list-item" + klass}>
-        {title}
-        <br></br>
-        <span className="time-since">{timeSince(date)}</span>
-        <button onClick={this.deleteNote} className="delete-button" value="DELETE">
-          <i className="fa fa-trash" aria-hidden="true"></i>
-        </button>
-      </li>
+      <div>
+        <li onClick={this.showDetail} className={"notes-list-item" + klass}>
+          {title}
+          <br></br>
+          <span className="time-since">{timeSince(date)}</span>
+          <button onClick={this.openDeleteModal} className="delete-button" value="DELETE">
+            <i className="fa fa-trash" aria-hidden="true"></i>
+          </button>
+        </li>
+
+        <Modal
+          style={NoteConstants.MODAL_STYLE}
+          isOpen={this.state.modalOpen}
+          onRequestClose={this.closeModal}>
+            <DeleteNoteModal
+              note={this.props.note}
+              closeModal={this.closeModal}
+              deleteCB={this.props.deleteCB}/>
+        </Modal>
+      </div>
     );
   }
 });

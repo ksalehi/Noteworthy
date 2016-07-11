@@ -33258,9 +33258,17 @@
 	var NoteActions = __webpack_require__(254);
 	var hashHistory = __webpack_require__(168).hashHistory;
 	var timeSince = __webpack_require__(259);
+	var Modal = __webpack_require__(266);
+	var NoteConstants = __webpack_require__(253);
+	var DeleteNoteModal = __webpack_require__(314);
 	
 	var NoteIndexItem = React.createClass({
 	  displayName: 'NoteIndexItem',
+	  getInitialState: function getInitialState() {
+	    return {
+	      modalOpen: false
+	    };
+	  },
 	  showDetail: function showDetail() {
 	    if (this.props.pathname.match('/notes/[^ ]*')) {
 	      hashHistory.push('/notes/' + this.props.note.id);
@@ -33272,8 +33280,21 @@
 	    e.preventDefault();
 	    // alert('Are you sure you want to delete this note?');
 	    if (this.props.note.id) {
-	      NoteActions.deleteNote(this.props.note.id, this.props.deleteCB);
+	      this.openModal();
+	      // NoteActions.deleteNote(this.props.note.id, this.props.deleteCB);
 	    }
+	  },
+	
+	  closeModal: function closeModal() {
+	    this.setState({ modalOpen: false });
+	  },
+	  openModal: function openModal() {
+	    this.setState({ modalOpen: true });
+	  },
+	  openDeleteModal: function openDeleteModal(e) {
+	    e.stopPropagation();
+	    e.preventDefault();
+	    this.openModal();
 	  },
 	  render: function render() {
 	    var klass = void 0;
@@ -33292,19 +33313,34 @@
 	
 	    var date = new Date(this.props.updatedAt);
 	    return React.createElement(
-	      'li',
-	      { onClick: this.showDetail, className: "notes-list-item" + klass },
-	      title,
-	      React.createElement('br', null),
+	      'div',
+	      null,
 	      React.createElement(
-	        'span',
-	        { className: 'time-since' },
-	        timeSince(date)
+	        'li',
+	        { onClick: this.showDetail, className: "notes-list-item" + klass },
+	        title,
+	        React.createElement('br', null),
+	        React.createElement(
+	          'span',
+	          { className: 'time-since' },
+	          timeSince(date)
+	        ),
+	        React.createElement(
+	          'button',
+	          { onClick: this.openDeleteModal, className: 'delete-button', value: 'DELETE' },
+	          React.createElement('i', { className: 'fa fa-trash', 'aria-hidden': 'true' })
+	        )
 	      ),
 	      React.createElement(
-	        'button',
-	        { onClick: this.deleteNote, className: 'delete-button', value: 'DELETE' },
-	        React.createElement('i', { className: 'fa fa-trash', 'aria-hidden': 'true' })
+	        Modal,
+	        {
+	          style: NoteConstants.MODAL_STYLE,
+	          isOpen: this.state.modalOpen,
+	          onRequestClose: this.closeModal },
+	        React.createElement(DeleteNoteModal, {
+	          note: this.props.note,
+	          closeModal: this.closeModal,
+	          deleteCB: this.props.deleteCB })
 	      )
 	    );
 	  }
@@ -47988,7 +48024,7 @@
 	  openModal: function openModal() {
 	    this.setState({ modalOpen: true });
 	  },
-	  deleteCB: function deleteCB(e) {
+	  openDeleteModal: function openDeleteModal(e) {
 	    e.stopPropagation();
 	    e.preventDefault();
 	    this.openModal();
@@ -48024,7 +48060,7 @@
 	        ),
 	        React.createElement(
 	          'button',
-	          { onClick: this.deleteCB, className: 'delete-button', value: 'DELETE' },
+	          { onClick: this.openDeleteModal, className: 'delete-button', value: 'DELETE' },
 	          React.createElement('i', { className: 'fa fa-trash', 'aria-hidden': 'true' })
 	        )
 	      ),
@@ -48179,7 +48215,7 @@
 	    NotebookActions.deleteNotebook(this.props.notebook.id, this.props.deleteCB);
 	  },
 	  render: function render() {
-	    var text = 'Are you sure you want to delete the notebook \'' + this.props.notebook.title + '\'?';
+	    var text = 'Are you sure you want to delete \'' + this.props.notebook.title + '\'?';
 	    return React.createElement(
 	      'div',
 	      { className: 'delete-notebook' },
@@ -48190,12 +48226,12 @@
 	      ),
 	      React.createElement(
 	        'button',
-	        { onClick: this.deleteNote, className: 'delete-note' },
+	        { onClick: this.deleteNote, className: 'delete-note-button' },
 	        'Yes, delete'
 	      ),
 	      React.createElement(
 	        'button',
-	        { onClick: this.props.closeModal, className: 'cancel-delete' },
+	        { onClick: this.props.closeModal, className: 'cancel-delete-button' },
 	        'Cancel'
 	      )
 	    );
@@ -48203,6 +48239,46 @@
 	});
 	
 	module.exports = DeleteNotebookModal;
+
+/***/ },
+/* 314 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var NoteActions = __webpack_require__(254);
+	
+	var DeleteNoteModal = React.createClass({
+	  displayName: 'DeleteNoteModal',
+	  deleteNote: function deleteNote() {
+	    NoteActions.deleteNote(this.props.note.id, this.props.deleteCB);
+	  },
+	  render: function render() {
+	    var text = 'Are you sure you want to delete \'' + this.props.note.title + '\'?';
+	    return React.createElement(
+	      'div',
+	      { className: 'delete-note' },
+	      React.createElement(
+	        'span',
+	        { className: 'delete-text' },
+	        text
+	      ),
+	      React.createElement(
+	        'button',
+	        { onClick: this.deleteNote, className: 'delete-note-button' },
+	        'Yes, delete'
+	      ),
+	      React.createElement(
+	        'button',
+	        { onClick: this.props.closeModal, className: 'cancel-delete-button' },
+	        'Cancel'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = DeleteNoteModal;
 
 /***/ }
 /******/ ]);
