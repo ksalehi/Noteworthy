@@ -15,7 +15,6 @@
   background-color: white;
   width: 100%;
   padding: 15px;
-  margin: 0 10px;
   height: 883px;
 }
 
@@ -26,7 +25,7 @@
   background: #575757;
   color: white;
   text-align: center;
-  border: 1px solid black;
+  border: 1px solid gray;
   position: relative;
 }
 
@@ -89,17 +88,15 @@
 
 .notebooks-button:hover {
   background: #03b651;
+  .fa-book {
+    color: white;
+  }
 }
 
 .fa.fa-book {
   color: #03b651;
   font-size: 26px;
   padding-left: 4px;
-}
-
-.fa-book:hover {
-  color: white;
-
 }
 
 .title-input {
@@ -146,6 +143,10 @@
 
 .fa-trash:hover {
   color: white;
+  font-size: 24px;
+  right: 9.5%;
+  top: 39%;
+  transition: 0.1s;
 }
 
 .selected {
@@ -218,6 +219,9 @@
 
 .logout-button:hover {
   background-color: #03b651;
+  .fa-power-off {
+    color: white;
+  }
 }
 
 .fa.fa-power-off {
@@ -225,10 +229,6 @@
   font-size: 25px;
   text-align: center;
   padding-left: 1px;
-}
-
-.fa-power-off:hover {
-  color: white;
 }
 
 .search-box {
@@ -268,6 +268,10 @@
 
 .fa-info-circle:hover {
   color: white;
+  color: white;
+  font-size: 30px;
+  right: 12px;
+  top: 12px;
 }
 
 .new-note-button {
@@ -284,6 +288,9 @@
 
 .new-note-button:hover {
   background-color: #03b651;
+  .fa-plus {
+    color: white;
+  }
 }
 
 .fa.fa-plus {
@@ -291,10 +298,6 @@
   font-size: 26px;
   padding-left: 2px;
   padding-top: 3px;
-}
-
-.fa-plus:hover {
-  color: white;
 }
 
 button {
@@ -320,10 +323,10 @@ button {
 .show-notebooks-menu {
   position: absolute;
   z-index: 20;
-  left: 75px;
+  left: 79px;
   transition: all 0.8s ease;
+  width: 391px;
   margin: 15px;
-  width: 400px;
 }
 
 .hide-notebooks-menu {
