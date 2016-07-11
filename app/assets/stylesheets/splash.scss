@@ -2,6 +2,7 @@
   font-size: 64px;
   font-weight: 700;
   font-family: Scope One, serif;
+  display: inline;
 }
 
 .slogan {
@@ -97,4 +98,15 @@ input.login-input {
     margin: 10px auto;
     border-radius: 5px;
     width: 200px;
+}
+
+.feather-icon {
+  background: url("feather_icon.png");
+  background-size: 90%;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: -20px;
+  left: -90px;
+  transform: scaleX(-1) rotate(30deg);
 }

@@ -47547,7 +47547,8 @@
 	        React.createElement(
 	          'h1',
 	          { className: 'noteworthy' },
-	          'Noteworthy.'
+	          'Noteworthy.',
+	          React.createElement('img', { className: 'feather-icon' })
 	        ),
 	        React.createElement(
 	          'p',
