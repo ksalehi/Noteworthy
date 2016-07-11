@@ -25,7 +25,6 @@
   background: #575757;
   color: white;
   text-align: center;
-  border: 1px solid gray;
   position: relative;
 }
 
@@ -243,6 +242,7 @@
   padding: 5px;
   border-radius: 5px;
   width: 75%;
+  margin-top: 40px;
 }
 
 .flex-parent {
@@ -357,4 +357,12 @@ button {
 
 .grayed-out {
   background-color: gray;
+}
+
+.delete-note {
+
+}
+
+.cancel-delete {
+  
 }

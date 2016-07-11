@@ -33,11 +33,12 @@ const NotebookActions = {
       ErrorActions.setErrors
     );
   },
-  deleteNotebook(notebookId){
+  deleteNotebook(notebookId, deleteCB){
     NotebookApiUtil.deleteNotebook(
       notebookId,
       NotebookActions.removeNotebook,
-      ErrorActions.setErrors
+      ErrorActions.setErrors,
+      deleteCB
     );
   },
   receiveNotebooks(notebooks){

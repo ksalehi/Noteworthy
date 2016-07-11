@@ -43,9 +43,6 @@ function resetSingleNotebook(notebook) {
 
 function removeNotebook(notebook) {
   delete _notebooks[notebook.id];
-  setTimeout(()=>{
-    hashHistory.push(`/notebooks`);
-  }, 0);
 }
 
 NotebookStore.__onDispatch = function(payload) {

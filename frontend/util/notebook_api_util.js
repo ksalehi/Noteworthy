@@ -46,11 +46,16 @@ const NotebookApiUtil = {
       error: errorCB
     });
   },
-  deleteNotebook(id, successCB, errorCB){
+  deleteNotebook(id, successCB, errorCB, deleteCB){
     $.ajax({
       method: 'DELETE',
       url: `api/notebooks/${id}`,
-      success: successCB,
+      success(response) {
+        successCB(response);
+        if (deleteCB) {
+          deleteCB(response);
+        }
+      },
       error: errorCB
     });
   }

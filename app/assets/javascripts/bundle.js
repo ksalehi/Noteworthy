@@ -26150,13 +26150,9 @@
 	          { className: 'notes-list-header' },
 	          this.state.currentNotebook ? this.state.currentNotebook.title : '',
 	          React.createElement(
-	            'div',
-	            null,
-	            React.createElement(
-	              'button',
-	              { onClick: this.editNotebook },
-	              React.createElement('i', { className: 'fa fa-info-circle', 'aria-hidden': 'true' })
-	            )
+	            'button',
+	            { onClick: this.editNotebook },
+	            React.createElement('i', { className: 'fa fa-info-circle', 'aria-hidden': 'true' })
 	          ),
 	          React.createElement(NotesSearchBox, null)
 	        ),
@@ -33486,9 +33482,6 @@
 	
 	function removeNotebook(notebook) {
 	  delete _notebooks[notebook.id];
-	  setTimeout(function () {
-	    hashHistory.push('/notebooks');
-	  }, 0);
 	}
 	
 	NotebookStore.__onDispatch = function (payload) {
@@ -33548,8 +33541,8 @@
 	  editNotebook: function editNotebook(notebook) {
 	    NotebookApiUtil.updateNotebook(notebook, NotebookActions.receiveNotebook, ErrorActions.setErrors);
 	  },
-	  deleteNotebook: function deleteNotebook(notebookId) {
-	    NotebookApiUtil.deleteNotebook(notebookId, NotebookActions.removeNotebook, ErrorActions.setErrors);
+	  deleteNotebook: function deleteNotebook(notebookId, deleteCB) {
+	    NotebookApiUtil.deleteNotebook(notebookId, NotebookActions.removeNotebook, ErrorActions.setErrors, deleteCB);
 	  },
 	  receiveNotebooks: function receiveNotebooks(notebooks) {
 	    AppDispatcher.dispatch({
@@ -33630,11 +33623,17 @@
 	      error: errorCB
 	    });
 	  },
-	  deleteNotebook: function deleteNotebook(id, successCB, errorCB) {
+	  deleteNotebook: function deleteNotebook(id, successCB, errorCB, deleteCB) {
 	    $.ajax({
 	      method: 'DELETE',
 	      url: 'api/notebooks/' + id,
-	      success: successCB,
+	      success: function success(response) {
+	        successCB(response);
+	        if (deleteCB) {
+	          deleteCB(response);
+	        }
+	      },
+	
 	      error: errorCB
 	    });
 	  }
@@ -47874,6 +47873,7 @@
 	var NoteConstants = __webpack_require__(253);
 	var NewNotebookForm = __webpack_require__(311);
 	var NotebooksSearchBox = __webpack_require__(312);
+	var hashHistory = __webpack_require__(168).hashHistory;
 	
 	var NotebookDrawer = React.createClass({
 	  displayName: 'NotebookDrawer',
@@ -47896,7 +47896,6 @@
 	  newNotebook: function newNotebook(e) {
 	    e.preventDefault();
 	    this.openModal();
-	    // TODO: autofocus cursor in modal input field
 	  },
 	
 	  closeModal: function closeModal() {
@@ -47905,6 +47904,24 @@
 	  openModal: function openModal() {
 	    this.setState({ modalOpen: true });
 	  },
+	  deleteCB: function deleteCB(notebookId) {
+	    debugger;
+	    // const notebookIds = Object.keys(this.state.notebooks).map(notebookIndex => {
+	    //   return this.state.notebooks[notebookIndex].id;
+	    // });
+	    // const nextNotebookIdx = notebookIds.indexOf(notebookId) + 1;
+	    // const nextNotebookIdx2 = notebookIds.indexOf(notebookId) -1;
+	    // const nextNotebookId = (nextNotebookIdx2 < 0) ? notebookIds[nextNotebookIdx] : notebookIds[nextNotebookIdx2];
+	    //
+	    // if (nextNotebookId) {
+	    //   hashHistory.push('/notebooks/' + nextNotebookId);
+	    // } else {
+	    //   hashHistory.push('/notes');
+	    // }
+	    hashHistory.push('/notes');
+	    debugger;
+	  },
+	
 	  render: function render() {
 	    var _this = this;
 	
@@ -47933,7 +47950,8 @@
 	            key: notebook.id,
 	            notebook: notebook,
 	            updatedAt: notebook.updated_at,
-	            toggleShowing: _this.props.toggleShowing
+	            toggleShowing: _this.props.toggleShowing,
+	            deleteCB: _this.deleteCB
 	          });
 	        })
 	      ),
@@ -47965,9 +47983,17 @@
 	var hashHistory = __webpack_require__(168).hashHistory;
 	var timeSince = __webpack_require__(259);
 	var Modal = __webpack_require__(266);
+	var NoteConstants = __webpack_require__(253);
+	var DeleteNotebookModal = __webpack_require__(313);
 	
 	var NotebookIndexItem = React.createClass({
 	  displayName: 'NotebookIndexItem',
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      modalOpen: false
+	    };
+	  },
 	  redirectToNoteIndex: function redirectToNoteIndex() {
 	    hashHistory.push('/notebooks/' + this.props.notebook.id);
 	    this.props.toggleShowing();
@@ -47979,7 +48005,7 @@
 	  openModal: function openModal() {
 	    this.setState({ modalOpen: true });
 	  },
-	  deleteNotebook: function deleteNotebook(e) {
+	  deleteCB: function deleteCB(e) {
 	    e.stopPropagation();
 	    e.preventDefault();
 	    this.openModal();
@@ -48013,9 +48039,23 @@
 	          { className: 'time-since' },
 	          timeSince(date)
 	        ),
-	        React.createElement('button', { onClick: this.deleteNotebook, className: 'delete-button', value: 'DELETE' })
+	        React.createElement(
+	          'button',
+	          { onClick: this.deleteCB, className: 'delete-button', value: 'DELETE' },
+	          React.createElement('i', { className: 'fa fa-trash', 'aria-hidden': 'true' })
+	        )
 	      ),
-	      React.createElement(Modal, null)
+	      React.createElement(
+	        Modal,
+	        {
+	          style: NoteConstants.MODAL_STYLE,
+	          isOpen: this.state.modalOpen,
+	          onRequestClose: this.closeModal },
+	        React.createElement(DeleteNotebookModal, {
+	          notebook: this.props.notebook,
+	          deleteCB: this.props.deleteCB,
+	          closeModal: this.closeModal })
+	      )
 	    );
 	  }
 	});
@@ -48140,6 +48180,43 @@
 	});
 	
 	module.exports = NotebooksSearchBox;
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var NotebookActions = __webpack_require__(264);
+	
+	var DeleteNotebookModal = React.createClass({
+	  displayName: 'DeleteNotebookModal',
+	  deleteNote: function deleteNote() {
+	    NotebookActions.deleteNotebook(this.props.notebook.id, this.props.deleteCB);
+	  },
+	  render: function render() {
+	    var text = 'Are you sure you want to delete the notebook \'' + this.props.notebook.title + '\'?';
+	    return React.createElement(
+	      'div',
+	      null,
+	      text,
+	      React.createElement('br', null),
+	      React.createElement(
+	        'button',
+	        { onClick: this.deleteNote, className: 'delete-note' },
+	        'Yes, delete'
+	      ),
+	      React.createElement(
+	        'button',
+	        { onClick: this.props.closeModal, className: 'cancel-delete' },
+	        'Cancel'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = DeleteNotebookModal;
 
 /***/ }
 /******/ ]);

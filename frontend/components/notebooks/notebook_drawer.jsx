@@ -6,6 +6,7 @@ const Modal = require('react-modal');
 const NoteConstants = require('../../constants/note_constants');
 const NewNotebookForm = require('./new_notebook_form');
 const NotebooksSearchBox = require('./notebooks_search_box');
+const hashHistory = require('react-router').hashHistory;
 
 const NotebookDrawer = React.createClass({
   getInitialState() {
@@ -27,13 +28,29 @@ const NotebookDrawer = React.createClass({
   newNotebook(e) {
     e.preventDefault();
     this.openModal();
-    // TODO: autofocus cursor in modal input field
   },
   closeModal: function(){
     this.setState({ modalOpen: false });
   },
   openModal: function(){
     this.setState({ modalOpen: true });
+  },
+  deleteCB(notebookId){
+    debugger;
+    // const notebookIds = Object.keys(this.state.notebooks).map(notebookIndex => {
+    //   return this.state.notebooks[notebookIndex].id;
+    // });
+    // const nextNotebookIdx = notebookIds.indexOf(notebookId) + 1;
+    // const nextNotebookIdx2 = notebookIds.indexOf(notebookId) -1;
+    // const nextNotebookId = (nextNotebookIdx2 < 0) ? notebookIds[nextNotebookIdx] : notebookIds[nextNotebookIdx2];
+    //
+    // if (nextNotebookId) {
+    //   hashHistory.push('/notebooks/' + nextNotebookId);
+    // } else {
+    //   hashHistory.push('/notes');
+    // }
+    hashHistory.push('/notes' );
+    debugger;
   },
   render: function() {
     const notebooks = this.state.notebooks;
@@ -56,6 +73,7 @@ const NotebookDrawer = React.createClass({
                 notebook={notebook}
                 updatedAt={notebook.updated_at}
                 toggleShowing={this.props.toggleShowing}
+                deleteCB={this.deleteCB}
                 />);
               })
             }

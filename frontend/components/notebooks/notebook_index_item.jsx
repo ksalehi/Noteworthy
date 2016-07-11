@@ -4,8 +4,15 @@ const NotebookActions = require('../../actions/notebook_actions');
 const hashHistory = require('react-router').hashHistory;
 const timeSince = require('../notes/time_since');
 const Modal = require('react-modal');
+const NoteConstants = require('../../constants/note_constants');
+const DeleteNotebookModal = require('./delete_notebook_modal');
 
 const NotebookIndexItem = React.createClass({
+  getInitialState: function() {
+    return {
+      modalOpen: false
+    };
+  },
   redirectToNoteIndex(){
     hashHistory.push('/notebooks/' + this.props.notebook.id);
     this.props.toggleShowing();
@@ -16,7 +23,7 @@ const NotebookIndexItem = React.createClass({
   openModal: function(){
     this.setState({ modalOpen: true });
   },
-  deleteNotebook(e){
+  deleteCB(e){
     e.stopPropagation();
     e.preventDefault();
     this.openModal();
@@ -43,11 +50,19 @@ const NotebookIndexItem = React.createClass({
           {title}
           <br></br>
           <span className="time-since">{timeSince(date)}</span>
-          <button onClick={this.deleteNotebook} className="delete-button" value="DELETE"></button>
+          <button onClick={this.deleteCB} className="delete-button" value="DELETE">
+            <i className="fa fa-trash" aria-hidden="true"></i>
+          </button>
         </li>
 
-        <Modal>
-
+        <Modal
+          style={NoteConstants.MODAL_STYLE}
+          isOpen={this.state.modalOpen}
+          onRequestClose={this.closeModal}>
+          <DeleteNotebookModal
+            notebook={this.props.notebook}
+            deleteCB={this.props.deleteCB}
+            closeModal={this.closeModal} />
         </Modal>
       </div>
     );

@@ -118,11 +118,9 @@ const NoteIndex = React.createClass({
       <div className="note-index-parent">
         <ul className="notes-list">
           <h2 className="notes-list-header">{this.state.currentNotebook ? this.state.currentNotebook.title : ''}
-            <div>
-              <button onClick={this.editNotebook}>
-                <i className="fa fa-info-circle" aria-hidden="true"></i>
-              </button>
-            </div>
+            <button onClick={this.editNotebook}>
+              <i className="fa fa-info-circle" aria-hidden="true"></i>
+            </button>
             <NotesSearchBox />
           </h2>
             {
