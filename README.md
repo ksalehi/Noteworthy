@@ -58,9 +58,9 @@ Notes are saved automatically every 5 seconds and when the user navigates away f
 autoSave() {
   const noteData = {
     title: this.state.title,
-    body: this.state.body
+    body: this.state.body,
+    id: this.state.noteId
   };
-  noteData['id'] = this.state.noteId;
   NoteActions.editNote(noteData);
   this.setState({saved: 'All changes saved'});
 }
@@ -85,15 +85,14 @@ Additional features to expect soon:
 
 ### Libraries
 
-Quill.js
-jBuilder
-Webpack
-PostgreSQL
-jQuery
-React Router
-BCrypt
+* Quill.js
+* jBuilder
+* Webpack
+* PostgreSQL
+* jQuery
+* React Router
+* BCrypt
 
-
-* [Original documentation][readme]
+[Original documentation][readme]
 
 [readme]: ./docs/development_readme.md
