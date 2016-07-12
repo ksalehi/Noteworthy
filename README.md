@@ -1,143 +1,73 @@
 # Noteworthy
 
-[Heroku][heroku]
+[Noteworthy][live-link]
 
-[heroku]: https://noteworthyapp.herokuapp.com
+[live-link]: https://noteworthyapp.herokuapp.com
 
-## Minimum Viable Product
+Noteworthy is a web application for writing and storing notes. It is inspired by Evernote and employs Ruby on Rails, a PostgreSQL database, and React.js with a Flux architecture.
 
-Noteworthy is a web application for note management and storage modeled after Evernote. It will be built using Ruby on Rails and React.js.  By the end of Week 9, this app will, at a minimum, meet the following specifications:
+## Splash page
+![splash]
 
-- [X] Hosting on Heroku
-- [X] New account creation, login, and guest/demo login
-- [ ] A production README, replacing this README
-- [ ] Notes
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
-- [ ] Notebooks for organizing notes
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
-- [ ] Tags for notes
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
-- [ ] Rich Text Editing of notes
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
+## Notes
+![notes]
 
-## Design Docs
-* [View Wireframes][views]
-* [React Components][components]
-* [Flux Cycles][flux-cycles]
-* [API endpoints][api-endpoints]
-* [DB schema][schema]
+## New notebook modal
+![notebooks]
 
-[views]: docs/views.md
-[components]: docs/components.md
-[flux-cycles]: docs/flux-cycles.md
-[api-endpoints]: docs/api-endpoints.md
-[schema]: docs/schema.md
+[splash]: ./screenshots/splash.png
+[notes]: ./screenshots/home.png
+[notebooks]: ./screenshots/new_notebook.png
 
-## Implementation Timeline
+## Features
 
-### Phase 1: Back-end setup and front-end user authentication (1 day, due W1 Tu 6pm)
+### Single-page functionality
 
-**Objective:** Basic rails project with authentication
+Noteworthy employs the React Router to create a fluid experience on a single page. All content is rendered to the root page by the static pages controller, and changes to the React Router's hash history determine what content -- in the form of React components -- is rendered at any given time.
 
-- [X] create new project
-- [X] create `User` model
-- [X] roll authentication
-- [X] create user signup/login pages
-- [X] create blank landing page after login
+```
+<Route path="/" component={App}>
+  <IndexRoute component={SplashPage} onEnter={_requireAnonymous}/>
+  <Route path="notes" component={NoteIndex} onEnter={_ensureLoggedIn}>
+    <IndexRoute component={NoteForm}/>
+    <Route path=":noteId" component={NoteForm} />
+  </Route>
+  <Route path="notebooks" component={NotebookIndex} onEnter={_ensureLoggedIn}>
+    <Route path=":notebookId" component={NoteIndex}>
+      <Route path=":noteId" component={NoteForm} />
+    </Route>
+  </Route>
+</Route>
+```
 
-### Phase 2: Note model, API, basic APIUtil (1.5 days, due W1 Th 12pm)
+In addition, the notebooks index is a dynamic drawer that gives the user access to notebooks from the landing page without changing the URL.
 
-**Objective:** Notes can be created, read, updated and destroyed through
-the API.
+### Quill.js
 
-- [X] create `Note` model
-- [X] seed database
-- [X] create jBuilder views for notes
-- [X] setup Webpack & Flux scaffold
-- [X] setup `APIUtil` to interact with the API
-- [X] test out API in console
+Noteworthy makes use of the node package Quill.js to provide rich-text editing.
 
-### Phase 3: Flux architecture and router (1.5 days, due W1 F 6pm)
+![quill]
 
-**Objective:** Notes can be created, read, updated and destroyed through the
-UI.
+[quill]: ./screenshots/quill.png
 
-- [X] set up flux loop with skeleton files
-- [X] setup React Router
-- implement each note component, building out the flux loop as needed:
-  - [X] `NotesIndex`
-  - [X] `NoteIndexItem`
-  - [X] `NoteForm`
-- [X] highlight the NoteIndexItem of the note currently being edited
-after editing
-- [X] clean up any remaining login/signup errors / routes
+Front-end user authentication
 
-### Phase 4: Start styling (0.5 days, due W2 M 12pm)
+Flux loop
+Autosave
+Tags
+Search
 
-**Objective:** Existing pages look polished.
+Libraries
 
-- [X] create basic style guide
-- [X] position elements on the page
-- [X] add basic colors & styles
-- [X] notes display how long ago they were created
-- [X] save notes to the DB when the form loses focus or is left idle
-
-### Phase 5: Notebooks (1 day, due W2 Tu 12pm)
-
-**Objective:** Notes belong to notebooks, and can be viewed by notebook.
-
-- [X] create `Notebook` model
-- build out API, Flux loop, and components for:
-  - [X] Notebook CRUD
-  - [X] adding notes requires a notebook
-  - [X] viewing notes by notebook
-- [X] Style new views
-
-### Phase 6: Tags (1 day, due W2 Th 6pm)
-
-**Objective:** Notes can be tagged, and tags are searchable.
-
-- [X] create `Tag` model and join table
-- build out API, Flux loop, and components for:
-  - [X] fetching tags for note
-  - [X] adding tags to note
-  - [X] creating tags while adding to note
-  - [X] searching notes by tag
-- [X] Style new elements
-
-### Phase 7: Add styling capabilities (0.5 days, due W2 F 12pm)
-
-**objective:** Enable complex styling of notes.
-
-- [X] Integrate `react-quill` (based on Quill.js).
-- [X] Style new Quill elements.
-
-### Phase 8: Styling cleanup and seeding (0.5 days, due W2 F 6pm)
-
-**objective:** Make the site more polished.
-
-- [X] Get feedback on UI from others
-- [X] Refactor HTML classes & CSS rules
-- [X] Add modals, transitions, and other styling flourishes.
-
-### Bonus Features (TBD)
-- [ ] Search through notes for blocks of text
-- [ ] Pagination / infinite scroll for Notes Index
-- [ ] Set reminders on notes
-- [ ] Changelogs for notes
-- [ ] Multiple sessions
-- [ ] moving notes to a different notebook
+Quill.js
+jBuilder
+Webpack
+PostgreSQL
+jQuery
+React Router
+BCrypt
 
 
-[phase-one]: docs/phases/phase1.md
-[phase-two]: docs/phases/phase2.md
-[phase-three]: docs/phases/phase3.md
-[phase-four]: docs/phases/phase4.md
+* [Original documentation][readme]
+
+[readme]: docs/development_readme.md

@@ -103,10 +103,17 @@
   font-family: Scope One, serif;
   font-size: 32px;
   color: #03b651;
-  display: block;
+  display: inline;
   padding: 10px 10px;
   margin: 5px auto;
-  width: 96%;
+  width: 75%;
+}
+
+.saved-changes {
+  float: right;
+  color: gray;
+  padding: 15px;
+  display: inline-block;
 }
 
 .body-input {

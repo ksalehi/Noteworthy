@@ -35769,7 +35769,7 @@
 	      body: "",
 	      tags: [],
 	      newTag: "",
-	      saved: 'saved'
+	      saved: 'All changes saved'
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
@@ -35833,30 +35833,29 @@
 	  changeTitle: function changeTitle(e) {
 	    this.setState({
 	      title: e.target.value,
-	      saved: 'unsaved'
+	      saved: 'Unsaved changes'
 	    });
 	  },
 	  changeBody: function changeBody(e) {
 	    this.setState({
 	      body: e,
-	      saved: 'unsaved'
+	      saved: 'Unsaved changes'
 	    });
 	  },
 	  autoSave: function autoSave() {
 	    var noteData = {
 	      title: this.state.title,
-	      body: this.state.body
+	      body: this.state.body,
+	      id: this.state.noteId
 	    };
-	    noteData['id'] = this.state.noteId;
 	    NoteActions.editNote(noteData);
-	    this.setState({ saved: 'saved' });
+	    this.setState({ saved: 'All changes saved' });
 	  },
 	  updateTagField: function updateTagField(e) {
 	    this.setState({ newTag: e.target.value });
 	  },
 	  createTag: function createTag(e) {
 	    e.preventDefault();
-	
 	    this.autoSave();
 	    var TagData = {
 	      tag: this.state.newTag,
@@ -35875,6 +35874,11 @@
 	        React.createElement(
 	          'form',
 	          { className: 'new-note-form', onSubmit: this.createTag },
+	          React.createElement(
+	            'div',
+	            { className: 'saved-changes' },
+	            this.state.saved
+	          ),
 	          React.createElement('input', { type: 'text',
 	            ref: 'titleInput',
 	            value: this.state.title,

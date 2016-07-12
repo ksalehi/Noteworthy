@@ -15,7 +15,7 @@ const NoteForm = React.createClass({
       body: "",
       tags: [],
       newTag: "",
-      saved: 'saved'
+      saved: 'All changes saved'
     };
   },
   componentDidMount() {
@@ -45,7 +45,7 @@ const NoteForm = React.createClass({
         noteId: note.id,
         title: note.title,
         body: note.body,
-        tags: note.tags,
+        tags: note.tags
       });
     }
   },
@@ -75,44 +75,45 @@ const NoteForm = React.createClass({
   changeTitle(e) {
     this.setState({
       title: e.target.value,
-      saved: 'unsaved'
+      saved: 'Unsaved changes'
     });
   },
   changeBody(e) {
     this.setState({
       body: e,
-      saved: 'unsaved'
+      saved: 'Unsaved changes'
     });
   },
   autoSave() {
     const noteData = {
       title: this.state.title,
-      body: this.state.body
+      body: this.state.body,
+      id: this.state.noteId
     };
-    noteData['id'] = this.state.noteId;
     NoteActions.editNote(noteData);
-    this.setState({saved: 'saved'});
+    this.setState({saved: 'All changes saved'});
   },
   updateTagField(e){
     this.setState({newTag: e.target.value});
   },
   createTag(e){
     e.preventDefault();
-
-      this.autoSave();
-      const TagData = {
-        tag: this.state.newTag,
-        noteId: this.state.noteId
-      };
-      TagActions.createTag(TagData);
-      this.setState({newTag: ""});
-
+    this.autoSave();
+    const TagData = {
+      tag: this.state.newTag,
+      noteId: this.state.noteId
+    };
+    TagActions.createTag(TagData);
+    this.setState({newTag: ""});
   },
   render(){
     return (
       <div>
         <div>
           <form className="new-note-form" onSubmit={this.createTag}>
+            <div className="saved-changes">
+              {this.state.saved}
+            </div>
             <input type="text"
                    ref="titleInput"
                    value={this.state.title}
