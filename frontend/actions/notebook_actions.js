@@ -7,22 +7,19 @@ const NotebookActions = {
   fetchNotebooks(data={}){
     NotebookApiUtil.fetchNotebooks(
       NotebookActions.receiveNotebooks,
-      ErrorActions.setErrors,
       data
     );
   },
   getNotebook(notebookId){
     NotebookApiUtil.getNotebook(
       notebookId,
-      NotebookActions.receiveNotebook,
-      ErrorActions.setErrors
+      NotebookActions.receiveNotebook
     );
   },
   createNotebook(notebook, callback){
     NotebookApiUtil.createNotebook(
       notebook,
       NotebookActions.receiveNotebook,
-      ErrorActions.setErrors,
       callback
     );
   },
@@ -37,7 +34,6 @@ const NotebookActions = {
     NotebookApiUtil.deleteNotebook(
       notebookId,
       NotebookActions.removeNotebook,
-      ErrorActions.setErrors,
       deleteCB
     );
   },

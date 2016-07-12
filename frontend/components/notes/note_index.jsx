@@ -16,8 +16,8 @@ const NoteIndex = React.createClass({
   getInitialState() {
     return {
       notes: [],
-      notebooks: [],
-      currentNotebook: null
+      currentNotebook: null,
+      modalOpen: false
      };
   },
   componentDidMount() {
@@ -28,7 +28,6 @@ const NoteIndex = React.createClass({
         const notebookData = {notebookId: this.props.params.notebookId};
         NoteActions.fetchNotes(notebookData);
       }
-      NotebookActions.fetchNotebooks();
       this.noteListener = NoteStore.addListener(this._onNoteChange);
       this.notebookListener = NotebookStore.addListener(this._onNotebookChange);
     }
@@ -41,7 +40,6 @@ const NoteIndex = React.createClass({
         const notebookData = {notebookId: nextProps.params.notebookId};
         NoteActions.fetchNotes(notebookData);
       }
-      NotebookActions.fetchNotebooks();
     }
   },
   componentWillUnmount() {
@@ -67,10 +65,7 @@ const NoteIndex = React.createClass({
       this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
     }
 
-    this.setState({
-      notebooks: NotebookStore.all(),
-      currentNotebook: this.currentNotebook
-    });
+    this.setState({ currentNotebook: this.currentNotebook });
   },
   editNotebook(e) {
     e.preventDefault();
@@ -97,20 +92,10 @@ const NoteIndex = React.createClass({
         hashHistory.push('/notebooks/' + this.props.params.notebookId + '/' + nextNoteId);
       }
     }
-
-    if (this.props.location.pathname.match('/notes/[^ ]*')) {
-      this.currentNotebook = NotebookStore.defaultNotebook();
-    } else {
-      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
-    }
   },
   render(){
     const notes = this.state.notes;
     const path = this.props.location.pathname;
-    let currentNotebookId = -1;
-    if (this.currentNotebook) {
-      currentNotebookId = this.currentNotebook.id;
-    }
     return (
       <div className="note-index-parent">
         <ul className="notes-list">
@@ -135,7 +120,7 @@ const NoteIndex = React.createClass({
                   updatedAt={note.updated_at}
                   pathname={this.props.location.pathname}
                   selected={ selected }
-                  notebookId={currentNotebookId}
+                  notebookId={this.state.currentNotebook.id}
                   deleteCB={this.deleteCB}
                   />);
                 })

@@ -1,26 +1,20 @@
 const NotebookApiUtil = {
-  fetchNotebooks(successCB, errorCB, notebookData={}) {
+  fetchNotebooks(successCB, notebookData={}) {
     $.ajax({
       method: 'GET',
       url: 'api/notebooks',
       data: notebookData,
-      success(data) {
-        successCB(data);
-      },
-      error(data) {
-        errorCB(data);
-      }
+      success: successCB
     });
   },
-  getNotebook(id, successCB, errorCB) {
+  getNotebook(id, successCB) {
     $.ajax({
       method: 'GET',
       url: `api/notebooks/${id}`,
-      success: successCB,
-      error: errorCB
+      success: successCB
     });
   },
-  createNotebook(notebookData, successCB, errorCB, optionalCB){
+  createNotebook(notebookData, successCB, optionalCB){
     $.ajax({
       method: 'POST',
       url: 'api/notebooks',
@@ -30,11 +24,10 @@ const NotebookApiUtil = {
          if (optionalCB) {
            optionalCB(data);
          }
-      },
-      error: errorCB
+      }
     });
   },
-  updateNotebook(notebookData, successCB, errorCB){
+  updateNotebook(notebookData, successCB){
     $.ajax({
       method: 'PATCH',
       url: `api/notebooks/${notebookData.id}`,
@@ -42,11 +35,10 @@ const NotebookApiUtil = {
         title: notebookData.title,
         body: notebookData.body
       }},
-      success: successCB,
-      error: errorCB
+      success: successCB
     });
   },
-  deleteNotebook(id, successCB, errorCB, deleteCB){
+  deleteNotebook(id, successCB, deleteCB){
     $.ajax({
       method: 'DELETE',
       url: `api/notebooks/${id}`,
@@ -55,8 +47,7 @@ const NotebookApiUtil = {
         if (deleteCB) {
           deleteCB(response);
         }
-      },
-      error: errorCB
+      }
     });
   }
 };

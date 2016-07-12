@@ -17,8 +17,6 @@ const Modal = require('react-modal');
 const NavBar = require('./components/nav_bar');
 const NotebookDrawer = require('./components/notebooks/notebook_drawer');
 
-window.hh = hashHistory;
-
 const App = React.createClass({
   getInitialState: function() {
     return {

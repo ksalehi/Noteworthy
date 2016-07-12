@@ -26,7 +26,7 @@ const NoteForm = React.createClass({
   componentWillReceiveProps(newProps){
     if (this.state.noteId) {
       if (NoteStore.noteIds().includes(this.state.noteId)) {
-        // TODO: this doesn't keep from autosaving deleted ntoe
+        // TODO: this doesn't keep from autosaving deleted note
         this.autoSave();
       }
     }
@@ -139,7 +139,7 @@ const NoteForm = React.createClass({
                    theme="snow"
                    value={this.state.body}
                    onChange={this.changeBody}
-                   placeholder="Drag files here or just start typing..."
+                   placeholder="Type your note here..."
                    className="body-input"/>
           </form>
         </div>

@@ -25,6 +25,7 @@ NotebookStore.find = function(id) {
 };
 
 NotebookStore.defaultNotebook = function() {
+  NotebookStore.all();
   return _defaultNotebook;
 };
 
@@ -34,7 +35,6 @@ function resetNotebooks(notebooks) {
     let notebook = notebooks[i];
     _notebooks[notebook.id] = notebook;
   }
-  NotebookStore.all();
 }
 
 function resetSingleNotebook(notebook) {

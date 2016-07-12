@@ -63,8 +63,6 @@
 	var NavBar = __webpack_require__(308);
 	var NotebookDrawer = __webpack_require__(309);
 	
-	window.hh = hashHistory;
-	
 	var App = React.createClass({
 	  displayName: 'App',
 	
@@ -26043,8 +26041,8 @@
 	  getInitialState: function getInitialState() {
 	    return {
 	      notes: [],
-	      notebooks: [],
-	      currentNotebook: null
+	      currentNotebook: null,
+	      modalOpen: false
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
@@ -26055,7 +26053,6 @@
 	        var notebookData = { notebookId: this.props.params.notebookId };
 	        NoteActions.fetchNotes(notebookData);
 	      }
-	      NotebookActions.fetchNotebooks();
 	      this.noteListener = NoteStore.addListener(this._onNoteChange);
 	      this.notebookListener = NotebookStore.addListener(this._onNotebookChange);
 	    }
@@ -26068,7 +26065,6 @@
 	        var notebookData = { notebookId: nextProps.params.notebookId };
 	        NoteActions.fetchNotes(notebookData);
 	      }
-	      NotebookActions.fetchNotebooks();
 	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
@@ -26095,10 +26091,7 @@
 	      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
 	    }
 	
-	    this.setState({
-	      notebooks: NotebookStore.all(),
-	      currentNotebook: this.currentNotebook
-	    });
+	    this.setState({ currentNotebook: this.currentNotebook });
 	  },
 	  editNotebook: function editNotebook(e) {
 	    e.preventDefault();
@@ -26128,22 +26121,12 @@
 	        hashHistory.push('/notebooks/' + this.props.params.notebookId + '/' + nextNoteId);
 	      }
 	    }
-	
-	    if (this.props.location.pathname.match('/notes/[^ ]*')) {
-	      this.currentNotebook = NotebookStore.defaultNotebook();
-	    } else {
-	      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
-	    }
 	  },
 	  render: function render() {
 	    var _this2 = this;
 	
 	    var notes = this.state.notes;
 	    var path = this.props.location.pathname;
-	    var currentNotebookId = -1;
-	    if (this.currentNotebook) {
-	      currentNotebookId = this.currentNotebook.id;
-	    }
 	    return React.createElement(
 	      'div',
 	      { className: 'note-index-parent' },
@@ -26175,7 +26158,7 @@
 	            updatedAt: note.updated_at,
 	            pathname: _this2.props.location.pathname,
 	            selected: selected,
-	            notebookId: currentNotebookId,
+	            notebookId: _this2.state.currentNotebook.id,
 	            deleteCB: _this2.deleteCB
 	          });
 	        })
@@ -33280,7 +33263,7 @@
 	  showDetail: function showDetail() {
 	    if (this.props.pathname.match('/notes/[^ ]*')) {
 	      hashHistory.push('/notes/' + this.props.note.id);
-	    } else if (this.props.notebookId !== -1) {
+	    } else if (!this.props.notebookId) {
 	      hashHistory.push('/notebooks/' + this.props.notebookId + '/' + this.props.note.id);
 	    }
 	  },
@@ -33505,6 +33488,7 @@
 	};
 	
 	NotebookStore.defaultNotebook = function () {
+	  NotebookStore.all();
 	  return _defaultNotebook;
 	};
 	
@@ -33514,7 +33498,6 @@
 	    var notebook = notebooks[i];
 	    _notebooks[notebook.id] = notebook;
 	  }
-	  NotebookStore.all();
 	}
 	
 	function resetSingleNotebook(notebook) {
@@ -33571,19 +33554,19 @@
 	  fetchNotebooks: function fetchNotebooks() {
 	    var data = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
-	    NotebookApiUtil.fetchNotebooks(NotebookActions.receiveNotebooks, ErrorActions.setErrors, data);
+	    NotebookApiUtil.fetchNotebooks(NotebookActions.receiveNotebooks, data);
 	  },
 	  getNotebook: function getNotebook(notebookId) {
-	    NotebookApiUtil.getNotebook(notebookId, NotebookActions.receiveNotebook, ErrorActions.setErrors);
+	    NotebookApiUtil.getNotebook(notebookId, NotebookActions.receiveNotebook);
 	  },
 	  createNotebook: function createNotebook(notebook, callback) {
-	    NotebookApiUtil.createNotebook(notebook, NotebookActions.receiveNotebook, ErrorActions.setErrors, callback);
+	    NotebookApiUtil.createNotebook(notebook, NotebookActions.receiveNotebook, callback);
 	  },
 	  editNotebook: function editNotebook(notebook) {
 	    NotebookApiUtil.updateNotebook(notebook, NotebookActions.receiveNotebook, ErrorActions.setErrors);
 	  },
 	  deleteNotebook: function deleteNotebook(notebookId, deleteCB) {
-	    NotebookApiUtil.deleteNotebook(notebookId, NotebookActions.removeNotebook, ErrorActions.setErrors, deleteCB);
+	    NotebookApiUtil.deleteNotebook(notebookId, NotebookActions.removeNotebook, deleteCB);
 	  },
 	  receiveNotebooks: function receiveNotebooks(notebooks) {
 	    AppDispatcher.dispatch({
@@ -33614,30 +33597,24 @@
 	'use strict';
 	
 	var NotebookApiUtil = {
-	  fetchNotebooks: function fetchNotebooks(successCB, errorCB) {
-	    var notebookData = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	  fetchNotebooks: function fetchNotebooks(successCB) {
+	    var notebookData = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 	
 	    $.ajax({
 	      method: 'GET',
 	      url: 'api/notebooks',
 	      data: notebookData,
-	      success: function success(data) {
-	        successCB(data);
-	      },
-	      error: function error(data) {
-	        errorCB(data);
-	      }
+	      success: successCB
 	    });
 	  },
-	  getNotebook: function getNotebook(id, successCB, errorCB) {
+	  getNotebook: function getNotebook(id, successCB) {
 	    $.ajax({
 	      method: 'GET',
 	      url: 'api/notebooks/' + id,
-	      success: successCB,
-	      error: errorCB
+	      success: successCB
 	    });
 	  },
-	  createNotebook: function createNotebook(notebookData, successCB, errorCB, optionalCB) {
+	  createNotebook: function createNotebook(notebookData, successCB, optionalCB) {
 	    $.ajax({
 	      method: 'POST',
 	      url: 'api/notebooks',
@@ -33647,12 +33624,10 @@
 	        if (optionalCB) {
 	          optionalCB(data);
 	        }
-	      },
-	
-	      error: errorCB
+	      }
 	    });
 	  },
-	  updateNotebook: function updateNotebook(notebookData, successCB, errorCB) {
+	  updateNotebook: function updateNotebook(notebookData, successCB) {
 	    $.ajax({
 	      method: 'PATCH',
 	      url: 'api/notebooks/' + notebookData.id,
@@ -33660,11 +33635,10 @@
 	          title: notebookData.title,
 	          body: notebookData.body
 	        } },
-	      success: successCB,
-	      error: errorCB
+	      success: successCB
 	    });
 	  },
-	  deleteNotebook: function deleteNotebook(id, successCB, errorCB, deleteCB) {
+	  deleteNotebook: function deleteNotebook(id, successCB, deleteCB) {
 	    $.ajax({
 	      method: 'DELETE',
 	      url: 'api/notebooks/' + id,
@@ -33673,9 +33647,7 @@
 	        if (deleteCB) {
 	          deleteCB(response);
 	        }
-	      },
-	
-	      error: errorCB
+	      }
 	    });
 	  }
 	};
@@ -35782,7 +35754,7 @@
 	
 	    if (this.state.noteId) {
 	      if (NoteStore.noteIds().includes(this.state.noteId)) {
-	        // TODO: this doesn't keep from autosaving deleted ntoe
+	        // TODO: this doesn't keep from autosaving deleted note
 	        this.autoSave();
 	      }
 	    }
@@ -35913,7 +35885,7 @@
 	            theme: 'snow',
 	            value: this.state.body,
 	            onChange: this.changeBody,
-	            placeholder: 'Drag files here or just start typing...',
+	            placeholder: 'Type your note here...',
 	            className: 'body-input' })
 	        )
 	      )
