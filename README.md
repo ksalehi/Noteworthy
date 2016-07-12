@@ -15,9 +15,9 @@ Noteworthy is a web application for writing and storing notes. It is inspired by
 ## New notebook modal
 ![notebooks]
 
-[splash]: ./screenshots/splash.png
-[notes]: ./screenshots/home.png
-[notebooks]: ./screenshots/new_notebook.png
+[splash]: ./docs/screenshots/splash.png
+[notes]: ./docs/screenshots/home.png
+[notebooks]: ./docs/screenshots/new_notebook.png
 
 ## Features
 
@@ -48,7 +48,7 @@ Noteworthy makes use of the node package Quill.js to provide rich-text editing.
 
 ![quill]
 
-[quill]: ./screenshots/quill.png
+[quill]: ./docs/screenshots/quill.png
 
 ### Autosave
 
@@ -96,4 +96,4 @@ BCrypt
 
 * [Original documentation][readme]
 
-[readme]: docs/development_readme.md
+[readme]: ./docs/development_readme.md
