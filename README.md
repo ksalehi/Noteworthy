@@ -105,29 +105,28 @@ after editing
 
 **Objective:** Notes can be tagged, and tags are searchable.
 
-- [ ] create `Tag` model and join table
+- [X] create `Tag` model and join table
 - build out API, Flux loop, and components for:
-  - [ ] fetching tags for notebook
-  - [ ] adding tags to notebook
-  - [ ] creating tags while adding to notebooks
-  - [ ] searching notebooks by tag
-- [ ] Style new elements
+  - [X] fetching tags for note
+  - [X] adding tags to note
+  - [X] creating tags while adding to note
+  - [X] searching notes by tag
+- [X] Style new elements
 
 ### Phase 7: Add styling capabilities (0.5 days, due W2 F 12pm)
 
 **objective:** Enable complex styling of notes.
 
-- [ ] Integrate `react-quill` (based on Quill.js).
-- [ ] Use Rails helpers to sanitize HTML before rendering.
-- [ ] Style new Quill elements.
+- [X] Integrate `react-quill` (based on Quill.js).
+- [X] Style new Quill elements.
 
 ### Phase 8: Styling cleanup and seeding (0.5 days, due W2 F 6pm)
 
 **objective:** Make the site more polished.
 
-- [ ] Get feedback on UI from others
-- [ ] Refactor HTML classes & CSS rules
-- [ ] Add modals, transitions, and other styling flourishes.
+- [X] Get feedback on UI from others
+- [X] Refactor HTML classes & CSS rules
+- [X] Add modals, transitions, and other styling flourishes.
 
 ### Bonus Features (TBD)
 - [ ] Search through notes for blocks of text
