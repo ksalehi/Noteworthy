@@ -33263,7 +33263,7 @@
 	  showDetail: function showDetail() {
 	    if (this.props.pathname.match('/notes/[^ ]*')) {
 	      hashHistory.push('/notes/' + this.props.note.id);
-	    } else if (!this.props.notebookId) {
+	    } else if (this.props.notebookId) {
 	      hashHistory.push('/notebooks/' + this.props.notebookId + '/' + this.props.note.id);
 	    }
 	  },
