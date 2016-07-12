@@ -50,14 +50,40 @@ Noteworthy makes use of the node package Quill.js to provide rich-text editing.
 
 [quill]: ./screenshots/quill.png
 
-Front-end user authentication
+### Autosave
 
-Flux loop
-Autosave
-Tags
-Search
+Notes are saved automatically every 5 seconds and when the user navigates away from the note's body or title input fields (onBlur or on ComponentWillUnmount).
 
-Libraries
+```
+autoSave() {
+  const noteData = {
+    title: this.state.title,
+    body: this.state.body
+  };
+  noteData['id'] = this.state.noteId;
+  NoteActions.editNote(noteData);
+  this.setState({saved: 'All changes saved'});
+}
+```
+
+### Tags
+
+Notes can be tagged with an unlimited number of tags. All tags must be unique (duplicate tags are ignored) and notes are saved when tags are created.
+
+### Search
+
+Notes and notebooks are searchable and the notes and notebook indices, respectively, update dynamically to show only those items matching the current query.
+
+### Future directions
+
+Additional features to expect soon:
+
+- Notebooks can have tags
+- Tags are searchable
+- Fuzzy search for notes/notebooks
+- User profile page
+
+### Libraries
 
 Quill.js
 jBuilder
