@@ -33043,7 +33043,7 @@
 	      right: 0,
 	      bottom: 0,
 	      backgroundColor: 'rgba(255, 255, 255, 0.5)',
-	      zIndex: 100
+	      zIndex: 10
 	    },
 	    content: {
 	      position: 'relative',
@@ -33070,29 +33070,28 @@
 	
 	var AppDispatcher = __webpack_require__(250);
 	var NoteConstants = __webpack_require__(253);
-	var ErrorActions = __webpack_require__(255);
 	var NoteApiUtil = __webpack_require__(257);
 	
 	var NoteActions = {
 	  fetchNotes: function fetchNotes() {
 	    var data = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
-	    NoteApiUtil.fetchNotes(NoteActions.receiveNotes, ErrorActions.setErrors, data);
+	    NoteApiUtil.fetchNotes(NoteActions.receiveNotes, data);
 	  },
 	  getNote: function getNote(noteId) {
-	    NoteApiUtil.getNote(noteId, NoteActions.receiveNote, ErrorActions.setErrors);
+	    NoteApiUtil.getNote(noteId, NoteActions.receiveNote);
 	  },
 	  getLastNote: function getLastNote() {
-	    NoteApiUtil.getLastNote(NoteActions.receiveLastNote, ErrorActions.setErrors);
+	    NoteApiUtil.getLastNote(NoteActions.receiveLastNote);
 	  },
 	  createNote: function createNote(note, callback) {
-	    NoteApiUtil.createNote(note, NoteActions.receiveNote, ErrorActions.setErrors, callback);
+	    NoteApiUtil.createNote(note, NoteActions.receiveNote, callback);
 	  },
 	  editNote: function editNote(note) {
-	    NoteApiUtil.updateNote(note, NoteActions.receiveNote, ErrorActions.setErrors);
+	    NoteApiUtil.updateNote(note, NoteActions.receiveNote);
 	  },
 	  deleteNote: function deleteNote(noteId, deleteCB) {
-	    NoteApiUtil.deleteNote(noteId, NoteActions.removeNote, ErrorActions.setErrors, deleteCB);
+	    NoteApiUtil.deleteNote(noteId, NoteActions.removeNote, deleteCB);
 	  },
 	  receiveNotes: function receiveNotes(notes) {
 	    AppDispatcher.dispatch({
@@ -33547,7 +33546,6 @@
 	
 	var AppDispatcher = __webpack_require__(250);
 	var NotebookConstants = __webpack_require__(263);
-	var ErrorActions = __webpack_require__(255);
 	var NotebookApiUtil = __webpack_require__(265);
 	
 	var NotebookActions = {
@@ -33563,7 +33561,7 @@
 	    NotebookApiUtil.createNotebook(notebook, NotebookActions.receiveNotebook, callback);
 	  },
 	  editNotebook: function editNotebook(notebook) {
-	    NotebookApiUtil.updateNotebook(notebook, NotebookActions.receiveNotebook, ErrorActions.setErrors);
+	    NotebookApiUtil.updateNotebook(notebook, NotebookActions.receiveNotebook);
 	  },
 	  deleteNotebook: function deleteNotebook(notebookId, deleteCB) {
 	    NotebookApiUtil.deleteNotebook(notebookId, NotebookActions.removeNotebook, deleteCB);

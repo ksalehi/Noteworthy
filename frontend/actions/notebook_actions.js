@@ -1,6 +1,5 @@
 const AppDispatcher = require('../dispatcher/dispatcher');
 const NotebookConstants = require('../constants/notebook_constants');
-const ErrorActions = require('./error_actions');
 const NotebookApiUtil = require('../util/notebook_api_util');
 
 const NotebookActions = {
@@ -26,8 +25,7 @@ const NotebookActions = {
   editNotebook(notebook){
     NotebookApiUtil.updateNotebook(
       notebook,
-      NotebookActions.receiveNotebook,
-      ErrorActions.setErrors
+      NotebookActions.receiveNotebook
     );
   },
   deleteNotebook(notebookId, deleteCB){
