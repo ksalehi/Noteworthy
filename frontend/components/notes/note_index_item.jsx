@@ -16,8 +16,8 @@ const NoteIndexItem = React.createClass({
   showDetail(){
     if (this.props.pathname.match('/notes/[^ ]*')) {
       hashHistory.push('/notes/' + this.props.note.id);
-    } else if (this.props.notebookId){
-      hashHistory.push('/notebooks/' + this.props.notebookId + '/' + this.props.note.id);
+    } else if (this.props.notebook){
+      hashHistory.push('/notebooks/' + this.props.notebook.id + '/' + this.props.note.id);
     }
   },
   deleteNote(e){

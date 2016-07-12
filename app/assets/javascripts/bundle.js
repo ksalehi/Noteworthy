@@ -26158,7 +26158,7 @@
 	            updatedAt: note.updated_at,
 	            pathname: _this2.props.location.pathname,
 	            selected: selected,
-	            notebookId: _this2.state.currentNotebook.id,
+	            notebook: _this2.state.currentNotebook,
 	            deleteCB: _this2.deleteCB
 	          });
 	        })
@@ -33263,8 +33263,8 @@
 	  showDetail: function showDetail() {
 	    if (this.props.pathname.match('/notes/[^ ]*')) {
 	      hashHistory.push('/notes/' + this.props.note.id);
-	    } else if (this.props.notebookId) {
-	      hashHistory.push('/notebooks/' + this.props.notebookId + '/' + this.props.note.id);
+	    } else if (this.props.notebook) {
+	      hashHistory.push('/notebooks/' + this.props.notebook.id + '/' + this.props.note.id);
 	    }
 	  },
 	  deleteNote: function deleteNote(e) {
@@ -47521,13 +47521,9 @@
 	        'div',
 	        { className: 'splash-text' },
 	        React.createElement(
-	          'div',
-	          { className: 'noteworthy-plus-icon' },
-	          React.createElement(
-	            'h1',
-	            { className: 'noteworthy' },
-	            'Noteworthy.'
-	          ),
+	          'h1',
+	          { className: 'noteworthy' },
+	          'Noteworthy.',
 	          React.createElement('div', { className: 'feather-icon' })
 	        ),
 	        React.createElement(

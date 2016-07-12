@@ -120,7 +120,7 @@ const NoteIndex = React.createClass({
                   updatedAt={note.updated_at}
                   pathname={this.props.location.pathname}
                   selected={ selected }
-                  notebookId={this.state.currentNotebook.id}
+                  notebook={this.state.currentNotebook}
                   deleteCB={this.deleteCB}
                   />);
                 })

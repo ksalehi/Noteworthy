@@ -31,10 +31,9 @@ const SplashPage = React.createClass({
         <div className="splash-container">
           <div className="cover-photo"></div>
           <div className="splash-text">
-            <div className="noteworthy-plus-icon">
-              <h1 className="noteworthy">Noteworthy.</h1>
+            <h1 className="noteworthy">Noteworthy.
               <div className="feather-icon"></div>
-            </div>
+            </h1>
             <p className="slogan">You write it. We remember it.</p>
             <button className="splash-button" onClick={this.openModal.bind(this, 'LOG IN')} value="LOG IN">LOG IN</button>
             <button className="splash-button" onClick={this.openModal.bind(this, 'SIGN UP')} value="SIGN UP">SIGN UP</button>
