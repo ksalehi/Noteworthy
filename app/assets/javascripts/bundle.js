@@ -47540,15 +47540,19 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'splash-container' },
-	      React.createElement('img', { className: 'cover-photo' }),
+	      React.createElement('div', { className: 'cover-photo' }),
 	      React.createElement(
 	        'div',
 	        { className: 'splash-text' },
 	        React.createElement(
-	          'h1',
-	          { className: 'noteworthy' },
-	          'Noteworthy.',
-	          React.createElement('img', { className: 'feather-icon' })
+	          'div',
+	          { className: 'noteworthy-plus-icon' },
+	          React.createElement(
+	            'h1',
+	            { className: 'noteworthy' },
+	            'Noteworthy.'
+	          ),
+	          React.createElement('div', { className: 'feather-icon' })
 	        ),
 	        React.createElement(
 	          'p',

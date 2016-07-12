@@ -29,11 +29,12 @@ const SplashPage = React.createClass({
     const style = NoteConstants.MODAL_STYLE;
       return (
         <div className="splash-container">
-          <img className="cover-photo"></img>
+          <div className="cover-photo"></div>
           <div className="splash-text">
-            <h1 className="noteworthy">Noteworthy.
-              <img className="feather-icon"></img>
-            </h1>
+            <div className="noteworthy-plus-icon">
+              <h1 className="noteworthy">Noteworthy.</h1>
+              <div className="feather-icon"></div>
+            </div>
             <p className="slogan">You write it. We remember it.</p>
             <button className="splash-button" onClick={this.openModal.bind(this, 'LOG IN')} value="LOG IN">LOG IN</button>
             <button className="splash-button" onClick={this.openModal.bind(this, 'SIGN UP')} value="SIGN UP">SIGN UP</button>
