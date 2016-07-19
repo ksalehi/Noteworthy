@@ -1,26 +1,20 @@
 const NoteApiUtil = {
-  fetchNotes(successCB, errorCB, data={}) {
+  fetchNotes(successCB, data={}) {
     $.ajax({
       method: 'GET',
       url: 'api/notes',
       data: data,
-      success: successCB,
-      error(response) {
-        errorCB("notes_index", response.responseJSON);
-      }
+      success: successCB
     });
   },
-  getNote(id, successCB, errorCB) {
+  getNote(id, successCB) {
     $.ajax({
       method: 'GET',
       url: `api/notes/${id}`,
-      success: successCB,
-      error(response) {
-        errorCB("note_index_item", response.responseJSON);
-      }
+      success: successCB
     });
   },
-  createNote(noteData, successCB, errorCB, optionalCB){
+  createNote(noteData, successCB, optionalCB){
     $.ajax({
       method: 'POST',
       url: 'api/notes',
@@ -30,13 +24,10 @@ const NoteApiUtil = {
         if (optionalCB) {
           optionalCB(data);
         }
-      },
-      error(response) {
-        errorCB("note_form", response.responseJSON);
       }
     });
   },
-  updateNote(noteData, successCB, errorCB){
+  updateNote(noteData, successCB){
     $.ajax({
       method: 'PATCH',
       url: `api/notes/${noteData.id}`,
@@ -44,22 +35,16 @@ const NoteApiUtil = {
         title: noteData.title,
         body: noteData.body
       }},
-      success: successCB,
-      error(response) {
-        errorCB("note_form", response.responseJSON);
-      }
+      success: successCB
     });
   },
-  deleteNote(id, successCB, errorCB, deleteCB){
+  deleteNote(id, successCB, deleteCB){
     $.ajax({
       method: 'DELETE',
       url: `api/notes/${id}`,
       success(response) {
          successCB(response);
          deleteCB(id);
-      },
-      error(response) {
-        errorCB("delete_note", response.responseJSON);
       }
     });
   }

@@ -13,16 +13,17 @@ const NoteConstants = {
       zIndex           : 10
     },
     content : {
-      position         : 'relative',
+      // position         : 'relative',
       width            : '35%',
       height           : '35%',
-      margin           : '150px auto',
+      margin           : '185px auto',
       border           : '1px solid #ccc',
       padding          : '5px',
       zIndex           : 11,
       borderRadius     : '10px',
       backgroundColor  : 'rgba(140, 140, 140, 0.95)',
-      display          : 'table'
+      display          : 'flex',
+      justifyContent   : 'center'
     }
   }
 };

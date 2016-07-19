@@ -33046,16 +33046,17 @@
 	      zIndex: 10
 	    },
 	    content: {
-	      position: 'relative',
+	      // position         : 'relative',
 	      width: '35%',
 	      height: '35%',
-	      margin: '150px auto',
+	      margin: '185px auto',
 	      border: '1px solid #ccc',
 	      padding: '5px',
 	      zIndex: 11,
 	      borderRadius: '10px',
 	      backgroundColor: 'rgba(140, 140, 140, 0.95)',
-	      display: 'table'
+	      display: 'flex',
+	      justifyContent: 'center'
 	    }
 	  }
 	};
@@ -33128,30 +33129,24 @@
 	'use strict';
 	
 	var NoteApiUtil = {
-	  fetchNotes: function fetchNotes(successCB, errorCB) {
-	    var data = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	  fetchNotes: function fetchNotes(successCB) {
+	    var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 	
 	    $.ajax({
 	      method: 'GET',
 	      url: 'api/notes',
 	      data: data,
-	      success: successCB,
-	      error: function error(response) {
-	        errorCB("notes_index", response.responseJSON);
-	      }
+	      success: successCB
 	    });
 	  },
-	  getNote: function getNote(id, successCB, errorCB) {
+	  getNote: function getNote(id, successCB) {
 	    $.ajax({
 	      method: 'GET',
 	      url: 'api/notes/' + id,
-	      success: successCB,
-	      error: function error(response) {
-	        errorCB("note_index_item", response.responseJSON);
-	      }
+	      success: successCB
 	    });
 	  },
-	  createNote: function createNote(noteData, successCB, errorCB, optionalCB) {
+	  createNote: function createNote(noteData, successCB, optionalCB) {
 	    $.ajax({
 	      method: 'POST',
 	      url: 'api/notes',
@@ -33161,13 +33156,10 @@
 	        if (optionalCB) {
 	          optionalCB(data);
 	        }
-	      },
-	      error: function error(response) {
-	        errorCB("note_form", response.responseJSON);
 	      }
 	    });
 	  },
-	  updateNote: function updateNote(noteData, successCB, errorCB) {
+	  updateNote: function updateNote(noteData, successCB) {
 	    $.ajax({
 	      method: 'PATCH',
 	      url: 'api/notes/' + noteData.id,
@@ -33175,22 +33167,16 @@
 	          title: noteData.title,
 	          body: noteData.body
 	        } },
-	      success: successCB,
-	      error: function error(response) {
-	        errorCB("note_form", response.responseJSON);
-	      }
+	      success: successCB
 	    });
 	  },
-	  deleteNote: function deleteNote(id, successCB, errorCB, deleteCB) {
+	  deleteNote: function deleteNote(id, successCB, deleteCB) {
 	    $.ajax({
 	      method: 'DELETE',
 	      url: 'api/notes/' + id,
 	      success: function success(response) {
 	        successCB(response);
 	        deleteCB(id);
-	      },
-	      error: function error(response) {
-	        errorCB("delete_note", response.responseJSON);
 	      }
 	    });
 	  }
