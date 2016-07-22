@@ -25,9 +25,9 @@ const LoginForm = React.createClass({
   },
   _handleRedirect(){
     if (SessionStore.isUserLoggedIn()) {
-      if (!this.state.loggedIn) {
+      // if (!this.state.loggedIn) {
         hashHistory.push('notes');
-      }
+      // }
     }
   },
   handleErrors(){
@@ -63,14 +63,7 @@ const LoginForm = React.createClass({
         };
         SessionActions.signUp(signupData);
         break;
-      case 'GUEST DEMO':
-        const demoData = {
-          username: "guest_user",
-          password: "password"
-        };
-        SessionActions.logIn(demoData);
-        break;
-    }
+      }
   },
   render() {
     const guestStatus = this.props.guestStatus;

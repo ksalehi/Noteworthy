@@ -4,9 +4,9 @@ const SessionApiUtil = require('../util/session_api_util');
 const ErrorActions = require('../actions/error_actions');
 
 const SessionActions = {
-  logIn(user) {
+  logIn(user, callback) {
     SessionApiUtil.logIn(
-      user, SessionActions.receiveCurrentUser, ErrorActions.setErrors);
+      user, SessionActions.receiveCurrentUser, ErrorActions.setErrors, callback);
   },
   logOut() {
     SessionApiUtil.logOut(

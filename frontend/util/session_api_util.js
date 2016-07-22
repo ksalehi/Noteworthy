@@ -11,13 +11,18 @@ const SessionApiUtil = {
       }
     });
   },
-  logIn(userData, successCB, errorCB) {
+  logIn(userData, successCB, errorCB, optionalCB) {
     $.ajax({
       method: 'POST',
       url: 'api/session',
       data: { userData },
       dataType: 'JSON',
-      success: successCB,
+      success(data) {
+        successCB(data);
+        if (optionalCB) {
+          optionalCB(data);
+        }
+      },
       error(response){
         errorCB("login", response.responseJSON);
       }

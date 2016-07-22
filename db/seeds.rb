@@ -8,7 +8,6 @@
 
 
 Notebook.create(title: 'Personal',
-                description: 'Personal stuff',
                 author_id: 2)
 Notebook.create(title: 'Favorite quotes',
                 author_id: 2)
