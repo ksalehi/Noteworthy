@@ -10,7 +10,7 @@ const NoteConstants = {
       right            : 0,
       bottom           : 0,
       backgroundColor  : 'rgba(255, 255, 255, 0.5)',
-      zIndex           : 10
+      zIndex           : 30
     },
     content : {
       // position         : 'relative',
@@ -19,7 +19,7 @@ const NoteConstants = {
       margin           : '185px auto',
       border           : '1px solid #ccc',
       padding          : '5px',
-      zIndex           : 11,
+      zIndex           : 31,
       borderRadius     : '10px',
       backgroundColor  : 'rgba(140, 140, 140, 0.95)',
       display          : 'flex',

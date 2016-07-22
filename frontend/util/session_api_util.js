@@ -7,7 +7,7 @@ const SessionApiUtil = {
       dataType: 'JSON',
       success: successCB,
       error(response){
-        errorCB("signup", response.responseJSON);
+        errorCB("login", response.responseJSON);
       }
     });
   },
@@ -24,7 +24,7 @@ const SessionApiUtil = {
         }
       },
       error(response){
-        errorCB("login", response.responseJSON);
+        errorCB("login", response.responseJSON.base);
       }
     });
   },
@@ -35,7 +35,7 @@ const SessionApiUtil = {
       dataType: 'JSON',
       success: successCB,
       error(response){
-        errorCB("logout", response.responseJSON);
+        errorCB("logout", response.responseJSON.base);
       }
     });
   }

@@ -84,7 +84,7 @@
 	      klass = "splash-flex";
 	      klass2 = "splash-flex-parent";
 	    } else {
-	      navbar = React.createElement(NavBar, { path: this.props.location.pathname, toggleShowing: this.toggleShowing });
+	      navbar = React.createElement(NavBar, { path: this.props.location.pathname, showing: this.state.showing, toggleShowing: this.toggleShowing });
 	      klass = "note-index-flex";
 	      klass2 = "flex-parent";
 	    }
@@ -33825,7 +33825,7 @@
 	      right: 0,
 	      bottom: 0,
 	      backgroundColor: 'rgba(255, 255, 255, 0.5)',
-	      zIndex: 10
+	      zIndex: 30
 	    },
 	    content: {
 	      // position         : 'relative',
@@ -33834,7 +33834,7 @@
 	      margin: '185px auto',
 	      border: '1px solid #ccc',
 	      padding: '5px',
-	      zIndex: 11,
+	      zIndex: 31,
 	      borderRadius: '10px',
 	      backgroundColor: 'rgba(140, 140, 140, 0.95)',
 	      display: 'flex',
@@ -48548,7 +48548,7 @@
 	      dataType: 'JSON',
 	      success: successCB,
 	      error: function error(response) {
-	        errorCB("signup", response.responseJSON);
+	        errorCB("login", response.responseJSON);
 	      }
 	    });
 	  },
@@ -48565,7 +48565,7 @@
 	        }
 	      },
 	      error: function error(response) {
-	        errorCB("login", response.responseJSON);
+	        errorCB("login", response.responseJSON.base);
 	      }
 	    });
 	  },
@@ -48576,7 +48576,7 @@
 	      dataType: 'JSON',
 	      success: successCB,
 	      error: function error(response) {
-	        errorCB("logout", response.responseJSON);
+	        errorCB("logout", response.responseJSON.base);
 	      }
 	    });
 	  }
@@ -48664,6 +48664,9 @@
 	  },
 	  logOut: function logOut(e) {
 	    e.preventDefault();
+	    if (this.props.showing) {
+	      this.props.toggleShowing();
+	    }
 	    SessionActions.logOut();
 	  },
 	
