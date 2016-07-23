@@ -26909,6 +26909,12 @@
 	
 	    var notes = this.state.notes;
 	    var path = this.props.location.pathname;
+	    var noteForm = void 0;
+	    if (this.state.notes.length === 0) {
+	      noteForm = React.createElement('div', null);
+	    } else {
+	      noteForm = this.props.children;
+	    }
 	    return React.createElement(
 	      'div',
 	      { className: 'note-index-parent' },
@@ -26948,7 +26954,7 @@
 	      React.createElement(
 	        'div',
 	        { className: 'note-form' },
-	        this.props.children
+	        noteForm
 	      ),
 	      React.createElement(
 	        Modal,

@@ -96,6 +96,12 @@ const NoteIndex = React.createClass({
   render(){
     const notes = this.state.notes;
     const path = this.props.location.pathname;
+    let noteForm;
+    if (this.state.notes.length === 0) {
+      noteForm = <div></div>;
+      } else {
+        noteForm = this.props.children;
+      }
     return (
       <div className="note-index-parent">
         <ul className="notes-list">
@@ -127,7 +133,7 @@ const NoteIndex = React.createClass({
               }
         </ul>
         <div className="note-form">
-          {this.props.children}
+          {noteForm}
         </div>
 
         <Modal
