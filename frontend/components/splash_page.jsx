@@ -2,12 +2,15 @@ const React = require('react');
 const hashHistory = require('react-router').hashHistory;
 const LogInForm = require('./login_form');
 const SessionStore = require('../stores/session_store');
+const SessionActions = require('../actions/session_actions');
 const Modal = require('react-modal');
 const NoteConstants = require('../constants/note_constants');
 
 const SplashPage = React.createClass({
   getInitialState: function(){
-    return({ modalOpen: false });
+    return({
+      modalOpen: false
+    });
   },
   closeModal: function(){
     this.setState({ modalOpen: false });
@@ -24,6 +27,20 @@ const SplashPage = React.createClass({
       buttonText: buttonText,
       guestStatus: guestStatus
     });
+  },
+  _handleRedirect(){
+    if (SessionStore.isUserLoggedIn()) {
+      // if (!this.state.loggedIn) {
+        hashHistory.push('notes');
+      // }
+    }
+  },
+  guestDemo() {
+    const demoData = {
+      username: "guest_user",
+      password: "password"
+    };
+    SessionActions.logIn(demoData, this._handleRedirect);
   },
   render() {
     const style = NoteConstants.MODAL_STYLE;
@@ -47,7 +64,7 @@ const SplashPage = React.createClass({
             <p className="slogan">You write it. We remember it.</p>
             <button className="splash-button" onClick={this.openModal.bind(this, 'LOG IN')} value="LOG IN">LOG IN</button>
             <button className="splash-button" onClick={this.openModal.bind(this, 'SIGN UP')} value="SIGN UP">SIGN UP</button>
-            <button className="splash-button" onClick={this.openModal.bind(this, 'GUEST DEMO')} value="GUEST DEMO">GUEST DEMO</button>
+            <button className="splash-button" onClick={this.guestDemo} value="GUEST DEMO">GUEST DEMO</button>
 
             <Modal
               style={style}

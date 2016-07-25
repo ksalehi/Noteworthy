@@ -36,7 +36,7 @@ const App = React.createClass({
       klass = "splash-flex";
       klass2 = "splash-flex-parent";
     } else {
-      navbar = <NavBar path={this.props.location.pathname} toggleShowing={this.toggleShowing} />;
+      navbar = <NavBar path={this.props.location.pathname} showing={this.state.showing} toggleShowing={this.toggleShowing} />;
       klass = "note-index-flex";
       klass2 = "flex-parent";
     }

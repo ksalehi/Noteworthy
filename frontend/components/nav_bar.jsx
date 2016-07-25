@@ -71,6 +71,9 @@ const NavBar = React.createClass({
   },
   logOut(e){
     e.preventDefault();
+    if (this.props.showing) {
+      this.props.toggleShowing();
+    }
     SessionActions.logOut();
   },
   render: function() {

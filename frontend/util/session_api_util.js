@@ -7,19 +7,24 @@ const SessionApiUtil = {
       dataType: 'JSON',
       success: successCB,
       error(response){
-        errorCB("signup", response.responseJSON);
+        errorCB("login", response.responseJSON);
       }
     });
   },
-  logIn(userData, successCB, errorCB) {
+  logIn(userData, successCB, errorCB, optionalCB) {
     $.ajax({
       method: 'POST',
       url: 'api/session',
       data: { userData },
       dataType: 'JSON',
-      success: successCB,
+      success(data) {
+        successCB(data);
+        if (optionalCB) {
+          optionalCB(data);
+        }
+      },
       error(response){
-        errorCB("login", response.responseJSON);
+        errorCB("login", response.responseJSON.base);
       }
     });
   },
@@ -30,7 +35,7 @@ const SessionApiUtil = {
       dataType: 'JSON',
       success: successCB,
       error(response){
-        errorCB("logout", response.responseJSON);
+        errorCB("logout", response.responseJSON.base);
       }
     });
   }
