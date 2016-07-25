@@ -2,7 +2,7 @@
 
 [Noteworthy][live-link]
 
-[live-link]: https://noteworthyapp.herokuapp.com
+[live-link]: https://www.noteworthy.site
 
 Noteworthy is a web application for writing and storing notes. It is inspired by Evernote and employs Ruby on Rails, a PostgreSQL database, and React.js with a Flux architecture.
 
