@@ -51,16 +51,6 @@ const SplashPage = React.createClass({
             <h1 className="noteworthy">Noteworthy.
               <div className="feather-icon"></div>
             </h1>
-            <script>
-               (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-               })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-               ga('create', 'UA-81178102-1', 'auto');
-               ga('send', 'pageview');
-
-            </script>
             <p className="slogan">You write it. We remember it.</p>
             <button className="splash-button" onClick={this.openModal.bind(this, 'LOG IN')} value="LOG IN">LOG IN</button>
             <button className="splash-button" onClick={this.openModal.bind(this, 'SIGN UP')} value="SIGN UP">SIGN UP</button>
