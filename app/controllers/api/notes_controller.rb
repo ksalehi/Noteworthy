@@ -8,8 +8,8 @@ class Api::NotesController < ApplicationController
       else
         @notes = @notes.where(
           [
-            'title LIKE :query OR body LIKE :query',
-            {query: "%#{params[:query]}%"}
+            'LOWER(title) LIKE :query OR body LIKE :query',
+            {query: "%#{params[:query].downcase}%"}
           ]
         )
       end
