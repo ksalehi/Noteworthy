@@ -3,12 +3,16 @@ class Api::NotesController < ApplicationController
   def index
     @notes = current_notebook.notes
     if params[:query] && !params[:query].empty?
-      @notes = @notes.where(
-        [
-          'title LIKE :query OR body LIKE :query',
-          {query: "%#{params[:query]}%"}
-        ]
-      )
+      if ['untitled', 'untitle', 'untitl', 'untit', 'unti', 'unt', 'un', 'u'].include?(params[:query].downcase)
+        @notes = @notes.where('title = ?', '')
+      else
+        @notes = @notes.where(
+          [
+            'title LIKE :query OR body LIKE :query',
+            {query: "%#{params[:query]}%"}
+          ]
+        )
+      end
     end
     render :index
   end

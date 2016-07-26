@@ -49,7 +49,7 @@ const NoteIndexItem = React.createClass({
 
     let title;
     if (this.props.note.title === '') {
-      title = 'Title Your Note';
+      title = '[Untitled]';
     } else {
       title = this.props.note.title;
     }
