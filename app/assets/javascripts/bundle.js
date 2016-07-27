@@ -91,13 +91,18 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: klass2 },
-	      navbar,
-	      React.createElement(NotebookDrawer, { showing: this.state.showing, toggleShowing: this.toggleShowing }),
+	      null,
+	      React.createElement('div', { className: 'drawer-hider' }),
 	      React.createElement(
 	        'div',
-	        { className: klass },
-	        this.props.children
+	        { className: klass2 },
+	        navbar,
+	        React.createElement(NotebookDrawer, { showing: this.state.showing, toggleShowing: this.toggleShowing }),
+	        React.createElement(
+	          'div',
+	          { className: klass },
+	          this.props.children
+	        )
 	      )
 	    );
 	  }

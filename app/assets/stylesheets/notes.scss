@@ -73,7 +73,6 @@
 .new-note-form {
   padding: 15px;
   height: 883px;
-  width: 100%;
   background-color: white;
 }
 
@@ -291,7 +290,7 @@
 }
 
 .note-index-flex {
-  width: 92%;
+  width: 98%;
 }
 
 .splash-flex {
@@ -435,4 +434,13 @@ button {
 .delete-notebook, .delete-note {
   display: flex;
   flex-direction: column;
+}
+
+.drawer-hider {
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 25px;
+  background: rgba(245,245,245,1);
+  z-index: 100;
 }

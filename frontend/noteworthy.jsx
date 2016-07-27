@@ -42,11 +42,14 @@ const App = React.createClass({
     }
 
     return (
-      <div className={klass2}>
-        {navbar}
-        <NotebookDrawer showing={this.state.showing} toggleShowing={this.toggleShowing} />
-        <div className={klass}>
-          {this.props.children}
+      <div>
+        <div className="drawer-hider"></div>
+        <div className={klass2}>
+          {navbar}
+          <NotebookDrawer showing={this.state.showing} toggleShowing={this.toggleShowing} />
+          <div className={klass}>
+            {this.props.children}
+          </div>
         </div>
       </div>
     );
