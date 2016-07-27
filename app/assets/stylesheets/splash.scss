@@ -42,6 +42,7 @@
   background-position: 90% 60%;
   position: relative;
   z-index: 40;
+  border-radius: 5px;
 }
 
 
@@ -68,7 +69,7 @@ input.login-input {
 }
 
 ::-webkit-input-placeholder {
-  color: gray;
+  color: #ccc;
 }
 
 .splash-button {

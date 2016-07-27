@@ -33,29 +33,41 @@
   font-size: 20px;
   background-color: white;
   padding: 25px;
-  border-top: 1px solid gray;
-  border-left: 1px solid gray;
-  border-right: 1px solid gray;
+  border: 1px solid #e6e6e6;
+  border-top: 0;
   position: relative;
 }
 
 .time-since {
   font-size: 16px;
-  color: #242424;
+  color: #aaa;
 }
 
 .notes-list-item:hover {
   cursor: pointer;
   background-color: #03b651;
+  border-right: 1px solid #03b651;
+  border-left: 4px solid #03b651;
+  color: white;
+  .time-since {
+    font-size: 16px;
+    color: white;
+  }
+  .fa.fa-trash {
+    color: white;
+    position: absolute;
+    right: 10%;
+    top: 40%;
+  }
 }
 
 .notes-list-item:last-of-type {
 
-  border-bottom: 1px solid gray;
+  // border-bottom: 1px solid #e6e6e6;
 }
 
-.notes-list-item:first-of-type {
-  border-top: 0;
+.notes-list:first-child {
+  // border-top: 1px solid white;
 }
 
 .new-note-form {
@@ -71,15 +83,15 @@
   flex-direction: column;
   z-index: 30;
   background: #D9DDDE;
-  border-left: 25px solid white;
   padding-left: 10px;
   padding-top: 10px;
+  border-radius: 5px;
 }
 
 .notebooks-button {
   padding: 5px;
   background: white;
-  border: 1px solid gray;
+  border: 1px solid #ccc;
   float: left;
   border-radius: 50%;
   height: 30px;
@@ -112,7 +124,7 @@
 
 .saved-changes {
   float: right;
-  color: gray;
+  color: #ccc;
   padding: 15px;
   display: inline-block;
 }
@@ -126,7 +138,7 @@
 }
 
 .fa.fa-trash {
-  color: black;
+  color: #aaa;
   font-size: 20px;
   position: absolute;
   right: 10%;
@@ -143,10 +155,28 @@
 
 .selected {
   box-shadow: 0 0 20px #03b621 inset;
+  border-left: 1px solid #03b621;
+  border-right: 1px solid #03b621;
+  border-top: 1px solid #03b621;
+  border-bottom: 1px solid #03b621;
 }
 
 .selected:hover {
   background-color: white;
+  color: black;
+  border-color: #03b651;
+  border-left: 1px solid #03b621;
+  border-right: 1px solid #03b621;
+  border-top: 1px solid #03b621;
+  .time-since {
+    color: #aaa;
+  }
+  .fa.fa-trash {
+    color: #aaa;
+    position: absolute;
+    right: 10%;
+    top: 40%;
+  }
   .fa-trash:hover {
     color: #03b651;
     font-size: 24px;
@@ -207,7 +237,7 @@
 
 
 .logout-button {
-  border: 1px solid gray;
+  border: 1px solid #ccc;
   float: left;
   border-radius: 50%;
   height: 40px;
@@ -239,6 +269,8 @@
   font-size: 16px;
   text-align: left;
   padding: 5px;
+  padding-left: 8px;
+  padding-bottom: 7px;
   border-radius: 5px;
   width: 75%;
   margin: 40px auto 0;
@@ -247,7 +279,7 @@
 
 .flex-parent {
   display: flex;
-  border-right: 15px solid #D9DDDE;
+  border-radius: 5px;
 }
 
 .splash-flex-parent {
@@ -264,7 +296,6 @@
 
 .splash-flex {
   width: 100%;
-  border-left: 25px solid white;
 }
 
 .note-index-parent {
@@ -288,7 +319,7 @@
 }
 
 .new-note-button {
-  border: 1px solid gray;
+  border: 1px solid #ccc;
   position: relative;
   border-radius: 50%;
   height: 40px;
@@ -309,7 +340,7 @@
 .fa.fa-plus {
   color: #03b651;
   font-size: 26px;
-  padding-left: 2px;
+  padding-left: 1px;
   padding-top: 3px;
 }
 
@@ -356,13 +387,11 @@ button {
 }
 
 .existing-tag {
-  background: #D9DDDE;
   display: inline-block;
   padding: 5px 8px;
-  border-radius: 5px;
   margin: 5px;
   float: right;
-  color: black;
+  color: #ccc;
 }
 
 .grayed-out {

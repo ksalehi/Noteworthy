@@ -49,9 +49,12 @@ input[type="submit"] {
   clear: both;
 }
 
+html {
+  background: rgba(245,245,245,1);
+}
+
 body {
   position: relative;
-  background: white;
   font-family: Helvetica, sans-serif;
 }
 
@@ -59,4 +62,6 @@ body {
   background: #D9DDDE;
   margin: 25px auto;
   margin-right: 25px;
+  margin-left: 25px;
+  border-radius: 5px;
 }
