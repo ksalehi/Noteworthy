@@ -33054,7 +33054,7 @@
 	      right: 0,
 	      bottom: 0,
 	      backgroundColor: 'rgba(100, 100, 100, 0.7)',
-	      zIndex: 30
+	      zIndex: 200
 	    },
 	    content: {
 	      // position         : 'relative',
@@ -33063,7 +33063,7 @@
 	      margin: '185px auto',
 	      border: '1px solid darkgray',
 	      padding: '5px',
-	      zIndex: 31,
+	      zIndex: 201,
 	      borderRadius: '10px',
 	      backgroundColor: 'rgba(200, 200, 200, 1)',
 	      display: 'flex',
@@ -47551,9 +47551,7 @@
 	  },
 	  _handleRedirect: function _handleRedirect() {
 	    if (SessionStore.isUserLoggedIn()) {
-	      // if (!this.state.loggedIn) {
 	      hashHistory.push('notes');
-	      // }
 	    }
 	  },
 	  guestDemo: function guestDemo() {

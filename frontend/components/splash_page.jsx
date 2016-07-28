@@ -30,9 +30,7 @@ const SplashPage = React.createClass({
   },
   _handleRedirect(){
     if (SessionStore.isUserLoggedIn()) {
-      // if (!this.state.loggedIn) {
-        hashHistory.push('notes');
-      // }
+      hashHistory.push('notes');
     }
   },
   guestDemo() {
