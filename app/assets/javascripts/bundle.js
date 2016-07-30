@@ -26040,6 +26040,7 @@
 	var NoteConstants = __webpack_require__(253);
 	var EditNotebookForm = __webpack_require__(286);
 	var NotesSearchBox = __webpack_require__(287);
+	var SearchStore = __webpack_require__(315);
 	
 	var NoteIndex = React.createClass({
 	  displayName: 'NoteIndex',
@@ -26058,6 +26059,7 @@
 	        var notebookData = { notebookId: this.props.params.notebookId };
 	        NoteActions.fetchNotes(notebookData);
 	      }
+	      this.searchListener = SearchStore.addListener(this._onSearchChange);
 	      this.noteListener = NoteStore.addListener(this._onNoteChange);
 	      this.notebookListener = NotebookStore.addListener(this._onNotebookChange);
 	    }
@@ -26073,8 +26075,12 @@
 	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
+	    this.searchListener.remove();
 	    this.noteListener.remove();
 	    this.notebookListener.remove();
+	  },
+	  _onSearchChange: function _onSearchChange() {
+	    this.setState({ notes: SearchStore.all(this.props.params.notebookId) });
 	  },
 	  _onNoteChange: function _onNoteChange() {
 	    this.setState({ notes: NoteStore.all(this.props.params.notebookId) });
@@ -26137,7 +26143,6 @@
 	    } else {
 	      noteForm = this.props.children;
 	    }
-	    console.log("current notebook in render: ", this.state.currentNotebook);
 	    return React.createElement(
 	      'div',
 	      { className: 'note-index-parent' },
@@ -33056,7 +33061,6 @@
 	      zIndex: 200
 	    },
 	    content: {
-	      // position         : 'relative',
 	      width: '35%',
 	      height: '35%',
 	      margin: '185px auto',
@@ -48270,6 +48274,54 @@
 	});
 	
 	module.exports = NotebooksSearchBox;
+
+/***/ },
+/* 315 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Store = __webpack_require__(232).Store;
+	var AppDispatcher = __webpack_require__(250);
+	var SearchStore = new Store(AppDispatcher);
+	var NoteConstants = __webpack_require__(253);
+	
+	var _notes = {};
+	
+	var dateSorter = function dateSorter(note1, note2) {
+	  return new Date(note2.updated_at) - new Date(note1.updated_at);
+	};
+	
+	SearchStore.all = function (notebookId) {
+	  var unsortedNotes = Object.keys(_notes).map(function (noteKey) {
+	    return _notes[noteKey];
+	  });
+	  if (notebookId) {
+	    unsortedNotes = unsortedNotes.filter(function (note) {
+	      return note.notebook_id === parseInt(notebookId);
+	    });
+	  }
+	  var sortedNotes = unsortedNotes.sort(dateSorter);
+	  return sortedNotes;
+	};
+	
+	function resetNotes(notes) {
+	  _notes = {};
+	  for (var i = 0; i < notes.length; i++) {
+	    var note = notes[i];
+	    _notes[note.id] = note;
+	  }
+	  SearchStore.all();
+	}
+	
+	SearchStore.__onDispatch = function (payload) {
+	  if (payload.actionType === NoteConstants.NOTES_RECEIVED) {
+	    resetNotes(payload.notes);
+	  }
+	  SearchStore.__emitChange();
+	};
+	
+	module.exports = SearchStore;
 
 /***/ }
 /******/ ]);

@@ -13,7 +13,6 @@ const NoteConstants = {
       zIndex           : 200
     },
     content : {
-      // position         : 'relative',
       width            : '35%',
       height           : '35%',
       margin           : '185px auto',

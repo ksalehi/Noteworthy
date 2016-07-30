@@ -11,6 +11,7 @@ const Modal = require('react-modal');
 const NoteConstants = require('../../constants/note_constants');
 const EditNotebookForm = require('../notebooks/edit_notebook_form');
 const NotesSearchBox = require('./notes_search_box');
+const SearchStore = require('../../stores/search_store');
 
 const NoteIndex = React.createClass({
   getInitialState() {
@@ -28,6 +29,7 @@ const NoteIndex = React.createClass({
         const notebookData = {notebookId: this.props.params.notebookId};
         NoteActions.fetchNotes(notebookData);
       }
+      this.searchListener = SearchStore.addListener(this._onSearchChange);
       this.noteListener = NoteStore.addListener(this._onNoteChange);
       this.notebookListener = NotebookStore.addListener(this._onNotebookChange);
     }
@@ -43,8 +45,12 @@ const NoteIndex = React.createClass({
     }
   },
   componentWillUnmount() {
+    this.searchListener.remove();
     this.noteListener.remove();
     this.notebookListener.remove();
+  },
+  _onSearchChange() {
+    this.setState({ notes: SearchStore.all(this.props.params.notebookId) });
   },
   _onNoteChange() {
     this.setState({ notes: NoteStore.all(this.props.params.notebookId) });
@@ -101,7 +107,6 @@ const NoteIndex = React.createClass({
       } else {
         noteForm = this.props.children;
       }
-      console.log("current notebook in render: ", this.state.currentNotebook);
     return (
       <div className="note-index-parent">
         <ul className="notes-list">
