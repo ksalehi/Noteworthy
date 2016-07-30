@@ -15,18 +15,17 @@ const NoteForm = React.createClass({
       body: "",
       tags: [],
       newTag: "",
-      saved: 'All changes saved'
+      saved: 'All changes saved',
+      autoSaving: false
     };
   },
   componentDidMount() {
-    this.autoSaver = setInterval(this.autoSave, 10000);
     this._onChange();
     this.noteListener = NoteStore.addListener(this._onChange);
   },
   componentWillReceiveProps(newProps){
     if (this.state.noteId) {
       if (NoteStore.noteIds().includes(this.state.noteId)) {
-        // TODO: this doesn't keep from autosaving deleted note
         this.autoSave();
       }
     }
@@ -50,7 +49,6 @@ const NoteForm = React.createClass({
     }
   },
   componentWillUnmount() {
-    clearInterval(this.autoSaver);
     if (NoteStore.noteIds().includes(this.state.noteId)) {
       // only save if the note wasn't just deleted
       this.autoSave();
@@ -83,6 +81,10 @@ const NoteForm = React.createClass({
       body: e,
       saved: 'Unsaved changes'
     });
+    if (!this.autoSaving) {
+      setTimeout(this.autoSave, 5000);
+      this.autoSaving = true;
+    }
   },
   autoSave() {
     const noteData = {
@@ -91,7 +93,9 @@ const NoteForm = React.createClass({
       id: this.state.noteId
     };
     NoteActions.editNote(noteData);
-    this.setState({saved: 'All changes saved'});
+    this.setState({
+      saved: 'All changes saved'});
+    this.autoSaving = false;
   },
   updateTagField(e){
     this.setState({newTag: e.target.value});
