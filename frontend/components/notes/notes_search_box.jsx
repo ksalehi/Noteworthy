@@ -9,7 +9,10 @@ const NotesSearchBox = React.createClass({
   },
   _onInput(e) {
     this.setState({ searchText: e.target.value });
-    NoteActions.fetchNotes({ query: e.target.value });
+    NoteActions.fetchNotes({
+      query: e.target.value,
+      notebookId: this.props.notebookId
+    });
   },
   render: function() {
     return (
@@ -20,7 +23,6 @@ const NotesSearchBox = React.createClass({
                placeholder="Search Notes"/>
     );
   }
-
 });
 
 module.exports = NotesSearchBox;

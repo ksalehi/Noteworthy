@@ -26046,7 +26046,7 @@
 	  getInitialState: function getInitialState() {
 	    return {
 	      notes: [],
-	      currentNotebook: null,
+	      currentNotebook: {},
 	      modalOpen: false
 	    };
 	  },
@@ -26095,7 +26095,6 @@
 	    } else {
 	      this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
 	    }
-	
 	    this.setState({ currentNotebook: this.currentNotebook });
 	  },
 	  editNotebook: function editNotebook(e) {
@@ -26138,6 +26137,7 @@
 	    } else {
 	      noteForm = this.props.children;
 	    }
+	    console.log("current notebook in render: ", this.state.currentNotebook);
 	    return React.createElement(
 	      'div',
 	      { className: 'note-index-parent' },
@@ -26153,7 +26153,7 @@
 	            { onClick: this.editNotebook },
 	            React.createElement('i', { className: 'fa fa-info-circle', 'aria-hidden': 'true' })
 	          ),
-	          React.createElement(NotesSearchBox, null)
+	          React.createElement(NotesSearchBox, { notebookId: this.state.currentNotebook.id })
 	        ),
 	        notes.map(function (note) {
 	          var selected = false;
@@ -26162,7 +26162,6 @@
 	          } else if (_this2.state.currentNotebook && path === '/notebooks/' + _this2.state.currentNotebook.id + '/' + note.id) {
 	            selected = true;
 	          }
-	
 	          return React.createElement(NoteIndexItem, {
 	            key: note.id,
 	            note: note,
@@ -33111,12 +33110,6 @@
 	      notes: notes
 	    });
 	  },
-	  receiveNotesByNotebook: function receiveNotesByNotebook(notes) {
-	    AppDispatcher.dispatch({
-	      actionType: NoteConstants.NOTES_BY_NOTEBOOK_RECEIVED,
-	      notes: notes
-	    });
-	  },
 	  receiveNote: function receiveNote(note) {
 	    AppDispatcher.dispatch({
 	      actionType: NoteConstants.NOTE_RECEIVED,
@@ -35677,7 +35670,10 @@
 	  },
 	  _onInput: function _onInput(e) {
 	    this.setState({ searchText: e.target.value });
-	    NoteActions.fetchNotes({ query: e.target.value });
+	    NoteActions.fetchNotes({
+	      query: e.target.value,
+	      notebookId: this.props.notebookId
+	    });
 	  },
 	
 	  render: function render() {
@@ -35687,7 +35683,6 @@
 	      value: this.state.searchText,
 	      placeholder: 'Search Notes' });
 	  }
-	
 	});
 	
 	module.exports = NotesSearchBox;

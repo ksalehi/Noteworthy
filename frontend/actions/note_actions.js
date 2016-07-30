@@ -46,18 +46,11 @@ const NoteActions = {
       notes: notes
     });
   },
-  receiveNotesByNotebook(notes) {
-    AppDispatcher.dispatch({
-      actionType: NoteConstants.NOTES_BY_NOTEBOOK_RECEIVED,
-      notes: notes
-    });
-  },
   receiveNote(note){
     AppDispatcher.dispatch({
       actionType: NoteConstants.NOTE_RECEIVED,
       note: note
     });
-
   },
   removeNote(note){
     AppDispatcher.dispatch({

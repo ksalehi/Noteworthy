@@ -16,7 +16,7 @@ const NoteIndex = React.createClass({
   getInitialState() {
     return {
       notes: [],
-      currentNotebook: null,
+      currentNotebook: {},
       modalOpen: false
      };
   },
@@ -64,7 +64,6 @@ const NoteIndex = React.createClass({
     } else {
       this.currentNotebook = NotebookStore.find(this.props.params.notebookId);
     }
-
     this.setState({ currentNotebook: this.currentNotebook });
   },
   editNotebook(e) {
@@ -102,6 +101,7 @@ const NoteIndex = React.createClass({
       } else {
         noteForm = this.props.children;
       }
+      console.log("current notebook in render: ", this.state.currentNotebook);
     return (
       <div className="note-index-parent">
         <ul className="notes-list">
@@ -109,7 +109,7 @@ const NoteIndex = React.createClass({
             <button onClick={this.editNotebook}>
               <i className="fa fa-info-circle" aria-hidden="true"></i>
             </button>
-            <NotesSearchBox />
+            <NotesSearchBox notebookId={this.state.currentNotebook.id}/>
           </h2>
             {
               notes.map( note => {
@@ -119,7 +119,6 @@ const NoteIndex = React.createClass({
                 } else if (this.state.currentNotebook && path === `/notebooks/${this.state.currentNotebook.id}/${note.id}`) {
                   selected = true;
                 }
-
                 return (<NoteIndexItem
                   key={note.id}
                   note={note}
