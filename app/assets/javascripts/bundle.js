@@ -35825,13 +35825,12 @@
 	    TagActions.createTag(TagData);
 	    this.setState({ newTag: "" });
 	  },
-	  deleteTag: function deleteTag(e) {
-	    e.preventDefault();
-	    debugger;
-	    var TagData = {
-	      tag: e.target.value
+	  deleteTag: function deleteTag(tagId) {
+	    var tagData = {
+	      tagId: tagId,
+	      noteId: this.state.noteId
 	    };
-	    TagActions.deleteTag(TagData);
+	    TagActions.deleteTag(tagData);
 	  },
 	  render: function render() {
 	    var _this2 = this;
@@ -35867,7 +35866,7 @@
 	                {
 	                  key: tag.id,
 	                  className: 'existing-tag',
-	                  onClick: _this2.deleteTag },
+	                  onClick: _this2.deleteTag.bind(_this2, tag.id) },
 	                tag.tag
 	              );
 	            })
@@ -47516,11 +47515,11 @@
 	      error: errorCB
 	    });
 	  },
-	  deleteTag: function deleteTag(TagData, successCB, errorCB) {
+	  deleteTag: function deleteTag(tagData, successCB, errorCB) {
 	    $.ajax({
 	      method: 'DELETE',
-	      url: 'api/tags',
-	      data: { tag: TagData },
+	      url: 'api/tags/' + tagData.tagId,
+	      data: { tagData: tagData },
 	      success: successCB,
 	      error: errorCB
 	    });

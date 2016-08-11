@@ -110,13 +110,12 @@ const NoteForm = React.createClass({
     TagActions.createTag(TagData);
     this.setState({newTag: ""});
   },
-  deleteTag(e) {
-    e.preventDefault();
-    debugger;
-    const TagData = {
-      tag: e.target.value
+  deleteTag(tagId) {
+    const tagData = {
+      tagId: tagId,
+      noteId: this.state.noteId
     };
-    TagActions.deleteTag(TagData);
+    TagActions.deleteTag(tagData);
   },
   render(){
     return (
@@ -138,8 +137,7 @@ const NoteForm = React.createClass({
                  return (<li
                    key={tag.id}
                    className="existing-tag"
-                   onClick={this.deleteTag}>
-                   {tag.tag}</li>);
+                   onClick={this.deleteTag.bind(this, tag.id)}>{tag.tag}</li>);
                })}
            </div>
            <div className="tag-icon-and-text">

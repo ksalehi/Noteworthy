@@ -8,11 +8,13 @@ class Api::TagsController < ApplicationController
 
   def destroy
     debugger
-    @tag = Tag.find(tag_params[:tag])
+    @tag = Tag.find(params[:id])
     if @tag.destroy
+      @note = Note.find(params[:tagData][:noteId])
       render 'api/notes/show'
     else
       render json: @tag.errors.full_messages, status: 422
+    end
   end
 
   def tag_params

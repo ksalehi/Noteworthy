@@ -8,11 +8,11 @@ const TagApiUtil = {
       error: errorCB
     });
   },
-  deleteTag(TagData, successCB, errorCB){
+  deleteTag(tagData, successCB, errorCB){
     $.ajax({
       method: 'DELETE',
-      url: 'api/tags',
-      data: {tag: TagData},
+      url: `api/tags/${tagData.tagId}`,
+      data: {tagData},
       success: successCB,
       error: errorCB
     });
