@@ -1,11 +1,18 @@
 const TagApiUtil = {
-  createTag(TagData, successCB, errorCB){
+  createTag(TagData, successCB){
     $.ajax({
       method: 'POST',
       url: 'api/tags',
       data: {tag: TagData},
-      success: successCB,
-      error: errorCB
+      success: successCB
+    });
+  },
+  deleteTag(TagData, successCB){
+    $.ajax({
+      method: 'DELETE',
+      url: 'api/tags',
+      data: {tag: TagData},
+      success: successCB
     });
   }
 };

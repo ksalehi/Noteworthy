@@ -5,8 +5,11 @@ const TagApiUtil = require('../util/tag_api_util');
 const NoteActions = require('../actions/note_actions');
 
 const TagActions = {
-  createTag(tagData){
-    TagApiUtil.createTag(tagData, NoteActions.receiveNote, ErrorActions.setErrors);
+  createTag(tagData) {
+    TagApiUtil.createTag(tagData, NoteActions.receiveNote);
+  },
+  deleteTag(tagData) {
+    TagApiUtil.deleteTag(tagData, NoteActions.receiveNote);
   }
 };
 

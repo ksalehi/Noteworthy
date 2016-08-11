@@ -6,6 +6,15 @@ class Api::TagsController < ApplicationController
     render 'api/notes/show'
   end
 
+  def destroy
+    debugger
+    @tag = Tag.find(tag_params[:tag])
+    if @tag.destroy
+      render 'api/notes/show'
+    else
+      render json: @tag.errors.full_messages, status: 422
+  end
+
   def tag_params
     params.require(:tag).permit(:tag, :noteId)
   end

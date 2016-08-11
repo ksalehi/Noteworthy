@@ -110,6 +110,14 @@ const NoteForm = React.createClass({
     TagActions.createTag(TagData);
     this.setState({newTag: ""});
   },
+  deleteTag(e) {
+    e.preventDefault();
+    debugger;
+    const TagData = {
+      tag: e.target.value
+    };
+    TagActions.deleteTag(TagData);
+  },
   render(){
     return (
       <div>
@@ -127,7 +135,11 @@ const NoteForm = React.createClass({
                    onBlur={this.autoSave}/>
             <div className="existing-tags"> {
                this.state.tags.map( (tag) => {
-                 return (<li key={tag.id} className="existing-tag">{tag.tag}</li>);
+                 return (<li
+                   key={tag.id}
+                   className="existing-tag"
+                   onClick={this.deleteTag}>
+                   {tag.tag}</li>);
                })}
            </div>
            <div className="tag-icon-and-text">
