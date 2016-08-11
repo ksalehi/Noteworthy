@@ -54,14 +54,14 @@
 	var IndexRoute = reactRouter.IndexRoute;
 	var hashHistory = reactRouter.hashHistory;
 	var NoteIndex = __webpack_require__(230);
-	var NotebookIndex = __webpack_require__(289);
-	var NoteForm = __webpack_require__(290);
-	var SplashPage = __webpack_require__(306);
+	var NotebookIndex = __webpack_require__(288);
+	var NoteForm = __webpack_require__(289);
+	var SplashPage = __webpack_require__(305);
 	var SessionStore = __webpack_require__(280);
-	var SessionActions = __webpack_require__(308);
+	var SessionActions = __webpack_require__(307);
 	var Modal = __webpack_require__(258);
-	var NavBar = __webpack_require__(310);
-	var NotebookDrawer = __webpack_require__(311);
+	var NavBar = __webpack_require__(309);
+	var NotebookDrawer = __webpack_require__(310);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -35682,8 +35682,7 @@
 	module.exports = NotesSearchBox;
 
 /***/ },
-/* 288 */,
-/* 289 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35704,19 +35703,19 @@
 	module.exports = NotebookIndex;
 
 /***/ },
-/* 290 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(38);
-	var ErrorStore = __webpack_require__(291);
+	var ErrorStore = __webpack_require__(290);
 	var hashHistory = __webpack_require__(168).hashHistory;
 	var NoteActions = __webpack_require__(254);
 	var NoteStore = __webpack_require__(231);
-	var ReactQuill = __webpack_require__(293);
-	var TagActions = __webpack_require__(303);
+	var ReactQuill = __webpack_require__(292);
+	var TagActions = __webpack_require__(302);
 	
 	var NoteForm = React.createClass({
 	  displayName: 'NoteForm',
@@ -35826,7 +35825,17 @@
 	    TagActions.createTag(TagData);
 	    this.setState({ newTag: "" });
 	  },
+	  deleteTag: function deleteTag(e) {
+	    e.preventDefault();
+	    debugger;
+	    var TagData = {
+	      tag: e.target.value
+	    };
+	    TagActions.deleteTag(TagData);
+	  },
 	  render: function render() {
+	    var _this2 = this;
+	
 	    return React.createElement(
 	      'div',
 	      null,
@@ -35855,7 +35864,10 @@
 	            this.state.tags.map(function (tag) {
 	              return React.createElement(
 	                'li',
-	                { key: tag.id, className: 'existing-tag' },
+	                {
+	                  key: tag.id,
+	                  className: 'existing-tag',
+	                  onClick: _this2.deleteTag },
 	                tag.tag
 	              );
 	            })
@@ -35886,7 +35898,7 @@
 	module.exports = NoteForm;
 
 /***/ },
-/* 291 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35894,7 +35906,7 @@
 	var Store = __webpack_require__(232).Store;
 	var AppDispatcher = __webpack_require__(250);
 	var ErrorStore = new Store(AppDispatcher);
-	var ErrorConstants = __webpack_require__(292);
+	var ErrorConstants = __webpack_require__(291);
 	
 	var _errors = [];
 	var _form = "";
@@ -35936,7 +35948,7 @@
 	module.exports = ErrorStore;
 
 /***/ },
-/* 292 */
+/* 291 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35949,29 +35961,29 @@
 	module.exports = ErrorConstants;
 
 /***/ },
-/* 293 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
 	React-Quill v0.4.1
 	https://github.com/zenoamaro/react-quill
 	*/
-	module.exports = __webpack_require__(294);
-	module.exports.Mixin = __webpack_require__(300);
-	module.exports.Toolbar = __webpack_require__(295);
-	module.exports.Quill = __webpack_require__(301);
+	module.exports = __webpack_require__(293);
+	module.exports.Mixin = __webpack_require__(299);
+	module.exports.Toolbar = __webpack_require__(294);
+	module.exports.Quill = __webpack_require__(300);
 
 
 /***/ },
-/* 294 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1),
 		ReactDOM = __webpack_require__(260),
-		QuillToolbar = __webpack_require__(295),
-		QuillMixin = __webpack_require__(300),
+		QuillToolbar = __webpack_require__(294),
+		QuillMixin = __webpack_require__(299),
 		T = React.PropTypes;
 	
 	// FIXME: Remove with the switch to JSX
@@ -36257,13 +36269,13 @@
 
 
 /***/ },
-/* 295 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1),
-		ReactDOMServer = __webpack_require__(296),
+		ReactDOMServer = __webpack_require__(295),
 		T = React.PropTypes;
 	
 	var defaultColors = [
@@ -36425,16 +36437,16 @@
 
 
 /***/ },
-/* 296 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(297);
+	module.exports = __webpack_require__(296);
 
 
 /***/ },
-/* 297 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -36451,7 +36463,7 @@
 	'use strict';
 	
 	var ReactDefaultInjection = __webpack_require__(43);
-	var ReactServerRendering = __webpack_require__(298);
+	var ReactServerRendering = __webpack_require__(297);
 	var ReactVersion = __webpack_require__(36);
 	
 	ReactDefaultInjection.inject();
@@ -36465,7 +36477,7 @@
 	module.exports = ReactDOMServer;
 
 /***/ },
-/* 298 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -36486,7 +36498,7 @@
 	var ReactInstrumentation = __webpack_require__(18);
 	var ReactMarkupChecksum = __webpack_require__(163);
 	var ReactReconciler = __webpack_require__(62);
-	var ReactServerBatchingStrategy = __webpack_require__(299);
+	var ReactServerBatchingStrategy = __webpack_require__(298);
 	var ReactServerRenderingTransaction = __webpack_require__(128);
 	var ReactUpdates = __webpack_require__(59);
 	
@@ -36555,7 +36567,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 299 */
+/* 298 */
 /***/ function(module, exports) {
 
 	/**
@@ -36582,12 +36594,12 @@
 	module.exports = ReactServerBatchingStrategy;
 
 /***/ },
-/* 300 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Quill = __webpack_require__(301);
+	var Quill = __webpack_require__(300);
 	
 	var QuillMixin = {
 	
@@ -36679,14 +36691,14 @@
 
 
 /***/ },
-/* 301 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(302);
+	module.exports = __webpack_require__(301);
 
 
 /***/ },
-/* 302 */
+/* 301 */
 /***/ function(module, exports) {
 
 	/*! Quill Editor v0.20.1
@@ -47440,33 +47452,36 @@
 	});
 
 /***/ },
-/* 303 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var AppDispatcher = __webpack_require__(250);
 	var NoteConstants = __webpack_require__(253);
-	var ErrorActions = __webpack_require__(304);
-	var TagApiUtil = __webpack_require__(305);
+	var ErrorActions = __webpack_require__(303);
+	var TagApiUtil = __webpack_require__(304);
 	var NoteActions = __webpack_require__(254);
 	
 	var TagActions = {
 	  createTag: function createTag(tagData) {
 	    TagApiUtil.createTag(tagData, NoteActions.receiveNote, ErrorActions.setErrors);
+	  },
+	  deleteTag: function deleteTag(tagData) {
+	    TagApiUtil.deleteTag(tagData, NoteActions.receiveNote, ErrorActions.setErrors);
 	  }
 	};
 	
 	module.exports = TagActions;
 
 /***/ },
-/* 304 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var AppDispatcher = __webpack_require__(250);
-	var ErrorConstants = __webpack_require__(292);
+	var ErrorConstants = __webpack_require__(291);
 	
 	var ErrorActions = {
 	  setErrors: function setErrors(form, errors) {
@@ -47486,7 +47501,7 @@
 	module.exports = ErrorActions;
 
 /***/ },
-/* 305 */
+/* 304 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -47500,22 +47515,31 @@
 	      success: successCB,
 	      error: errorCB
 	    });
+	  },
+	  deleteTag: function deleteTag(TagData, successCB, errorCB) {
+	    $.ajax({
+	      method: 'DELETE',
+	      url: 'api/tags',
+	      data: { tag: TagData },
+	      success: successCB,
+	      error: errorCB
+	    });
 	  }
 	};
 	
 	module.exports = TagApiUtil;
 
 /***/ },
-/* 306 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
 	var hashHistory = __webpack_require__(168).hashHistory;
-	var LogInForm = __webpack_require__(307);
+	var LogInForm = __webpack_require__(306);
 	var SessionStore = __webpack_require__(280);
-	var SessionActions = __webpack_require__(308);
+	var SessionActions = __webpack_require__(307);
 	var Modal = __webpack_require__(258);
 	var NoteConstants = __webpack_require__(253);
 	
@@ -47607,16 +47631,16 @@
 	module.exports = SplashPage;
 
 /***/ },
-/* 307 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var SessionActions = __webpack_require__(308);
+	var SessionActions = __webpack_require__(307);
 	var hashHistory = __webpack_require__(168).hashHistory;
 	var SessionStore = __webpack_require__(280);
-	var ErrorStore = __webpack_require__(291);
+	var ErrorStore = __webpack_require__(290);
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
@@ -47724,15 +47748,15 @@
 	module.exports = LoginForm;
 
 /***/ },
-/* 308 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var AppDispatcher = __webpack_require__(250);
 	var SessionConstants = __webpack_require__(281);
-	var SessionApiUtil = __webpack_require__(309);
-	var ErrorActions = __webpack_require__(304);
+	var SessionApiUtil = __webpack_require__(308);
+	var ErrorActions = __webpack_require__(303);
 	
 	var SessionActions = {
 	  logIn: function logIn(user, callback) {
@@ -47760,7 +47784,7 @@
 	module.exports = SessionActions;
 
 /***/ },
-/* 309 */
+/* 308 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -47811,7 +47835,7 @@
 	module.exports = SessionApiUtil;
 
 /***/ },
-/* 310 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47820,7 +47844,7 @@
 	var NoteActions = __webpack_require__(254);
 	var NotebookActions = __webpack_require__(284);
 	var hashHistory = __webpack_require__(168).hashHistory;
-	var SessionActions = __webpack_require__(308);
+	var SessionActions = __webpack_require__(307);
 	var SessionStore = __webpack_require__(280);
 	var NotebookStore = __webpack_require__(282);
 	
@@ -47923,7 +47947,7 @@
 	module.exports = NavBar;
 
 /***/ },
-/* 311 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47931,11 +47955,11 @@
 	var React = __webpack_require__(1);
 	var NotebookStore = __webpack_require__(282);
 	var NotebookActions = __webpack_require__(284);
-	var NotebookIndexItem = __webpack_require__(312);
+	var NotebookIndexItem = __webpack_require__(311);
 	var Modal = __webpack_require__(258);
 	var NoteConstants = __webpack_require__(253);
-	var NewNotebookForm = __webpack_require__(314);
-	var NotebooksSearchBox = __webpack_require__(315);
+	var NewNotebookForm = __webpack_require__(313);
+	var NotebooksSearchBox = __webpack_require__(314);
 	var hashHistory = __webpack_require__(168).hashHistory;
 	
 	var NotebookDrawer = React.createClass({
@@ -48021,7 +48045,7 @@
 	module.exports = NotebookDrawer;
 
 /***/ },
-/* 312 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48033,7 +48057,7 @@
 	var timeSince = __webpack_require__(257);
 	var Modal = __webpack_require__(258);
 	var NoteConstants = __webpack_require__(253);
-	var DeleteNotebookModal = __webpack_require__(313);
+	var DeleteNotebookModal = __webpack_require__(312);
 	
 	var NotebookIndexItem = React.createClass({
 	  displayName: 'NotebookIndexItem',
@@ -48112,7 +48136,7 @@
 	module.exports = NotebookIndexItem;
 
 /***/ },
-/* 313 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48152,7 +48176,7 @@
 	module.exports = DeleteNotebookModal;
 
 /***/ },
-/* 314 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48237,7 +48261,7 @@
 	module.exports = NewNotebookForm;
 
 /***/ },
-/* 315 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
