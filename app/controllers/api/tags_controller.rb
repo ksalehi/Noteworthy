@@ -7,7 +7,6 @@ class Api::TagsController < ApplicationController
   end
 
   def destroy
-    debugger
     @tag = Tag.find(params[:id])
     if @tag.destroy
       @note = Note.find(params[:tagData][:noteId])

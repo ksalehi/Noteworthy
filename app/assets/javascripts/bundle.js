@@ -35867,7 +35867,8 @@
 	                  key: tag.id,
 	                  className: 'existing-tag',
 	                  onClick: _this2.deleteTag.bind(_this2, tag.id) },
-	                tag.tag
+	                tag.tag,
+	                React.createElement('i', { 'class': 'fa fa-times', 'aria-hidden': 'true' })
 	              );
 	            })
 	          ),
@@ -47918,6 +47919,16 @@
 	    }
 	    SessionActions.logOut();
 	  },
+	  displayTooltip: function displayTooltip(e) {
+	    var tooltip = $(e.target).find('p');
+	    this.interval = setTimeout(function () {
+	      tooltip.addClass('show-tooltip').removeClass('hide-tooltip');
+	    }, 1000);
+	  },
+	  hideTooltip: function hideTooltip(e) {
+	    $(e.target).find('p').addClass('hide-tooltip').removeClass('show-tooltip');
+	    // clearTimeout(this.interval);
+	  },
 	
 	  render: function render() {
 	    return React.createElement(
@@ -47925,18 +47936,42 @@
 	      { className: 'nav-bar' },
 	      React.createElement(
 	        'button',
-	        { className: 'new-note-button', onClick: this.newNote },
-	        React.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' })
+	        { className: 'new-note-button',
+	          onMouseOver: this.displayTooltip,
+	          onMouseOut: this.hideTooltip,
+	          onClick: this.newNote },
+	        React.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' }),
+	        React.createElement(
+	          'p',
+	          { className: 'hide-tooltip' },
+	          'new note'
+	        )
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'notebooks-button', onClick: this.notebookIndex },
-	        React.createElement('i', { className: 'fa fa-book', 'aria-hidden': 'true' })
+	        { className: 'notebooks-button',
+	          onMouseOver: this.displayTooltip,
+	          onMouseOut: this.hideTooltip,
+	          onClick: this.notebookIndex },
+	        React.createElement('i', { className: 'fa fa-book', 'aria-hidden': 'true' }),
+	        React.createElement(
+	          'p',
+	          { className: 'hide-tooltip' },
+	          'notebooks'
+	        )
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'logout-button', onClick: this.logOut },
-	        React.createElement('i', { className: 'fa fa-power-off', 'aria-hidden': 'true' })
+	        { className: 'logout-button',
+	          onMouseOver: this.displayTooltip,
+	          onMouseOut: this.hideTooltip,
+	          onClick: this.logOut },
+	        React.createElement('i', { className: 'fa fa-power-off', 'aria-hidden': 'true' }),
+	        React.createElement(
+	          'p',
+	          { className: 'hide-tooltip' },
+	          'logout'
+	        )
 	      )
 	    );
 	  }

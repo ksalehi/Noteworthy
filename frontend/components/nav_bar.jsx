@@ -76,17 +76,39 @@ const NavBar = React.createClass({
     }
     SessionActions.logOut();
   },
+  displayTooltip(e) {
+    const tooltip = $(e.target).find('p');
+    this.interval = setTimeout(() => {
+      tooltip.addClass('show-tooltip').removeClass('hide-tooltip');
+    }, 1000);
+  },
+  hideTooltip(e) {
+    $(e.target).find('p').addClass('hide-tooltip').removeClass('show-tooltip');
+    // clearTimeout(this.interval);
+  },
   render: function() {
     return (
       <div className="nav-bar">
-        <button className="new-note-button" onClick={this.newNote}>
+        <button className="new-note-button"
+                onMouseOver={this.displayTooltip}
+                onMouseOut={this.hideTooltip}
+                onClick={this.newNote}>
           <i className="fa fa-plus" aria-hidden="true"></i>
+          <p className="hide-tooltip">new note</p>
         </button>
-        <button className="notebooks-button" onClick={this.notebookIndex}>
+        <button className="notebooks-button"
+                onMouseOver={this.displayTooltip}
+                onMouseOut={this.hideTooltip}
+                onClick={this.notebookIndex}>
           <i className="fa fa-book" aria-hidden="true"></i>
+          <p className="hide-tooltip">notebooks</p>
         </button>
-        <button className="logout-button" onClick={this.logOut}>
+        <button className="logout-button"
+                onMouseOver={this.displayTooltip}
+                onMouseOut={this.hideTooltip}
+                onClick={this.logOut}>
           <i className="fa fa-power-off" aria-hidden="true"></i>
+          <p className="hide-tooltip">logout</p>
         </button>
     </div>
     );

@@ -137,7 +137,9 @@ const NoteForm = React.createClass({
                  return (<li
                    key={tag.id}
                    className="existing-tag"
-                   onClick={this.deleteTag.bind(this, tag.id)}>{tag.tag}</li>);
+                   onClick={this.deleteTag.bind(this, tag.id)}>{tag.tag}
+                   <i class="fa fa-times" aria-hidden="true"></i>
+                   </li>);
                })}
            </div>
            <div className="tag-icon-and-text">

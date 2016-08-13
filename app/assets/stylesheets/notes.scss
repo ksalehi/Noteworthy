@@ -98,6 +98,7 @@
   height: 30px;
   width: 30px;
   margin: 5px auto;
+  position: relative;
 }
 
 .notebooks-button:hover {
@@ -247,6 +248,7 @@
   text-align: center;
   margin: 5px auto;
   background: white;
+  position: relative;
 }
 
 .logout-button:hover {
@@ -395,6 +397,12 @@ button {
   color: #ccc;
 }
 
+.existing-tag:hover {
+  cursor: pointer;
+  background: gray;
+  border-radius: 2px;
+}
+
 .grayed-out {
   background-color: gray;
 }
@@ -445,4 +453,38 @@ button {
   width: 25px;
   background: rgba(245,245,245,1);
   z-index: 100;
+}
+
+.show-tooltip {
+  position: absolute;
+  width: 80px;
+  display: block;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 14px;
+  padding: 4px;
+  border-radius: 2px;
+  left: 150%;
+  top: 5px;
+  text-align: center;
+}
+
+.hide-tooltip {
+  display: none;
+}
+
+.show-tooltip:before {
+  background: transparent;
+  width: 0;
+  height: 0;
+  content: "";
+  display: block;
+  position: absolute;
+  top: 2px;
+  left: -12%;
+  border-right: 10px solid black;
+  border-left: 0 solid black;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  opacity: 0.7;
 }
