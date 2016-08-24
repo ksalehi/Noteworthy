@@ -63,19 +63,11 @@
   }
 }
 
-.notes-list-item:last-of-type {
-
-  // border-bottom: 1px solid #e6e6e6;
-}
-
-.notes-list:first-child {
-  // border-top: 1px solid white;
-}
-
 .new-note-form {
   padding: 15px;
   height: 883px;
   background-color: white;
+  overflow: scroll;
 }
 
 .nav-bar {
